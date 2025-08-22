@@ -29,6 +29,7 @@ class Pessoa{
         
         return other instanceof Pessoa && this.cpf === other.cpf;
   }
+  //TODO => Metodo para retornar um JSON pronto e formatado??
 
 
 }

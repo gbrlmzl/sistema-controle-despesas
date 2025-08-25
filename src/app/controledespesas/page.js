@@ -1,5 +1,5 @@
 import styles from "../page.module.css";
-import ControleDespesas from "../../components/ControleDespesa"
+import ControleDespesas from "../../components/ControleDespesas"
 
 
 export default function Home(){
@@ -12,7 +12,7 @@ export default function Home(){
             
         </main>
         <footer className={styles.footer}>
-            <a href="https://www.google.com">Pênis de Cavalo</a>
+            <h2>testando</h2>
         </footer>
     </div>
 

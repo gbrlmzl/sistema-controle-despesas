@@ -1,0 +1,19 @@
+.tecladoNumerico {
+  display: grid;
+  grid-template-columns: repeat(3, 50px);
+  gap: 10px;
+  width: max-content;
+  margin: 20px auto;
+}
+.tecladoNumerico button {
+  font-size: 1.5rem;
+  padding: 15px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  background: #f0f0f0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.tecladoNumerico button:hover {
+  background: #d0eaff;
+}

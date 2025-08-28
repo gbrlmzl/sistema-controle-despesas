@@ -9,7 +9,7 @@ import ConfirmaPessoas from "./ConfirmaPessoas";
 
 
 export default function CadastraPessoa({handleOpcaoMenu}){
-    const {pessoas, handleConfirmaNumeroPessoas, etapa, handlePrevEtapa, handleNextEtapa} = useCadastroPessoas();
+    const {pessoas, handleConfirmaNumeroPessoas, etapa, snackbarOpen, snackbarMsg, handleFecharSnackbar, handlePrevEtapa, handleNextEtapa} = useCadastroPessoas();
     const pessoaTemporaria = useRef(pessoas[etapa]);
     
 
@@ -41,7 +41,7 @@ export default function CadastraPessoa({handleOpcaoMenu}){
             <div>
                 <form onSubmit={(event) => handleNextEtapa(event, pessoaTemporaria.current, etapa)}>
                     <div>
-                        <PessoaInfo pessoa={pessoas[etapa]} onSave={(value) => pessoaTemporaria.current = value} etapa ={etapa}></PessoaInfo>
+                        <PessoaInfo pessoa={pessoas[etapa]} onSave={(value) => pessoaTemporaria.current = value} etapa ={etapa} snackbarOpen={snackbarOpen} snackbarMensagem={snackbarMsg} snackBarOnClose={handleFecharSnackbar}></PessoaInfo>
                     </div>
                     <div /* Menu de navegação */>
                         <button type= "button" onClick={handlePrevEtapa} disabled={etapa == 0}>Anterior</button>

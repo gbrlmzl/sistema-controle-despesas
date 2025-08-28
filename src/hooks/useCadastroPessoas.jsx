@@ -5,6 +5,9 @@ import { useState } from "react";
 export const useCadastroPessoas = () => {
     const [pessoas, setPessoas] = useState([]);
     const [etapa, setEtapa] = useState(0);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMsg, setSnackbarMsg] = useState("");
+
 
 
 
@@ -12,10 +15,20 @@ export const useCadastroPessoas = () => {
     const criarArrayPessoas = (numeroPessoas) => {
         let listaPessoas = [];
         for(let i = 0; i < numeroPessoas; i++){
-            const novaPessoa = {"nome" : "", "cpf" : ""}; //Forma mais simples de utilizar um objeto
+            const novaPessoa = {"nome" : "", "email" : ""}; //Forma mais simples de utilizar um objeto
             listaPessoas.push(novaPessoa);
         }
         return listaPessoas;
+    }
+    
+    const mostrarSnackbar = (msg) => {
+        setSnackbarMsg(msg);
+        setSnackbarOpen(true);
+        //setTimeout(() => setSnackbarOpen(false), 5000);
+    };
+    
+    const handleFecharSnackbar = () => {
+        setSnackbarOpen(false);
     }
 
     const handleConfirmaNumeroPessoas = (numeroPessoas) => {
@@ -29,9 +42,15 @@ export const useCadastroPessoas = () => {
 
     const handleNextEtapa = (event, pessoaTemporaria, etapa) => {
         if (event) {event.preventDefault()};
-        //Validar CPF => 
-        handlePessoaDados(pessoaTemporaria, etapa);
-        setEtapa(prev => prev + 1);
+        //Validar CPF =>
+        if(validarEmail(pessoaTemporaria.email)){
+            handlePessoaDados(pessoaTemporaria, etapa);
+            setEtapa(prev => prev + 1);
+            setSnackbarOpen(false); //Fecha o snackbar caso ele esteja aberto
+
+        }else{
+            mostrarSnackbar("Insira um email válido!")           
+        }
     }
 
     const handlePessoaDados = (dados, index) => {
@@ -42,9 +61,15 @@ export const useCadastroPessoas = () => {
         });
     }
 
+    const validarEmail = (email) => {
+        const emailRegex = /\w+@\w+\.\w+/
+        return emailRegex.test(email);
+    
+    }
 
 
 
-    return{pessoas, etapa, handleConfirmaNumeroPessoas, handlePrevEtapa, handleNextEtapa}
+
+    return{pessoas, etapa, snackbarOpen, snackbarMsg, handleFecharSnackbar, handleConfirmaNumeroPessoas, handlePrevEtapa, handleNextEtapa}
 
 }

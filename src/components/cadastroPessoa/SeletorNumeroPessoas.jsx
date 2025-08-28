@@ -23,7 +23,7 @@ export default function SeletorNumeroPessoas({onConfirma, onCancela}){
         <div>
             <div>
                 <div /* Titulo */ >
-                    <h1>{numeroPessoasPainel}</h1>  
+                    <h2>Número de pessoas: {numeroPessoasPainel !== 0 && numeroPessoasPainel}</h2>  
                 </div>
                 <div className={styles.tecladoNumerico}>
                     <button disabled={true}>1</button>

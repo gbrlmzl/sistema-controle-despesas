@@ -1,18 +1,18 @@
 class Pessoa{
     nome;
-    cpf;
+    email;
 
-    constructor(nome, cpf){
+    constructor(nome, email){
         this.nome = nome;
-        this.cpf = cpf;
+        this.email = email;
     }
 
     getNome(){
         return this.nome;
     }
 
-    getCpf(){
-        return this.cpf;
+    getEmail(){
+        return this.email;
     }
 
     setNome(nome){

@@ -1,9 +1,9 @@
 //Aqui será o componente filho de CadastraPessoa
 "use client"
 import { useState, useEffect } from "react";
+import Snackbar from "../Snackbar";
 
-
-export default function PessoaInfo({pessoa, onSave, etapa}){
+export default function PessoaInfo({pessoa, onSave, etapa, snackbarOpen, snackbarMensagem, snackBarOnClose}){
     const [localPessoa, setLocalPessoa] = useState(pessoa); //Estado local para armazenar os dados da pessoa temporariamente
     
     useEffect(() => {
@@ -29,8 +29,11 @@ export default function PessoaInfo({pessoa, onSave, etapa}){
                 <h3>Pessoa {etapa + 1}</h3>
             </div>
             <div className="formCampos">  
-                <input name="nome" type="text" onChange={handleDados} placeholder="Nome" value={localPessoa.nome} />
-                <input name="cpf" type="text" onChange={handleDados} placeholder="CPF" value={localPessoa.cpf} /> {/*TODO => REGEX verificador de CPF */}
+                <input name="nome" type="text" onChange={handleDados} placeholder="Nome" value={localPessoa.nome} required />
+                <input name="email" type="text" onChange={handleDados} placeholder="E-mail" value={localPessoa.email} required />
+            </div>
+            <div>
+                <Snackbar open={snackbarOpen} message={snackbarMensagem} onClose={snackBarOnClose} ></Snackbar>
             </div>
         </div>
     )

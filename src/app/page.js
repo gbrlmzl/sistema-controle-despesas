@@ -6,6 +6,7 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <h1>Testando</h1>
+        <a href="/controledespesas">Controle de Despesas</a>
       </main>
       <footer className={styles.footer}>
         <a

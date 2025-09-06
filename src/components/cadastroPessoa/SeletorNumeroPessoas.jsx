@@ -22,7 +22,7 @@ export default function SeletorNumeroPessoas({onConfirma, onCancela}){
     return(
         <div>
             <div>
-                <div /* Titulo */ >
+                <div>
                     <h2>Número de pessoas: {numeroPessoasPainel !== 0 && numeroPessoasPainel}</h2>  
                 </div>
                 <div className={styles.tecladoNumerico}>

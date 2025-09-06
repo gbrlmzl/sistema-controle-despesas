@@ -10,7 +10,7 @@ export default function ConfirmaPessoas({pessoas, onConfirma}){
 
     const lista = pessoas.map((person, idx) => <li key={idx}>{person.nome} <br /> {person.cpf}</li>);
 
-    //Criar rota da api para cadastrar pessoas no banco de dados(Criar banco de dados) e receber a confirmação de que deu certo
+    //Criar rota da api para cadastrar pessoas no banco de dados e receber a confirmação de que deu certo
     return(
         <div>
             <div>

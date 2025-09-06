@@ -36,6 +36,8 @@ export const useCadastroPessoas = () => {
         setPessoas(listaPessoas);
     }
 
+    
+
     const handlePrevEtapa = () => {
         if(etapa !== 0) {setEtapa(prev => prev - 1);};
     }

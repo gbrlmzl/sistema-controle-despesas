@@ -15,32 +15,33 @@ datasource db {
 }
 
 model Usuario {
-  idUsuario Int @id @default(autoincrement())
-  googleId String
-  nome String
-  email String
+  id Int @id @default(autoincrement())
+  googleId String? @unique
+  name String
+  email String @unique
+  password String
 
   pessoas Pessoa[] 
 }
 
 model Pessoa {
-  idPessoa Int @id
-  nome String
+  id Int @id
+  name String
   email String
   idUsuario Int
 
-  usuario Usuario @relation(fields: [idUsuario], references: [idUsuario])
+  usuario Usuario @relation(fields: [idUsuario], references: [id])
   gasto Gasto[]
 }
 
 model Gasto {
-  idGasto String @id @default(uuid())
-  nome String
-  valor Float
-  mes Int
-  ano Int
+  id String @id @default(uuid())
+  name String
+  value Float
+  month Int
+  year Int
   idPessoa Int
 
-  pessoa Pessoa @relation(fields: [idPessoa], references: [idPessoa])
+  pessoa Pessoa @relation(fields: [idPessoa], references: [id])
 
 }

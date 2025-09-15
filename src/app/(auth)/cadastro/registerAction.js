@@ -16,7 +16,7 @@ export default async function registerAction(_prevState, formData) {
         
         return {
             message: 'Preencha todos os campos',
-            sucess : false,
+            success : false,
         }
     }
 
@@ -30,7 +30,7 @@ export default async function registerAction(_prevState, formData) {
     if (user) {
         return {
             message : 'Este usuário já existe',
-            sucess : false,
+            success : false,
         }
     }
     
@@ -38,7 +38,7 @@ export default async function registerAction(_prevState, formData) {
 
 
     //se não existir, cria o usuário
-    const senhaHash = await hash(data.password, saltRounds) //Criptrografa a senha do usuário
+    const senhaHash = await hash(data.password, saltRounds) //Criptografa a senha do usuário
 
     await db.usuario.create({
         data:{
@@ -50,7 +50,6 @@ export default async function registerAction(_prevState, formData) {
     })
 
     return {
-        message : 'Usuário cadastrado com sucesso!',
-        sucess : true,
+        success : true,
     }    
 }

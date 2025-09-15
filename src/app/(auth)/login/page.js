@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 export default async function LoginPage() {
   const session = await auth();
   if(session){
-    return redirect('/controledespesas'); //caso o usuário esteja logado, ele é redirecionado para o programa controle de despesas.
+    return redirect('/'); //caso o usuário esteja logado, ele é redirecionado para a página inicial.
   }
 
   return (

@@ -6,21 +6,23 @@ import { useActionState } from "react";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
     const [state, formAction, isPending] = useActionState(loginAction);
     const { update } = useSession();
-    
-    // Efeito para atualizar a sessão quando o login for bem-sucedido
+    const router = useRouter();
+
     useEffect(() => {
-        if (state?.sucess) () => {
-            update(); // agora é chamado de forma segura no client
+        if (state?.success) {
+            update();          // atualiza a sessão no Session Provider
+            router.push("/"); // redireciona no client
         }
-    }, [state?.sucess, update]);
+    }, [state?.success, router]);
 
     return (
         <>
-            {state?.sucess === false && (
+            {state?.success === false && (
                 <div className="a" role="alert">
                     <strong className="aaa">Erro!</strong>
                     <span className="aa">{state?.message}</span>
@@ -36,7 +38,7 @@ export default function LoginForm() {
                     <input type="password" name="password" placeholder="********" />
                 </div>
                 <div>
-                    <button type="submit">
+                    <button type="submit" disabled={isPending}>
                         Login
                     </button>
                 </div>

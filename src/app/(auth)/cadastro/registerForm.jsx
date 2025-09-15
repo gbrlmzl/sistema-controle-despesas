@@ -1,14 +1,28 @@
 'use client'
 import registerAction from "./registerAction";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import Form from "next/form"
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
  
 export default function RegisterForm(){
     const [state, formAction, isPending] = useActionState(registerAction, null);  // Hook para gerenciar o estado da ação do formulário
     //isPending -> indica se a ação do formulário está em andamento, desabilitando o botão de envio para evitar envios múltiplos.
+    const { update } = useSession();
+    const router = useRouter();
+
+
+    useEffect(() => {
+        if(state?.success) {
+            update();              // atualiza a sessão no Session Provider
+            router.push("/login"); // redireciona o usuário para a página de login
+        }
+    }, [state?.success, router]);
+
     return(
         <>
-            {state?.sucess === false && (
+            {state?.success === false && (
                 <div className="a" role="alert">
                     <strong className="aaa">Erro!</strong>
                     <span className="aa">{state?.message}</span>

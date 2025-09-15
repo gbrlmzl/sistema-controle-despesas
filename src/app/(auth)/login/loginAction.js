@@ -1,5 +1,6 @@
 'use server';
 
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { signIn } from "../../../../auth";
 
 export default async function loginAction(_prevState, formData){
@@ -8,15 +9,18 @@ export default async function loginAction(_prevState, formData){
         await signIn('credentials', {
             email : formData.get('email'),
             password : formData.get('password'),
-            redirect : true,
+            redirect : false,
         });
-        console.log("Deu certo");
-        return { sucess: true };
+        return { success: true };
     } catch (e) {
+
         if (e.type === 'CredentialsSignin'){
-            return {sucess : false, message : "Dados incorretos"};
+            return {success : false, message : "Dados incorretos"};
         }
-        return {sucess : false, message : "Erro interno no servidor"};
+        if(e.type === 'NEXT_REDIRECT'){
+            return {success : true};
+        }
+        return {success : false, message : "Erro interno no servidor"};
     }
     
 }

@@ -1,8 +1,15 @@
 import Link from "next/link";
-import RegisterForm from "./register-form";
+import RegisterForm from "./registerForm";
+import { auth } from "../../../../auth";
+import { redirect } from "next/navigation";
 
 
-export default function paginaRegistro() {
+export default async function paginaRegistro() {
+
+    const session = await auth();
+    if (session) {
+        return redirect('/controledespesas'); //caso o usuário esteja logado, ele é redirecionado para o programa controle de despesas.
+    }
     return(
         <div>
             <div>

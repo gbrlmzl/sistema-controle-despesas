@@ -9,7 +9,7 @@ import ConfirmaPessoas from "./ConfirmaPessoas";
 
 
 export default function CadastraPessoa({handleOpcaoMenu}){
-    const {pessoas, handleConfirmaNumeroPessoas, etapa, snackbarOpen, snackbarMsg, handleFecharSnackbar, handlePrevEtapa, handleNextEtapa} = useCadastroPessoas();
+    const {pessoas, handleConfirmaNumeroPessoas, etapa, snackbarOpen, snackbarMsg, loadingCadastro, sucessoCadastro, handleFecharSnackbar, handlePrevEtapa, handleNextEtapa, handleCadastrarPessoas} = useCadastroPessoas();
     const pessoaTemporaria = useRef(pessoas[etapa]);
     
 
@@ -25,6 +25,10 @@ export default function CadastraPessoa({handleOpcaoMenu}){
 
     const retornarAoMenu = () => {
         handleOpcaoMenu("sistema");
+    }
+
+    const retornarAoMenuPrincipal = () => {
+        handleOpcaoMenu("menu");
     }
     
     
@@ -56,7 +60,7 @@ export default function CadastraPessoa({handleOpcaoMenu}){
     }
     if(etapa === numeroPessoas()){
         return(
-            <ConfirmaPessoas pessoas={pessoas} onConfirma={/*TODO*/ () => console.log("Enviando dados para API...")} />
+            <ConfirmaPessoas pessoas={pessoas} onConfirma={handleCadastrarPessoas} loading={loadingCadastro} sucesso={sucessoCadastro} retornarAoMenu={retornarAoMenuPrincipal} />
         )
     }
 

@@ -7,6 +7,8 @@ export const useCadastroPessoas = () => {
     const [etapa, setEtapa] = useState(0);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState("");
+    const [loadingCadastro, setLoadingCadastro] = useState(false);
+    const [sucessoCadastro, setSucessoCadastro] = useState(null); // null = não tentou cadastrar, true = sucesso, false = falha
 
 
 
@@ -14,19 +16,19 @@ export const useCadastroPessoas = () => {
     //Criar um array de objetos Pessoa com o numero de pessoas escolhidas
     const criarArrayPessoas = (numeroPessoas) => {
         let listaPessoas = [];
-        for(let i = 0; i < numeroPessoas; i++){
-            const novaPessoa = {"nome" : "", "email" : ""}; //Forma mais simples de utilizar um objeto
+        for (let i = 0; i < numeroPessoas; i++) {
+            const novaPessoa = { "nome": "", "email": "" }; //Forma mais simples de utilizar um objeto
             listaPessoas.push(novaPessoa);
         }
         return listaPessoas;
     }
-    
+
     const mostrarSnackbar = (msg) => {
         setSnackbarMsg(msg);
         setSnackbarOpen(true);
         //setTimeout(() => setSnackbarOpen(false), 5000);
     };
-    
+
     const handleFecharSnackbar = () => {
         setSnackbarOpen(false);
     }
@@ -36,22 +38,22 @@ export const useCadastroPessoas = () => {
         setPessoas(listaPessoas);
     }
 
-    
+
 
     const handlePrevEtapa = () => {
-        if(etapa !== 0) {setEtapa(prev => prev - 1);};
+        if (etapa !== 0) { setEtapa(prev => prev - 1); };
     }
 
     const handleNextEtapa = (event, pessoaTemporaria, etapa) => {
-        if (event) {event.preventDefault()};
+        if (event) { event.preventDefault() };
         //Validar CPF =>
-        if(validarEmail(pessoaTemporaria.email)){
+        if (validarEmail(pessoaTemporaria.email)) {
             handlePessoaDados(pessoaTemporaria, etapa);
             setEtapa(prev => prev + 1);
             setSnackbarOpen(false); //Fecha o snackbar caso ele esteja aberto
 
-        }else{
-            mostrarSnackbar("Insira um email válido!")           
+        } else {
+            mostrarSnackbar("Insira um email válido!")
         }
     }
 
@@ -63,15 +65,56 @@ export const useCadastroPessoas = () => {
         });
     }
 
-    const validarEmail = (email) => {
-        const emailRegex = /\w+@\w+\.\w+/
+    const handleCadastrarPessoas = async (listaPessoasACadastrar) => {
+        //Recebe uma lista de objetos 'pessoa' com nome e email.
+        //Faz um POST desse array para a rota api/pessoas
+        //Recebe a resposta
+        //Retorna sucesso ou falha.
+        if (loadingCadastro) return; // Impede execução se já estiver carregando
+        setLoadingCadastro(true);
+
+        try {
+            const response = await fetch("/api/pessoas", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    listaPessoasACadastrar
+                }),
+
+            });
+
+            const resultadoCadastro = await response.json();
+
+            if (resultadoCadastro.success === true) {
+                setSucessoCadastro(true); 
+            } else {
+                setSucessoCadastro(false); // Indica falha no cadastro
+                mostrarSnackbar(`Erro: ${resultadoCadastro.message}`); //Mostra a mensagem de erro retornada pela API
+                
+            }
+
+
+
+
+
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoadingCadastro(false);
+
+
+        }
+    }
+
+    const validarEmail = (email) => { //usar uma biblioteca especializada de validação?
+        const emailRegex = /\S+@\S+\.\S+/
         return emailRegex.test(email);
-    
+
     }
 
 
 
 
-    return{pessoas, etapa, snackbarOpen, snackbarMsg, handleFecharSnackbar, handleConfirmaNumeroPessoas, handlePrevEtapa, handleNextEtapa}
+    return { pessoas, etapa, snackbarOpen, snackbarMsg, loadingCadastro, sucessoCadastro, handleFecharSnackbar, handleConfirmaNumeroPessoas, handlePrevEtapa, handleNextEtapa, handleCadastrarPessoas }
 
 }

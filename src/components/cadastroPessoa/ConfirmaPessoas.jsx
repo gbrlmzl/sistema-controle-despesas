@@ -1,28 +1,58 @@
 "use client"
+import Loading from "../ui/Loading";
 
-
-export default function ConfirmaPessoas({pessoas, onConfirma}){
+export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso, retornarAoMenu }) {
 
 
     const handleConfirma = () => {
-        if(onConfirma){onConfirma()};
+        if (onConfirma) {
+            onConfirma(pessoas)
+        };
     }
 
     const lista = pessoas.map((person, idx) => <li key={idx}>{person.nome} <br /> {person.cpf}</li>);
 
-    //Criar rota da api para cadastrar pessoas no banco de dados e receber a confirmação de que deu certo
-    return(
-        <div>
+    if (loading) { //Se estiver carregando, mostra a animação de loading
+        return (
             <div>
-                <h2>Confirmação</h2>
+                <Loading />
             </div>
-            <ul>
-                {lista}
-            </ul>
+        )
+    }
+
+    if (sucesso === true) { //Se o cadastro foi um sucesso, mostra a mensagem de sucesso
+        return (
+            <>
+                <div>
+                    <h2>Cadastro realizado com sucesso!</h2>
+                </div>
+                <div>
+                    <button onClick={retornarAoMenu}>Voltar ao menu</button>
+                </div>
+            </>
+        )
+    }
+    if (sucesso === false) { //Se o cadastro falhou, mostra a mensagem de erro
+        return (
             <div>
-                <button onClick={handleConfirma}>Confirmar</button> 
+                <h2>Erro ao cadastrar:</h2>
             </div>
-        </div>
-    )
+        )
+    }
+    if (sucesso === null) { //Se ainda não tentou cadastrar, mostra a lista de pessoas a serem cadastradas e o botão de confirmar
+        return (
+            <div>
+                <div>
+                    <h2>Confirmação</h2>
+                </div>
+                <ul>
+                    {lista}
+                </ul>
+                <div>
+                    <button onClick={handleConfirma}>Confirmar</button>
+                </div>
+            </div>
+        )
+    }
 
 }

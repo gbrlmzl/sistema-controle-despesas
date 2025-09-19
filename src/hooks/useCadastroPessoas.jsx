@@ -1,8 +1,8 @@
 //TODO => Separar responsabilidades dos hooks que controlam as pessoas e o hook que controla as despesas em si.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export const useCadastroPessoas = () => {
+export const useCadastroPessoas = (handleAtualizarListaPessoas) => {
     const [pessoas, setPessoas] = useState([]);
     const [etapa, setEtapa] = useState(0);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -12,7 +12,13 @@ export const useCadastroPessoas = () => {
 
 
 
-
+    useEffect(() => {
+        if (sucessoCadastro === true) {
+            //chamar a função para atualizar a lista de pessoas no hook useControleDespesas
+            handleAtualizarListaPessoas();
+        }
+    }, [sucessoCadastro]);
+    
     //Criar um array de objetos Pessoa com o numero de pessoas escolhidas
     const criarArrayPessoas = (numeroPessoas) => {
         let listaPessoas = [];
@@ -89,14 +95,7 @@ export const useCadastroPessoas = () => {
                 setSucessoCadastro(true); 
             } else {
                 setSucessoCadastro(false); // Indica falha no cadastro
-                mostrarSnackbar(`Erro: ${resultadoCadastro.message}`); //Mostra a mensagem de erro retornada pela API
-                
             }
-
-
-
-
-
         } catch (err) {
             console.log(err);
         } finally {
@@ -115,6 +114,6 @@ export const useCadastroPessoas = () => {
 
 
 
-    return { pessoas, etapa, snackbarOpen, snackbarMsg, loadingCadastro, sucessoCadastro, handleFecharSnackbar, handleConfirmaNumeroPessoas, handlePrevEtapa, handleNextEtapa, handleCadastrarPessoas }
+    return { pessoas, etapa, snackbarOpen, snackbarMsg, loadingCadastro, sucessoCadastro, handleFecharSnackbar, handleConfirmaNumeroPessoas, handlePrevEtapa, handleNextEtapa, handleCadastrarPessoas}
 
 }

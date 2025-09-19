@@ -20,7 +20,7 @@ export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso,
         )
     }
 
-    if (sucesso === true) { //Se o cadastro foi um sucesso, mostra a mensagem de sucesso
+    if (sucesso === true) { 
         return (
             <>
                 <div>

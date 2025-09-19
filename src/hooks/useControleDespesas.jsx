@@ -1,36 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pessoa from "../entities/Pessoa"
 
 
-export const useControleDespesas = () =>{
-    //pessoas
-    //Será modificado para quando existir pessoas cadastradas no banco de dados.
-
+export const useControleDespesas = () => {
     
+
+
     //useStates
     const [opcaoMenu, setOpcaoMenu] = useState("menu");
     const [listaPessoas, setListaPessoas] = useState([]);
-
-
-
-
-
-
-
-
-const updatePessoas = (pessoas) => {  //Recebe um array com as pessoas cadastradas e atualiza o array de pessoas nesse Hook
     
 
+    useEffect(() => { //Ao iniciar, busca as pessoas cadastradas no banco de dados e atualiza o array de pessoas local
+        const recuperaEAtualiza = async () => {
+            await handleUpdatePessoas();
+        };
+        recuperaEAtualiza();
+    }, []);
+    
+    const recuperaListaPessoas = async () => {
+        try{
+            const response = await fetch("/api/pessoas", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+            const resultadoBusca = await response.json();
+            return resultadoBusca;
+        }catch(err){
+            console.log(err);
+        }
+    }
 
+    const handleUpdatePessoas = async () => {
+        const novaListaPessoas = await recuperaListaPessoas();
+        
+        setListaPessoas(novaListaPessoas || []);
+    }
+
+    const handleAtualizarListaPessoas = async () => {
+        await handleUpdatePessoas();
     }
 
     //handlers
-    const handleOpcaoMenu = (opcao) =>{
+    const handleOpcaoMenu = (opcao) => {
         setOpcaoMenu(opcao);
     }
 
 
 
 
-    return{opcaoMenu, handleOpcaoMenu }
+    return { opcaoMenu, listaPessoas, handleOpcaoMenu, recuperaListaPessoas, handleAtualizarListaPessoas }
 }

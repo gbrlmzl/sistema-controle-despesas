@@ -5,10 +5,14 @@ import SistemaComponent from "./Sistema";
 import {useControleDespesas} from "../hooks/useControleDespesas";
 import {useCadastroPessoas} from "../hooks/useCadastroPessoas"
 import CadastraPessoa from "./cadastroPessoa/CadastraPessoa";
-
+import CadastraDespesa from "./cadastraDespesa/CadastraDespesa";
 
 function ControleDespesa(){
-    const {opcaoMenu, handleOpcaoMenu} = useControleDespesas();
+    const {opcaoMenu, listaPessoas, listaDespesas,handleOpcaoMenu, handleAtualizarListaPessoas} = useControleDespesas();
+
+    const retornarAoMenu = () => {
+        handleOpcaoMenu("menu");
+    }
     
 
 
@@ -23,6 +27,8 @@ function ControleDespesa(){
         //TODO ConsultaDespesa
     }
     if(opcaoMenu === "cadastraDespesa"){
+        return <CadastraDespesa retornarAoMenu={retornarAoMenu}
+        handleOpcaoMenu={handleOpcaoMenu}  listaPessoas={listaPessoas}  />
 
     }
     if(opcaoMenu === "resumoDespesa"){
@@ -33,7 +39,7 @@ function ControleDespesa(){
 
     }
     if(opcaoMenu === "cadastraPessoas"){
-        return <CadastraPessoa handleOpcaoMenu={handleOpcaoMenu}/>
+        return <CadastraPessoa handleOpcaoMenu={handleOpcaoMenu} handleAtualizarListaPessoas={handleAtualizarListaPessoas}/>
 
     }
     return (<div>

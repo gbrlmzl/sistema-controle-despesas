@@ -8,8 +8,8 @@ import ConfirmaPessoas from "./ConfirmaPessoas";
 
 
 
-export default function CadastraPessoa({handleOpcaoMenu}){
-    const {pessoas, handleConfirmaNumeroPessoas, etapa, snackbarOpen, snackbarMsg, loadingCadastro, sucessoCadastro, handleFecharSnackbar, handlePrevEtapa, handleNextEtapa, handleCadastrarPessoas} = useCadastroPessoas();
+export default function CadastraPessoa({handleOpcaoMenu, handleAtualizarListaPessoas}){
+    const {pessoas, handleConfirmaNumeroPessoas, etapa, snackbarOpen, snackbarMsg, loadingCadastro, sucessoCadastro, handleFecharSnackbar, handlePrevEtapa, handleNextEtapa, handleCadastrarPessoas} = useCadastroPessoas(handleAtualizarListaPessoas);
     const pessoaTemporaria = useRef(pessoas[etapa]);
     
 
@@ -60,7 +60,12 @@ export default function CadastraPessoa({handleOpcaoMenu}){
     }
     if(etapa === numeroPessoas()){
         return(
-            <ConfirmaPessoas pessoas={pessoas} onConfirma={handleCadastrarPessoas} loading={loadingCadastro} sucesso={sucessoCadastro} retornarAoMenu={retornarAoMenuPrincipal} />
+            <ConfirmaPessoas pessoas={pessoas}
+            onConfirma={handleCadastrarPessoas}
+            loading={loadingCadastro}
+            sucesso={sucessoCadastro}
+            retornarAoMenu={retornarAoMenuPrincipal}
+             />
         )
     }
 

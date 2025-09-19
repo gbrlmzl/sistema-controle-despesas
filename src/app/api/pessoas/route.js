@@ -44,3 +44,30 @@ export async function POST(req) {
     );
 }
 
+export async function GET() {
+    const session = await auth()
+    if (!session) {
+        return new Response(JSON.stringify({ success: false, message: "Usuário não autenticado" }), { status: 401 });
+    }//Se não tiver sessão, retorna erro 401 - não autorizado
+
+    const usuario = await db.usuario.findUnique({
+        where: {
+            email: session.user.email,
+        },
+    });
+
+    const pessoas = await db.pessoa.findMany({
+        where: {
+            idUsuario: usuario.id
+        }
+    })
+
+
+    console.log(pessoas); //testando
+    return new Response(
+        JSON.stringify({pessoas}),
+        { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+
+}
+

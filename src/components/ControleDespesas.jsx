@@ -1,37 +1,43 @@
 "use client"
 
 import ControleDespesasMenu from "./ControleDespesasMenu";
-import SistemaComponent from "./Sistema";  
+import SistemaComponent from "./sistema/Sistema";  
 import {useControleDespesas} from "../hooks/useControleDespesas";
-import {useCadastroPessoas} from "../hooks/useCadastroPessoas"
 import CadastraPessoa from "./cadastroPessoa/CadastraPessoa";
 import CadastraDespesa from "./cadastraDespesa/CadastraDespesa";
+import ResumoDespesas from "./resumoDespesas/ResumoDespesas";
+import FormatarSistema from "./formatarSistema/FormatarSistema";
+import ConsultarDespesas from "./consultarDespesas/ConsultarDespesas";
 
-function ControleDespesa(){
-    const {opcaoMenu, listaPessoas, listaDespesas,handleOpcaoMenu, handleAtualizarListaPessoas} = useControleDespesas();
+function ControleDespesas(){
+    const {opcaoMenu, listaPessoas, listaDespesas,handleOpcaoMenu, atualizarPessoas, atualizarDespesas, existemPessoasCadastradas} = useControleDespesas();
 
     const retornarAoMenu = () => {
         handleOpcaoMenu("menu");
     }
-    
 
-
-
-    
+    const atualizarDadosLocais = () => {
+        atualizarDespesas();
+        atualizarPessoas();
+    }
     
 
     if(opcaoMenu === "menu"){
         return <ControleDespesasMenu handleOpcaoMenu={handleOpcaoMenu}/>
     }
     if(opcaoMenu === "consultaDespesa"){
-        //TODO ConsultaDespesa
+        return <ConsultarDespesas 
+                listaPessoas={listaPessoas} 
+                listaDespesas={listaDespesas} 
+                handleOpcaoMenu={handleOpcaoMenu}/>
     }
     if(opcaoMenu === "cadastraDespesa"){
         return <CadastraDespesa retornarAoMenu={retornarAoMenu}
-        handleOpcaoMenu={handleOpcaoMenu}  listaPessoas={listaPessoas}  />
+        handleOpcaoMenu={handleOpcaoMenu}  listaPessoas={listaPessoas} atualizarDespesas={atualizarDespesas}  />
 
     }
     if(opcaoMenu === "resumoDespesa"){
+        return <ResumoDespesas handleOpcaoMenu={handleOpcaoMenu} listaDespesas={listaDespesas} listaPessoas={listaPessoas}/>
         
     }
     if(opcaoMenu === "sistema"){
@@ -39,8 +45,19 @@ function ControleDespesa(){
 
     }
     if(opcaoMenu === "cadastraPessoas"){
-        return <CadastraPessoa handleOpcaoMenu={handleOpcaoMenu} handleAtualizarListaPessoas={handleAtualizarListaPessoas}/>
+        return <CadastraPessoa
+                handleOpcaoMenu={handleOpcaoMenu}
+                atualizarPessoas={atualizarPessoas}
+                listaPessoas={listaPessoas}
+                existemPessoasCadastradas={existemPessoasCadastradas}
+                />
 
+    }
+    if(opcaoMenu === "formatarSistema"){
+        return <FormatarSistema 
+                handleOpcaoMenu={handleOpcaoMenu}
+                atualizarDadosLocais={atualizarDadosLocais}
+                />
     }
     return (<div>
         <h1>Pass</h1>
@@ -51,4 +68,4 @@ function ControleDespesa(){
 
 }
 
-export default ControleDespesa;
+export default ControleDespesas;

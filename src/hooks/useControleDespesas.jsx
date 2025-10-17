@@ -1,53 +1,90 @@
 import { useEffect, useState } from "react";
-import Pessoa from "../entities/Pessoa"
 
 
 export const useControleDespesas = () => {
-    
-
-
     //useStates
     const [opcaoMenu, setOpcaoMenu] = useState("menu");
     const [listaPessoas, setListaPessoas] = useState([]);
-    
+    const [listaDespesas, setListaDespesas] = useState([]);
+    //listaDespesas = [{ mes: 1, ano: 2022, despesas: [{name: 'aluguel', value: 700, month: 2, year: 2029, idPessoa: 1}]}]
 
-    useEffect(() => { //Ao iniciar, busca as pessoas cadastradas no banco de dados e atualiza o array de pessoas local
-        const recuperaEAtualiza = async () => {
-            await handleUpdatePessoas();
+    useEffect(() => { //Ao iniciar, busca as pessoas e gastos cadastradas no banco de dados e atualiza os dados locais.
+        const recuperaEAtualizaDados = async () => {
+            await atualizarPessoas();
+            await atualizarDespesas();
         };
-        recuperaEAtualiza();
+
+        recuperaEAtualizaDados();
     }, []);
-    
+
     const recuperaListaPessoas = async () => {
-        try{
+        try {
             const response = await fetch("/api/pessoas", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
             const resultadoBusca = await response.json();
             return resultadoBusca;
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
     }
 
-    const handleUpdatePessoas = async () => {
+    const recuperaListaDespesas = async () => {
+        try {
+            const response = await fetch("/api/gastos", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+            const resultadoBusca = await response.json();
+            return resultadoBusca;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const atualizarPessoas = async () => {
         const novaListaPessoas = await recuperaListaPessoas();
-        
+
         setListaPessoas(novaListaPessoas || []);
     }
 
-    const handleAtualizarListaPessoas = async () => {
-        await handleUpdatePessoas();
+    const atualizarDespesas = async () => {
+        const despesasBrutasObject = await recuperaListaDespesas();
+        const despesasBrutas = despesasBrutasObject.gastos;
+
+        if (despesasBrutas.length > 0) {
+            // Agrupa por mês/ano
+            const despesasOrganizadas = [];
+            despesasBrutas.forEach(despesa => {
+                const { month, year } = despesa;
+                let grupo = despesasOrganizadas.find(d => d.mes === month && d.ano === year);
+                if (!grupo) {
+                    grupo = { mes: month, ano: year, despesas: [] };
+                    despesasOrganizadas.push(grupo);
+                }
+                grupo.despesas.push(despesa);
+            });
+            setListaDespesas(despesasOrganizadas);
+        }else{
+            setListaDespesas([]);
+        }
+
     }
+
+
 
     //handlers
     const handleOpcaoMenu = (opcao) => {
         setOpcaoMenu(opcao);
     }
 
+    const existemPessoasCadastradas = () => {
+        return listaPessoas.pessoas.length > 0;
+    }
 
 
 
-    return { opcaoMenu, listaPessoas, handleOpcaoMenu, recuperaListaPessoas, handleAtualizarListaPessoas }
+
+    return { opcaoMenu, listaPessoas, listaDespesas, handleOpcaoMenu, atualizarPessoas, atualizarDespesas, existemPessoasCadastradas }
 }

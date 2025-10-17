@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from "react";
 
-export const useCadastroPessoas = (handleAtualizarListaPessoas) => {
+export const useCadastroPessoas = ({atualizarPessoas}) => {
     const [pessoas, setPessoas] = useState([]);
     const [etapa, setEtapa] = useState(0);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState("");
     const [loadingCadastro, setLoadingCadastro] = useState(false);
     const [sucessoCadastro, setSucessoCadastro] = useState(null); // null = não tentou cadastrar, true = sucesso, false = falha
-
+    
 
 
     useEffect(() => {
         if (sucessoCadastro === true) {
             //chamar a função para atualizar a lista de pessoas no hook useControleDespesas
-            handleAtualizarListaPessoas();
+            atualizarPessoas();
         }
     }, [sucessoCadastro]);
     

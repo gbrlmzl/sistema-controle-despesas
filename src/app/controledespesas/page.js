@@ -12,7 +12,7 @@ export default function Home(){
             
         </main>
         <footer className={styles.footer}>
-            <h2>testando</h2>
+            
         </footer>
     </div>
 

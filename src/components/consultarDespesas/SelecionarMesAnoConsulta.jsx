@@ -1,41 +1,40 @@
 import { useState } from "react";
-import Loading from "../ui/Loading";
 
-export default function SelecionaMes({onConfirmaEscolha, onCancela, onSobrescrever, loading, existeDespesaCadastrada}) {
+
+export default function SelecionarMesAnoConsulta({ onConfirmaEscolha, onRetornaAoMenu,onRetorna, loading, existeDespesaCadastrada, mesAnoTexto }) {
     const [mesEscolhido, setMesEscolhido] = useState("");
     const [anoEscolhido, setAnoEscolhido] = useState("");
 
 
     const handleConfirmaEscolha = () => {
-        if(mesEscolhido !== "" && anoEscolhido !== ""){
+        if (mesEscolhido !== "" && anoEscolhido !== "") {
             const mesInt = parseInt(mesEscolhido);
             const anoInt = parseInt(anoEscolhido);
             onConfirmaEscolha(mesInt, anoInt);
 
         }
-        
+
     }
 
-    if(existeDespesaCadastrada === true){
-        return(
+    if (existeDespesaCadastrada === false) {
+        return (
             <div>
-                <h2>Existem despesas cadastradas para {mesEscolhido}/{anoEscolhido}.</h2>
-                <h2>Deseja sobrescrevê-las?</h2>
-                <button onClick={onSobrescrever}>Sobrescrever</button>
-                <button onClick={onCancela}>Cancelar</button>
+                <h2>Não existem despesas cadastradas para {mesAnoTexto()}.</h2>
+                <button onClick={onRetorna}>Retornar</button>
+                <button onClick={onRetornaAoMenu}>Menu</button>
             </div>
         )
 
     }
 
 
-    
 
 
 
-    return(
-    <div>
-        <h2>Selecione o Mês e Ano</h2>
+
+    return (
+        <div>
+            <h2>Selecione o Mês e Ano</h2>
             <div>
                 <select value={mesEscolhido} onChange={(e) => setMesEscolhido(e.target.value)}>
                     <option value="" disabled hidden>Selecione o mês</option>
@@ -67,10 +66,10 @@ export default function SelecionaMes({onConfirmaEscolha, onCancela, onSobrescrev
             </div>
             <div>
                 <button onClick={handleConfirmaEscolha} disabled={loading || mesEscolhido === "" || anoEscolhido === ""}>Confirmar</button>
-                <button onClick={onCancela}>Cancelar</button>
+                <button onClick={onRetornaAoMenu}>Cancelar</button>
             </div>
 
 
-    </div>
+        </div>
     )
 }

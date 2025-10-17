@@ -63,7 +63,7 @@ export async function GET() {
     })
 
 
-    console.log(pessoas); //testando
+
     return new Response(
         JSON.stringify({pessoas}),
         { status: 200, headers: { "Content-Type": "application/json" } }

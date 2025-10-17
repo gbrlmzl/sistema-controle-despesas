@@ -10,7 +10,7 @@ export default async function ControleDespesasLayout({ children }) {
     }
 
     return (
-        <div style={{ minHeight: "100vh", background: "#ffacacff" }}>
+        <div style={{ minHeight: "100vh", background: "#999999ff" }}>
             <header>
                 <h1>Controle de Despesas</h1>
             </header>
@@ -18,7 +18,7 @@ export default async function ControleDespesasLayout({ children }) {
                 {children}
             </main>
             <footer>
-                <small>© 2025 - Seu sistema</small>
+                <small>Instagram - gbrlmzl</small>
             </footer>
         </div>
     );

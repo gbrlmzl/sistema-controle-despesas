@@ -1,13 +1,17 @@
 "use client"
 import Loading from "../ui/Loading";
 
-export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso, retornarAoMenu }) {
+export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso, retornarAoMenu, voltarEtapa }) {
 
 
     const handleConfirma = () => {
         if (onConfirma) {
             onConfirma(pessoas)
         };
+    }
+
+    const handleRetorna = () => {
+        voltarEtapa();
     }
 
     const lista = pessoas.map((person, idx) => <li key={idx}>{person.nome} <br /> {person.cpf}</li>);
@@ -50,6 +54,7 @@ export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso,
                 </ul>
                 <div>
                     <button onClick={handleConfirma}>Confirmar</button>
+                    <button onClick={handleRetorna}>Retornar</button>
                 </div>
             </div>
         )

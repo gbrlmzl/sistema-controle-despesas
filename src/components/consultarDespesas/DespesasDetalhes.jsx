@@ -1,14 +1,15 @@
 import { useRef } from "react";
+import styles from './DespesasDetalhes.module.css';
 
 export default function DespesasDetalhes({ despesasPessoa, retornarResumo, mesAnoTexto, onCompartilhar }) {
 
-    const despesasDetalhesRef = useRef();
+    
 
     const { despesas, pessoa } = despesasPessoa;
     const existemDespesasCadastradas = despesas.length > 0;
 
     const handleCompartilhar = () => {
-        onCompartilhar({despesasDetalhesRef: despesasDetalhesRef, pessoaNome: pessoa.name});
+        onCompartilhar(despesas, pessoa, mesAnoTexto());
 
     }
 
@@ -27,89 +28,50 @@ export default function DespesasDetalhes({ despesasPessoa, retornarResumo, mesAn
         }
     }
     return (
-        <div>
-            <div>
-                <div>
-                    <h2>{mesAnoTexto()}</h2>
-                </div>
-                <div>
-                    <h3>{pessoa.name}</h3>
-                </div>
-                <div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Despesa</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {existemDespesasCadastradas ? (
-                                    despesas.map((despesa, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{despesa.name}</td>
-                                            <td>{despesa.value.toFixed(2)}</td>
-                                        </tr>
-                                    ))) :
-                                    (<tr>
-                                        <td colSpan={2}>Nenhuma despesa cadastrada</td>
+        <div className={styles.container}>
+            <h2>{mesAnoTexto()}</h2>
+            <div className={styles.detalhesContainer}>
+                <h3>{pessoa.name}</h3>
+                <div className={styles.tabelaDespesasContainer}>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Despesa</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {existemDespesasCadastradas ? (
+                                despesas.map((despesa, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>{despesa.name}</td>
+                                        <td>{despesa.value.toFixed(2)}</td>
                                     </tr>
-                                    )}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                        <span style={{ backgroundColor: "lightblue" }}>{`${calcularTotalGasto()} R$, ${quantidadeDespesas()} despesas`}</span>
-                    </div>
-                </div>
-            </div>
-            <div ref={despesasDetalhesRef} className="tabelaCompartilhamento" style={{"position": "absolute", "left": "-9999px", padding: 15, fontFamily: "cursive"}}>
-                <div>
-                    <h2>{mesAnoTexto()}</h2>
-                </div>
-                <div>
-                    <h3>{pessoa.name}</h3>
-                </div>
-                <div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Despesa</th>
-                                    <th>Valor</th>
+                                ))) :
+                                (<tr>
+                                    <td colSpan={2}>Nenhuma despesa cadastrada</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {existemDespesasCadastradas ? (
-                                    despesas.map((despesa, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{despesa.name}</td>
-                                            <td>{despesa.value.toFixed(2)}</td>
-                                        </tr>
-                                    ))) :
-                                    (<tr>
-                                        <td colSpan={2}>Nenhuma despesa cadastrada</td>
-                                    </tr>
-                                    )}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                        <span style={{ backgroundColor: "lightblue" }}>{`${calcularTotalGasto()} R$, ${quantidadeDespesas()} despesas`}</span>
-                    </div>
+                                )}
+                        </tbody>
+                    </table>
                 </div>
+
+                <span className={styles.totalGasto}>{`${calcularTotalGasto()} R$, ${quantidadeDespesas()} despesas`}</span>
+
             </div>
-            
-
-
-            <div>
-                <button onClick={retornarResumo}>Retornar</button>
-                <button onClick={handleCompartilhar}>Compartilhar</button>
+            <div className="botoesContainer">
+                <button className={"botaoIcone"} onClick={retornarResumo}>
+                    <span>
+                        <img src="./icons/retornarIcon.svg" alt="Voltar" />
+                    </span>
+                </button>
+                <button className={"botaoIcone"} onClick={handleCompartilhar}>
+                    <span>
+                        <img src="./icons/compartilharIcon.svg" alt="Compartilhar" />
+                    </span>
+                </button>
             </div>
 
 

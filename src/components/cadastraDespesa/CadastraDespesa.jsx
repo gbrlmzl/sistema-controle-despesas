@@ -1,16 +1,18 @@
 import React from "react";
 import { useCadastroDespesas } from "@/hooks/useCadastroDespesas";
-import SelecionaMes from "./SelecionaMes";
 import DespesaInfo from "./DespesaInfo";
 import ConfirmaDespesa from "./ConfirmaDespesa";
 import ResumoPagamento from "./ResumoPagamento";
+import SobrescreveDespesa from "./SobrescreveDespesa";
+import SeletorMes from "../shared/SeletorMes";
+import PessoasNaoCadastradas from "./PessoasNaoCadastradas";
 export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaPessoas, atualizarDespesas}) {
     const { 
         etapa, 
         mesAnoTexto,
         loading,
         existeDespesaCadastrada,
-        handleConfirmaEscolha,
+        selecionarMesAno,
         handleSobrescrever,
         handleProximaDespesa,
         handleAnteriorDespesa,
@@ -24,6 +26,9 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
         pessoaIndexDados,
         listaResumoDespesas,
         dadosPagamento,
+        snackbar,
+        fecharSnackbar,
+        isUltimaDespesa,
         sucessoCadastro} = useCadastroDespesas({listaPessoas, atualizarDespesas});
         
     const pessoasArray = listaPessoas.pessoas; //transforma o objeto em array
@@ -31,33 +36,35 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
     //Se o usuário não possuir pessoas cadastradas, deve retornar um menu avisando que ele precisa cadastrar pessoas antes e um botão de menu principal e outro que leva para tela de cadastrar Pessoa
     if (pessoasArray.length === 0) {
         return (
-            <div>
-                <h2>Você precisa cadastrar pessoas antes de cadastrar despesas.</h2>
-                <button onClick={() => handleOpcaoMenu("cadastraPessoas")}>Cadastrar Pessoas</button>
-                <button onClick={retornarAoMenu}>Menu Principal</button>    
-            </div>
+            <PessoasNaoCadastradas
+                onRetornaAoMenu={retornarAoMenu}
+                onCadastraPessoas={() => handleOpcaoMenu("cadastraPessoas")}
+            />
         )
     }
 
     if (etapa === "selecaoMes") {
         return (
-            <SelecionaMes onConfirmaEscolha={(mesSelecionado, anoSelecionado) => handleConfirmaEscolha(mesSelecionado, anoSelecionado)}
+            <SeletorMes
+             titulo="Cadastrar Despesas"
+             onConfirmaEscolha={(mesSelecionado, anoSelecionado) => selecionarMesAno(mesSelecionado, anoSelecionado)}
              onCancela={retornarAoMenu}
-             onSobrescrever={handleSobrescrever}
              loading={loading}
-             existeDespesaCadastrada={existeDespesaCadastrada}
               />
 
         )
+    } else if (etapa === "confirmaSobrescreverDespesas") {
+        return (
+            <SobrescreveDespesa 
+            onConfirmaSobrescrever={handleSobrescrever}
+            onCancela={retornarAoMenu}
+            mesAnoTexto={mesAnoTexto()}
+            />
+        )
     } else if (etapa === "cadastroDespesa") {
         return (
-            <div>
-                <h2>Cadastro de Despesa</h2>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <h3>{mesAnoTexto()}</h3>
-                </div>
-                
                 <DespesaInfo 
+                mesAnoTexto={mesAnoTexto()}
                 despesaDados={despesaDados}
                 pessoaIndexDados={pessoaIndexDados}
                 onProxima={(formData) => handleProximaDespesa(formData)}
@@ -65,9 +72,10 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
                 onProximaPessoa={handleProximaPessoa}
                 onAnteriorPessoa={handleAnteriorPessoa}
                 onFinaliza={handleFinalizar}
+                snackbar={snackbar}
+                onFecharSnackbar={fecharSnackbar}
+                isUltimaDespesa={isUltimaDespesa}
                 ></DespesaInfo>
-            </div>
-            
         )
 
     } else if (etapa === "confirmaDespesa") {

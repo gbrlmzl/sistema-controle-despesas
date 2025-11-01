@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react"
 import html2canvas from "html2canvas";
+import { compartilharDespesasResumo } from "../app/utils/compartilharDespesas";
 
 export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
     const etapas = ["selecionarMesAno", "resumoDespesa"]
+
     const [etapa, setEtapa] = useState("selecionarMesAno")
     const [listaDespesasMesAnoSelecionado, setListaDespesasMesAnoSelecionado] = useState([]);
     const [existeDespesaCadastrada, setExisteDespesaCadastrada] = useState(null);
@@ -46,7 +48,7 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
 
 
 
-    const handleConfirmaEscolha = (mesSelecionado, anoSelecionado) => {
+    const selecionarMesAno = (mesSelecionado, anoSelecionado) => {
         for (const despesaDados of listaDespesas) {
             if (despesaDados.mes === mesSelecionado && despesaDados.ano === anoSelecionado) {
                 setListaDespesasMesAnoSelecionado(despesaDados.despesas);
@@ -59,6 +61,8 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
                 return;
             }
         }
+        //Caso não encontre despesas para o mês e ano selecionados
+        setMesAnoTexto(converteMesAnoTexto(mesSelecionado, anoSelecionado))
         setExisteDespesaCadastrada(false);
     }
 
@@ -100,29 +104,19 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
 
     }
 
-    const compartilharResumo = async (resumoRef) => {
-        const canvas = await html2canvas(resumoRef.current);
-        const dataUrl = canvas.toDataURL("image/png");
-
-        //Converter para blob
-        const res = await fetch(dataUrl);
-        const blob = await res.blob();
-
-        //Compartilhar usando a API de compartilhamento nativa do navegador
-        if (navigator.share) {
-            const mesAnoFormatado = mesAnoTexto.toLowerCase().replace(" de ", "_").replace("ç", "c").replace(/ /g, "_");
-            const file = new File([blob], `resumo_${mesAnoFormatado}.png`, { type: "image/png" });
-            navigator.share({
-                files: [file],
-                title: "Resumo financeiro",
-                text: "",
-            });
-        } else {
-            console.log("Erro ao compartilhar");
-
-        }
+    const compartilharResumo = async (dados) => {
+        await compartilharDespesasResumo({
+            listaDespesasInfoFormatada: dados.listaDespesasInfoFormatada,
+            mesAnoTexto: dados.mesAnoTexto,
+            existeDespesaCadastrada: dados.existeDespesaCadastrada
+        });
+    }
 
 
+
+    const retornarSelecao = () => {
+        setExisteDespesaCadastrada(null);
+        setEtapa("selecionarMesAno");
     }
 
 
@@ -133,14 +127,15 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
 
     return ({
         etapa,
-        handleConfirmaEscolha,
+        selecionarMesAno,
         existeDespesaCadastrada,
         listaDespesasMesAnoSelecionado,
         mesAnoTexto,
         calcularResumoDespesas,
         compartilharResumo,
         onAnteriorMes,
-        onProximoMes
+        onProximoMes,
+        retornarSelecao
 
     })
 

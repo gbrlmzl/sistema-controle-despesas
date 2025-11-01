@@ -1,0 +1,49 @@
+@keyframes blink {
+  0%, 100% { background: #d30104; }
+  50% { background: #ff0004; }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+}
+
+
+.botaoSistemaContainer{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 80%;
+    gap: 5px;
+}
+
+.botaoFormatar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FF0004;
+  border-radius: 40px;
+  padding: 8px;
+  font-family: var(--font-roboto-condensed);
+  font-size: 1rem;
+  color: rgb(255, 255, 255);
+}
+
+
+.botaoFormatar:hover{
+    background: #d30104;
+    cursor: pointer;
+    animation: blink 1.5s linear infinite;
+}
+
+.botaoMenuContainer{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}

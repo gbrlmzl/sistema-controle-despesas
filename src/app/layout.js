@@ -1,19 +1,33 @@
 import "modern-css-reset/dist/reset.min.css";
-import { Geist, Geist_Mono } from "next/font/google";
-//import "./globals.css";
-import Navbar from "@/components/Navbar";
+import { Montserrat, Roboto_Condensed, Roboto, Poppins } from "next/font/google";
+import "./globals.css";
+import Navbar from "@/components/ui/Navbar";
 import SessionProvider from "@/components/providers/SessionProvider";
 
 import { getServerSession } from "next-auth";
 import {auth} from "../../auth";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+
+const montserratSemibold = Montserrat({
+  weight: ["600"],
+  variable: "--font-montserrat_semibold",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const robotoCondensed = Roboto_Condensed({
+  variable: "--font-roboto-condensed",
+  subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  weight: ["400", "600"],
+  variable: "--font-poppins",
+  subsets: ["latin"],
+});
+
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
 });
 
@@ -26,7 +40,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${montserratSemibold.variable} ${robotoCondensed.variable} ${roboto.variable} ${poppins.variable}`}>
         <SessionProvider>
           <header>
             <Navbar />

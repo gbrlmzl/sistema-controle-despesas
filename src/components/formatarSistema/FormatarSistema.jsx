@@ -3,6 +3,8 @@ import {useFormatarSistema} from "../../hooks/useFormatarSistema";
 import Confirmacao from "./Confirmacao";
 import ResumoFormatacao from "./ResumoFormatacao";
 
+
+
 export default function FormatarSistema({ handleOpcaoMenu, atualizarDadosLocais }) {
     const {
         etapa,

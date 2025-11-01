@@ -1,8 +1,8 @@
-
+import styles from "./DespesasResumo.module.css";
 
 export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas, retornarSelecao, mesAnoTexto, mostrarDespesasPessoa, calcularResumoDespesas, onProximoMes, onAnteriorMes }) {
 
-    
+        
 
 
 
@@ -15,26 +15,27 @@ export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas
         }
     }
 
+    const handleExibirDetalhes = (pessoaId) => {
+        mostrarDespesasPessoa(pessoaId);
+    }
+
 
     return (
-        <div style={{"display": "flex", "gap": "3vh", "flexDirection": "column" }}>
-            <div style={{"display" : "flex", "flexDirection" : "row", "justifyContent" : "space-between", "paddingInline" : 5}}>
-                <button style={{borderRadius: 40}} onClick={onAnteriorMes}>{"<"}</button>
-                <h2>{mesAnoTexto()}</h2>
-                <button onClick={onProximoMes}>{">"}</button>
-
+        <div className={styles.container}> 
+            <div className={styles.botoesNavContainer}>
+                <button className="botaoNavegacaoIcone" onClick={onAnteriorMes}>
+                    <span>
+                        <img src="./icons/anteriorNavIcon.svg" alt="Mês anterior" />
+                    </span>
+                </button>
+                <h3>{mesAnoTexto()}</h3>
+                <button className="botaoNavegacaoIcone" onClick={onProximoMes}>
+                    <span>
+                        <img src="./icons/avancarNavIcon.svg" alt="Próximo mês" />
+                    </span>
+                </button>
             </div>
-
-            <div style={{ maxHeight: '200px', overflowY: 'scroll', border: '1px solid #ccc', borderRadius: '4px', padding: '8px', display: 'flex', flexDirection: 'column', gap: '4px', alignItems: "center" }}> {/*Arrumar no CSS depois */}
-                {listaPessoas.pessoas.map(pessoa => {
-                    return (
-                        <div key={pessoa.id}>
-                            <button disabled={!existemDespesasCadastradas} onClick={() => mostrarDespesasPessoa(pessoa.id)}>Despesas de {pessoa.name}</button>
-                        </div>
-                    )
-                })}
-            </div>
-            <div>
+            <div className={styles.resumoContainer}>
                 <table>
                     <thead>
                         <tr>
@@ -48,7 +49,7 @@ export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas
                         {existemDespesasCadastradas ? (
                             calcularResumoDespesas().map((pessoa, index) => (
                             <tr key={index}>
-                                <td>{pessoa.nomePessoa}</td>
+                                <td onClick={() => handleExibirDetalhes(pessoa.pessoaId)}>{pessoa.nomePessoa}</td>
                                 <td>{pessoa.paga ? pessoa.quantia.toFixed(2) : "0.00"}</td>
                                 <td>{pessoa.recebe ? pessoa.quantia.toFixed(2) : "0.00"}</td>
                                 <td>{pessoa.numDespesas}</td>
@@ -66,15 +67,21 @@ export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td style={{ fontWeight: "bold", color: "#d32f2f" }}>Total</td>
-                            <td style={{ fontWeight: "bold", color: "#d32f2f" }}>{calcularTotalGasto()}</td>
+                            <td style={{fontWeight: "bold"}}>Total</td>
+                            <td>{calcularTotalGasto()}</td>
+                            <td>X</td>
+                            <td>{existemDespesasCadastradas ? despesasMesAnoSelecionado.length : "-"}</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
-            <div>
-                <button onClick={retornarSelecao}>Voltar</button>
-                
+            
+            <div className="botoesContainer">
+                <button className="botaoIcone" onClick={retornarSelecao}>
+                    <span >
+                        <img src="./icons/retornarIcon.svg" alt="retornar" />
+                    </span>
+                </button>  
             </div>
 
 

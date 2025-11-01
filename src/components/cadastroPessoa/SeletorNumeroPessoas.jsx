@@ -2,29 +2,29 @@
 import styles from "./SeletorNumeroPessoas.module.css";
 import { useState } from "react";
 
-export default function SeletorNumeroPessoas({onConfirma, onCancela}){
+export default function SeletorNumeroPessoas({ onConfirma, onCancela }) {
     const [numeroPessoasPainel, setNumeroPessoasPainel] = useState(0);
 
-    const handleNumeroPessoasPainel = (numero) =>{
+    const handleNumeroPessoasPainel = (numero) => {
         setNumeroPessoasPainel(numero);
     }
-    
+
     const handleConfirmaNumeroPessoas = () => {
-        if(onConfirma) {onConfirma(numeroPessoasPainel)};
+        if (onConfirma) { onConfirma(numeroPessoasPainel) };
     }
 
     const handleCancela = () => {
-        if (onCancela) {onCancela()};
+        if (onCancela) { onCancela() };
     }
 
 
 
-    return(
-        <div>
-            <div>
-                <div>
-                    <h2>Número de pessoas: {numeroPessoasPainel !== 0 && numeroPessoasPainel}</h2>  
+    return (
+            <div className={styles.container}>
+                <div className={styles.numPessoasContainer}>
+                    <h3>Número de pessoas: {numeroPessoasPainel !== 0 && numeroPessoasPainel}</h3>
                 </div>
+                
                 <div className={styles.tecladoNumerico}>
                     <button disabled={true}>1</button>
                     <button onClick={() => handleNumeroPessoasPainel(2)}>2</button>
@@ -36,13 +36,21 @@ export default function SeletorNumeroPessoas({onConfirma, onCancela}){
                     <button onClick={() => handleNumeroPessoasPainel(8)}>8</button>
                     <button onClick={() => handleNumeroPessoasPainel(9)}>9</button>
                 </div>
-                <div>
-                    <button onClick={handleCancela}>Cancelar</button>
-                    <button onClick={handleConfirmaNumeroPessoas} disabled = {numeroPessoasPainel === 0}>Confirmar</button>
-                </div>             
+                <div className={styles.botoesContainer}>
+                    <button onClick={handleCancela}>
+                        <span className="botaoIcone">
+                            <img src="/icons/retornarIcon.svg" alt="Cancelar" />
+                        </span>
+                    </button>
+                    <button onClick={handleConfirmaNumeroPessoas} disabled={numeroPessoasPainel === 0}>
+                        <span className="botaoIcone">
+                            <img src="/icons/confirmarIcon.svg" alt="Confirmar" />
+                        </span>
+                    </button>
+                </div>
             </div>
-            
-        </div>
+
+        
     )
 
 }

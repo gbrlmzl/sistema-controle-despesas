@@ -1,12 +1,12 @@
 import { useState } from "react";
 import html2canvas from "html2canvas";
-
+import {compartilharDespesasDetalhes} from '../app/utils/compartilharDespesas';
 
 export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
     const etapas = ["selecaoMes", "despesasResumo", "despesasDetalhes"];
     const [etapa, setEtapa] = useState(etapas[0]);
     const [loading, setLoading] = useState(false);
-
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", type: "" });
     const [despesasMesAnoSelecionado, setDespesasMesAnoSelecionado] = useState([]);
     const [despesasPessoaSelecionada, setDespesasPessoaSelecionada] = useState([]);
     const [existeDespesaCadastrada, setExisteDespesaCadastrada] = useState(null); //null = não verificado, true = existe, false = não existe
@@ -78,14 +78,17 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
             const paga = saldo > 0 ? true : false;
             const quantia = Math.abs(saldo);
             const numDespesas = despesasMesAnoSelecionado.filter(despesa => despesa.idPessoa === pessoa.id).length;
+            const pessoaId = pessoa.id;
 
             return {
                 nomePessoa: nomePessoa,
+                pessoaId: pessoaId,
                 totalGasto: totalGastoPessoa,
                 recebe: recebe,
                 paga: paga,
                 quantia: quantia,
                 numDespesas: numDespesas
+
             }
         })
     }
@@ -117,37 +120,22 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
         setDespesasPessoaSelecionada([]);
     }
 
-    const compartilharDespesasPessoa = async ({despesasDetalhesRef, pessoaNome}) => {
 
-        
-
-        const canvas = await html2canvas(despesasDetalhesRef.current);
-        const dataUrl = canvas.toDataURL("image/png");
-
-        //Converter para blob
-        const res = await fetch(dataUrl);
-        const blob = await res.blob();
-
-        //Compartilhar usando a API de compartilhamento nativa do navegador
-        if (navigator.share) {
-            const mesAnoFormatado = mesAnoTexto().toLowerCase().replace(" de ", "_").replace("ç", "c").replace(/ /g, "_");
-            const file = new File([blob], `despesas_${pessoaNome.toLowerCase().replace(/ /g, "_")}_${mesAnoFormatado}.png`, { type: "image/png" });
-            navigator.share({
-                files: [file],
-                title: "Resumo financeiro",
-                text: "",
-            });
-        } else {
-            console.log("Erro ao compartilhar");
-
+    const mostrarSnackbar = ({ msg, type, time }) => {
+        setSnackbar({ open: true, message: msg, type: type });
+        if (time) {
+            setTimeout(() => {
+                setSnackbar({ open: false, message: "", type: "" });
+            }, time);
         }
+
     }
 
+    const fecharSnackbar = () => {
+        setSnackbar({ open: false, message: "", type: "" });
+    }
 
-
-
-
-
+    
     return {
         etapa,
         loading,
@@ -162,7 +150,10 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
         exibirDespesasDetalhes,
         despesasPessoaSelecionada,
         retornarResumo,
-        compartilharDespesasPessoa
+        compartilharDespesasDetalhes,
+        snackbar,
+        mostrarSnackbar,
+        fecharSnackbar,
     }
 
 

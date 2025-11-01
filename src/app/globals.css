@@ -1,4 +1,6 @@
-:root {
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
+
+/*:root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -24,10 +26,39 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+
+
+
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+
+
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}*/
+
+:root {
+  --color-primary: #efe9f4;
+  --color-secondary: #ff6347;
+  --foreground: #171717;
+  --color-bg: #0a122a;
+}
+
+body{
+  background: var(--color-bg);
+  color: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+
 }
 
 a {
@@ -35,8 +66,27 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+h1{
+  font-family: 'Audiowide', cursive;
+}
+
+/*button{
+  font-family: 'Audiowide', cursive;
+  cursor: pointer;
+  background: rgba(93, 236, 26, 0.500);
+  border: none;
+  padding: 8px;
+  border-radius: 40px;
+  transition: background 0.2s;
+}*/
+
+button:hover {
+  background: rgba(0, 110, 255, 0.1);
+}
+
+label{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+input{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

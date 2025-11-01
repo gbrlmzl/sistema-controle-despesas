@@ -15,19 +15,22 @@ export async function GET(req) {
     });
 
     const { searchParams } = new URL(req.url);
-    const mes = searchParams.get("mes");
+    const mes = searchParams.get("mes")
     const ano = searchParams.get("ano");
+
 
     let gastos;
 
     if (mes && ano) {
-        gastos = prisma.gasto.findMany({
+        const mesInt = parseInt(mes);
+        const anoInt = parseInt(ano);
+        gastos = await prisma.gasto.findMany({
             where: {
                 pessoa: {
                     idUsuario: usuario.id
                 },
-                month: mes,
-                year: ano
+                month: mesInt,
+                year: anoInt
 
             },
             select: {
@@ -36,7 +39,6 @@ export async function GET(req) {
                 idPessoa: true
             }
         });
-
     } else {
         //buscar todos os gastos
         gastos = await prisma.gasto.findMany({
@@ -103,7 +105,6 @@ export async function POST(req) {
                 idPessoa: { in: idsPessoasArray }
             }
         })
-        console.log(gastosExistentesDeletados);
         //verificar se já existem gastos cadastrados nesse mêsAno em nome das pessoas deste usuário.
         //caso exista, exclua do banco de dados.
     }

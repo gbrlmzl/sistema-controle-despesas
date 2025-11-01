@@ -1,5 +1,8 @@
+
 import Loading from "../ui/Loading";
-export default function ConfirmaDespesa({ listaResumoDespesas, onConfirmar, onCancelar, onRetornaAoMenu, loading}) {
+import styles from './ConfirmaDespesa.module.css';
+
+export default function ConfirmaDespesa({ listaResumoDespesas, onConfirmar, onCancelar, onRetornaAoMenu, loading }) {
     const handleConfirma = () => {
         onConfirmar();
     }
@@ -22,20 +25,42 @@ export default function ConfirmaDespesa({ listaResumoDespesas, onConfirmar, onCa
 
 
     return (
-        <div>
+        <div className={styles.container}>
             <h2>Resumo</h2>
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1vh" }}> {/* Mudar isso aqui no CSS depois */}
-                {listaResumoDespesas().map((resumo, index) => (
-                    <div key={index}>
-                        <h4>{resumo.nomeResponsavel}</h4>
-                        <p>Total: {resumo.somaDespesas} R$, {resumo.quantDespesas} despesas</p>
-                    </div>
-                ))}
+            <div className={styles.resumoContainer}>
+                <table>
+                    <thead>
+                        <tr >
+                            <th>Pessoa</th>
+                            <th>Total</th>
+                            <th>Quantidade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listaResumoDespesas().map((resumo, index) => (
+                            <tr key={index}>
+                                <td >{resumo.nomeResponsavel}</td>
+                                <td>{resumo.somaDespesas.toFixed(2)}</td>
+                                <td>{resumo.quantDespesas}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
             </div>
-            <div>
-                <button onClick={handleConfirma} disabled={loading}>Confirmar</button>
-                <button onClick={handleCancela}>Cancelar</button>
+
+            <div className={styles.botoesContainer}>
+                <button onClick={handleCancela}>
+                    <span className="botaoIcone">
+                        <img src="/icons/retornarIcon.svg" alt="Cancelar" />
+                    </span>
+                </button>
+                <button onClick={handleConfirma}>
+                    <span className="botaoIcone">
+                        <img src="/icons/confirmarIcon.svg" alt="Confirmar" />
+                    </span>
+                </button>
             </div>
 
         </div>

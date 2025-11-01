@@ -1,9 +1,11 @@
-//Aqui será o componente filho de CadastraPessoa
 "use client"
 import { useState, useEffect, useRef } from "react";
-import Snackbar from "../Snackbar";
+import Snackbar from "../ui/Snackbar";
+import styles from './PessoaInfo.module.css';
+import Form from "next/form";
 
-export default function PessoaInfo({ pessoa, onSave, etapa, snackbarOpen, snackbarMensagem, snackBarOnClose }) {
+
+export default function PessoaInfo({ pessoa, onSave, etapa, snackbarOpen, snackbarMensagem, snackBarOnClose, handlePrevEtapa, onProximo }) {
     const [localPessoa, setLocalPessoa] = useState(pessoa); //Estado local para armazenar os dados da pessoa temporariamente
     const inputRef = useRef(null);
 
@@ -21,22 +23,38 @@ export default function PessoaInfo({ pessoa, onSave, etapa, snackbarOpen, snackb
         setLocalPessoa((prev) => ({ ...prev, [name]: value }));
     }
 
+    const handleSubmit = (formData) => {
+
+
+    }
+
+
 
     return (
-        <div style={{ color: "black" }}>
-            <div>
-                <h2>Cadastrar Pessoas</h2>
-            </div>
-            <div>
-                <h3>Pessoa {etapa + 1}</h3>
-            </div>
-            <div className="formCampos">
-                <input name="nome" type="text" onChange={handleDados} placeholder="Nome" value={localPessoa.nome} required ref={inputRef} />
-                <input name="email" type="text" onChange={handleDados} placeholder="E-mail" value={localPessoa.email} required />
-            </div>
-            <div>
-                <Snackbar open={snackbarOpen} message={snackbarMensagem} onClose={snackBarOnClose} ></Snackbar>
-            </div>
+        <div className={styles.container}>
+            <h3>Pessoa {etapa + 1}</h3>
+            <Form className={styles.formContainer} action={(FormData) => onProximo(FormData, etapa)}>
+                <div className={styles.formCampos}>
+                    <input name="nome" type="text" onChange={handleDados} placeholder="Nome" value={localPessoa.nome} required ref={inputRef} />
+                    <input name="email" type="text" onChange={handleDados} placeholder="E-mail" value={localPessoa.email} required />
+                </div>
+                <div className="botoesContainer">
+                    <button type="button" onClick={handlePrevEtapa} disabled={etapa === 0}>
+                        <span className="botaoIcone">
+                            <img src="/icons/retornarIcon.svg" alt="Anterior" />
+                        </span>
+                    </button>
+                    <button type="submit">
+                        <span className="botaoIcone" >
+                            <img src="/icons/avancarIcon.svg" alt="Próximo"/>
+                        </span>
+                    </button>
+                </div>
+            </Form>
+            
+            <Snackbar open={snackbarOpen} message={snackbarMensagem} onClose={snackBarOnClose} type={"error"} ></Snackbar>
+            
         </div>
+
     )
 }

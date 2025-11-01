@@ -1,5 +1,6 @@
 "use client"
 import Loading from "../ui/Loading";
+import styles from "./ConfirmaPessoas.module.css";
 
 export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso, retornarAoMenu, voltarEtapa }) {
 
@@ -18,22 +19,29 @@ export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso,
 
     if (loading) { //Se estiver carregando, mostra a animação de loading
         return (
-            <div>
-                <Loading />
-            </div>
+            <Loading />
         )
     }
 
-    if (sucesso === true) { 
+    if (sucesso === true) {
         return (
-            <>
-                <div>
-                    <h2>Cadastro realizado com sucesso!</h2>
+            <div className={styles.sucessoContainer}>
+                <div className={styles.mensagemSucessoContainer}>
+                    <p>Cadastro realizado com sucesso!</p>
                 </div>
-                <div>
-                    <button onClick={retornarAoMenu}>Voltar ao menu</button>
+
+                <div className={styles.botoesContainer}>
+                    <div> 
+                    </div>
+                    <button onClick={retornarAoMenu}>
+                        <span className="botaoIcone">
+                            <img src="/icons/confirmarIcon.svg" alt="Confirmar" />
+                        </span>
+                    </button>
+                    <div>
+                    </div>
                 </div>
-            </>
+            </div>
         )
     }
     if (sucesso === false) { //Se o cadastro falhou, mostra a mensagem de erro
@@ -45,16 +53,26 @@ export default function ConfirmaPessoas({ pessoas, onConfirma, loading, sucesso,
     }
     if (sucesso === null) { //Se ainda não tentou cadastrar, mostra a lista de pessoas a serem cadastradas e o botão de confirmar
         return (
-            <div>
-                <div>
-                    <h2>Confirmação</h2>
+            <div className={styles.container}>
+                <h3>Confirmação</h3>
+                <div className={styles.listaPessoasContainer}>
+                    <ol>
+                        {lista}
+                    </ol>
                 </div>
-                <ul>
-                    {lista}
-                </ul>
-                <div>
-                    <button onClick={handleConfirma}>Confirmar</button>
-                    <button onClick={handleRetorna}>Retornar</button>
+
+                <div className={styles.botoesContainer}>
+                    <button onClick={handleRetorna}>
+                        <span className="botaoIcone">
+                            <img src="/icons/retornarIcon.svg" alt="Cancelar" />
+                        </span>
+                    </button>
+                    <button onClick={handleConfirma}>
+                        <span className="botaoIcone">
+                            <img src="/icons/confirmarIcon.svg" alt="Confirmar" />
+                        </span>
+
+                    </button>
                 </div>
             </div>
         )

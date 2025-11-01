@@ -1,6 +1,7 @@
 'use server';
 import { redirect } from "next/navigation";
 import { auth } from "../../../auth";
+import "./controledespesas.css";
 
 
 export default async function ControleDespesasLayout({ children }) {
@@ -10,9 +11,11 @@ export default async function ControleDespesasLayout({ children }) {
     }
 
     return (
-        <div style={{ minHeight: "100vh", background: "#999999ff" }}>
-            <header>
-                <h1>Controle de Despesas</h1>
+        <div className="paginaConteudo" style={{ }}>
+            <header className="tituloPrincipal">
+                <span>
+                    <a href="/controledespesas">Controle de Despesas</a>
+                </span>
             </header>
             <main>
                 {children}

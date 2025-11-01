@@ -1,3 +1,37 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container h3 {
+  color: black;
+  font-family: var(--font-roboto);
+}
+.numPessoasContainer{
+  display: flex;
+  width: 100%;
+  text-align: center;
+  justify-content: start;
+  padding-left: 2rem;
+  padding-top: 1rem;
+
+}
+
+.botoesContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-inline: 1rem ;
+  width: 100%;
+
+}
+
+
+
 .tecladoNumerico {
   display: grid;
   grid-template-columns: repeat(3, 50px);
@@ -7,13 +41,29 @@
 }
 .tecladoNumerico button {
   font-size: 1.5rem;
-  padding: 15px;
+  padding: 10px;
   border: 1px solid #888;
   border-radius: 8px;
   background: #f0f0f0;
+  color: black;
   cursor: pointer;
   transition: background 0.2s;
 }
+
+
 .tecladoNumerico button:hover {
   background: #d0eaff;
+}
+
+.tecladoNumerico button:disabled {
+  background: none;
+  color: transparent;
+  border: none;
+  
+}
+
+.tecladoNumerico button:disabled:hover {
+  background: none;
+  cursor: default;
+  
 }

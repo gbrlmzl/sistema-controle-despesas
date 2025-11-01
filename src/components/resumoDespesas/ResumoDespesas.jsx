@@ -1,7 +1,8 @@
 import { useResumoDespesas } from "@/hooks/useResumoDespesas"
 
-import SelecionarMesAno from "./SelecionarMesAno";
 import DespesasInfoResumo from "./DespesasInfoResumo";
+import SeletorMes from "../shared/SeletorMes";
+import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";
 
 export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPessoas }) {
 
@@ -9,12 +10,13 @@ export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPe
         etapa,
         listaDespesasMesAnoSelecionado,
         existeDespesaCadastrada,
-        handleConfirmaEscolha,
+        selecionarMesAno,
         mesAnoTexto,
         calcularResumoDespesas,
         compartilharResumo,
         onAnteriorMes,
-        onProximoMes
+        onProximoMes,
+        retornarSelecao
 
 
      } = useResumoDespesas({ listaDespesas, listaPessoas });
@@ -25,16 +27,22 @@ export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPe
     }
 
 
-    
+    if(etapa === "selecionarMesAno" && existeDespesaCadastrada === false){
+        return (
+            <DespesasNaoCadastradas
+                titulo={"Resumo de Despesas"}
+                onRetornaSelecao={retornarSelecao}
+                mesAnoTexto={mesAnoTexto}
+            />
+            
+        )
+    }
     if(etapa === "selecionarMesAno"){
         return (
-                <SelecionarMesAno
-                onConfirmaEscolha={(mesSelecionado, anoSelecionado) => handleConfirmaEscolha(mesSelecionado, anoSelecionado)}
-                onRetornaAoMenu={retornarAoMenu}
-                existeDespesaCadastrada={existeDespesaCadastrada}
-                
-
-
+                <SeletorMes
+                titulo={"Resumo de Despesas"}
+                onConfirmaEscolha={(mesSelecionado, anoSelecionado) => selecionarMesAno(mesSelecionado, anoSelecionado)}
+                onCancela={retornarAoMenu}                
                 />
 
        )
@@ -45,7 +53,7 @@ export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPe
             onRetornaAoMenu={retornarAoMenu}
             mesAnoTexto={mesAnoTexto}
             listaDespesasInfoFormatada = {calcularResumoDespesas()}
-            onCompartilhar={compartilharResumo}
+            onCompartilhar={(dados) => compartilharResumo(dados)}
             onAnteriorMes={onAnteriorMes}
             onProximoMes={onProximoMes}
             existeDespesaCadastrada={existeDespesaCadastrada}

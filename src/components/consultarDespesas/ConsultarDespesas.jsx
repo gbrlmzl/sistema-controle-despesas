@@ -1,9 +1,12 @@
 import useConsultarDespesas from "../../hooks/useConsultarDespesas";
 import DespesasDetalhes from "./DespesasDetalhes";
 import DespesasResumo from "./DespesasResumo";
-import SelecionarMesAnoConsulta from "./SelecionarMesAnoConsulta";
+import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";
+import SeletorMes from "../shared/SeletorMes";
+import Snackbar from "../ui/Snackbar";
+import { useEffect } from "react";
 
-export default function ConsultarDespesas({listaPessoas, listaDespesas, handleOpcaoMenu,}){
+export default function ConsultarDespesas({ listaPessoas, listaDespesas, handleOpcaoMenu, }) {
 
 
     const {
@@ -20,24 +23,44 @@ export default function ConsultarDespesas({listaPessoas, listaDespesas, handleOp
         avancarMes,
         retrocederMes,
         retornarResumo,
-        compartilharDespesasPessoa
-    } = useConsultarDespesas({listaPessoas, listaDespesas});
+        compartilharDespesasDetalhes,
+        snackbar,
+        mostrarSnackbar,
+        fecharSnackbar,
+    } = useConsultarDespesas({ listaPessoas, listaDespesas });
 
-    
+    useEffect(() => {
+        if(etapa === "despesasResumo") {
+            mostrarSnackbar({msg: "Clique no nome da pessoa para ver os detalhes das despesas.", type: "warning"});
+        }
+        
+    }, [etapa]);
 
-    if(etapa === "selecaoMes"){
+    const retornarAoMenu = () => {
+        handleOpcaoMenu("menu");
+    }
+
+    if(etapa === "selecaoMes" && existeDespesaCadastrada === false) {
         return(
-            <SelecionarMesAnoConsulta 
-            onConfirmaEscolha={(mesSelecionado, anoSelecionado) => buscarDespesasMesAno(mesSelecionado, anoSelecionado)}
-            onRetornaAoMenu={() => handleOpcaoMenu("menu")}
-            onRetorna={retornarSelecao}
-            loading={loading}
-            existeDespesaCadastrada={existeDespesaCadastrada}
-            mesAnoTexto={mesAnoTexto}
+            <DespesasNaoCadastradas
+            onRetornaSelecao={retornarSelecao}
+            mesAnoTexto={mesAnoTexto()}
+        />
+        )
+        
+    }
+    
+    if (etapa === "selecaoMes") {
+        return (
+            <SeletorMes
+                onConfirmaEscolha={(mesSelecionado, anoSelecionado) => buscarDespesasMesAno(mesSelecionado, anoSelecionado)}
+                onCancela={retornarAoMenu}
+                loading={loading}
             />
         )
     } else if (etapa === "despesasResumo") {
         return (
+            <>
             <DespesasResumo
                 despesasMesAnoSelecionado={despesasMesAnoSelecionado}
                 listaPessoas={listaPessoas}
@@ -48,6 +71,8 @@ export default function ConsultarDespesas({listaPessoas, listaDespesas, handleOp
                 onProximoMes={avancarMes}
                 onAnteriorMes={retrocederMes}
             />
+            <Snackbar open={snackbar.open} message={snackbar.message} type={snackbar.type} onClose={fecharSnackbar} ></Snackbar>
+            </>
         );
     } else if (etapa === "despesasDetalhes") {
         return (
@@ -55,7 +80,7 @@ export default function ConsultarDespesas({listaPessoas, listaDespesas, handleOp
                 despesasPessoa={despesasPessoaSelecionada}
                 retornarResumo={retornarResumo}
                 mesAnoTexto={mesAnoTexto}
-                onCompartilhar={({despesasDetalhesRef, pessoaNome}) => compartilharDespesasPessoa({despesasDetalhesRef, pessoaNome})}
+                onCompartilhar={(despesas, pessoa, mesAnoTexto) => compartilharDespesasDetalhes(despesas, pessoa, mesAnoTexto)}
             />
         )
     }

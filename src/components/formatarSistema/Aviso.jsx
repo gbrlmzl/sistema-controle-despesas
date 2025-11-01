@@ -1,12 +1,22 @@
+import styles from './Aviso.module.css';
 
-
-export default function Aviso({handleProsseguir}) {
+export default function Aviso({ handleProsseguir }) {
     return (
-        <div>
-            <h2>Formatar sistema</h2>
-            <h3>Atenção: Esta ação irá apagar todos os dados do sistema, incluindo pessoas e despesas cadastradas. Tem certeza que deseja continuar?</h3>
-            <button onClick={() => handleProsseguir(true)}>Prosseguir</button>
-            <button onClick={() => handleProsseguir(false)}>Cancelar</button>
+        <div className={styles.container}>
+            <div className={styles.avisoContainer}> 
+                <h3>ATENÇÃO!</h3>
+                <div className={styles.mensagemContainer}>
+                    <p>Esta ação irá apagar todos os dados do sistema, <span className={styles.destaque}>incluindo pessoas e despesas cadastradas</span></p>
+                </div>
+                <span className={styles.continuarTexto}><p>Deseja continuar?</p></span>
+
+            </div>
+
+            <div className='botoesContainer'>
+                <button className='botaoTexto' onClick={() => handleProsseguir(false)}>Cancelar</button>
+                <button className='botaoTexto' onClick={() => handleProsseguir(true)}>Prosseguir</button>
+            </div>
+
         </div>
     )
 }

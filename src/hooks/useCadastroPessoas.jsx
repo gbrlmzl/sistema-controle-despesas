@@ -50,11 +50,15 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
         if (etapa !== 0) { setEtapa(prev => prev - 1); };
     }
 
-    const handleNextEtapa = (event, pessoaTemporaria, etapa) => {
-        if (event) { event.preventDefault() };
+    const handleNextEtapa = (formData, etapa) => {
+        //if (event) { event.preventDefault() };
         //Validar CPF =>
-        if (validarEmail(pessoaTemporaria.email)) {
-            handlePessoaDados(pessoaTemporaria, etapa);
+        const nomePessoa = formData.get("nome");
+        const emailPessoa = formData.get("email");
+
+        
+        if (validarEmail(emailPessoa)) {
+            adicionaNovaPessoa({nome: nomePessoa, email: emailPessoa}, etapa);
             setEtapa(prev => prev + 1);
             setSnackbarOpen(false); //Fecha o snackbar caso ele esteja aberto
 
@@ -63,7 +67,7 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
         }
     }
 
-    const handlePessoaDados = (dados, index) => {
+    const adicionaNovaPessoa = (dados, index) => {
         setPessoas((prev) => {
             const newPessoas = [...prev];
             newPessoas[index] = dados;

@@ -1,23 +1,20 @@
 "use client"
 
-function Sistema({handleOpcaoMenu}){
+import styles from './Sistema.module.css'
+
+function Sistema({ handleOpcaoMenu }) {
 
 
-    return(
-    <div>
-        <h1>Sistema</h1>
-        <div>
-            <button onClick={() => handleOpcaoMenu("cadastraPessoas") }>Cadastrar Pessoas</button>
-            <button onClick={() => handleOpcaoMenu("menu")}>Retornar ao menu</button>
-            <button onClick={() => handleOpcaoMenu("formatarSistema")}>Formatar sistema</button>
-            
-
+    return (
+        <div className={styles.container}>
+            <div className={styles.botaoSistemaContainer}>
+                <button className="botaoTexto" onClick={() => handleOpcaoMenu("cadastraPessoas")}>Cadastrar Pessoas</button>
+                <button className={styles.botaoFormatar} onClick={() => handleOpcaoMenu("formatarSistema")}>Formatar sistema</button>
+            </div>
+            <div className={styles.botaoMenuContainer}>
+                <button className='botaoTexto' onClick={() => handleOpcaoMenu("menu")}> Menu</button>
+            </div>
         </div>
-
-
-        
-
-    </div>
         
     )
 

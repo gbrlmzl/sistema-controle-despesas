@@ -1,21 +1,24 @@
 import html2canvas from "html2canvas";
 import { useEffect, useState, useRef } from "react";
 
-export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
-    const etapas = ["selecaoMes", "cadastroDespesa", "confirmaDespesa", "resumoPagamento"];
+export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
+    const etapas = ["selecaoMes", "confirmaSobrescreverDespesas", "cadastroDespesa", "confirmaDespesa", "resumoPagamento"];
     const [mesAno, setMesAno] = useState({ mes: null, ano: null });
     const [pessoaAtualIndex, setPessoaAtualIndex] = useState(0);
     const [despesaAtualIndex, setDespesaAtualIndex] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [snackbar, setSnackbar] = useState({ open: false, message: "" });
     const [existeDespesaCadastrada, setExisteDespesaCadastrada] = useState(false);
     const [somaDespesasPessoaAtual, setSomaDespesasPessoaAtual] = useState(0);
     const [listaDespesasDeCadaPessoa, setListaDespesasDeCadaPessoa] = useState([]);
     const [etapa, setEtapa] = useState(etapas[0]);
     const [sucessoCadastro, setSucessoCadastro] = useState(null); // null = não tentou cadastrar, true = sucesso, false = falha
+    const [isUltimaDespesa, setIsUltimaDespesa] = useState(false);
     const sobrescreverDespesas = useRef(false);
 
-    useEffect(() => { //UseEffect para atualizar a soma das despesas da pessoa atual sempre que a lista de despesas ou o índice da pessoa atual mudar
+    useEffect(() => { //UseEffect para atualizar a soma das despesas da pessoa atual sempre que a lista de despesas ou o índice da pessoa atual mudar  
         setSomaDespesasPessoaAtual(listaDespesasDeCadaPessoa[pessoaAtualIndex]?.somaDespesas || 0);
+        //setIsUltimaDespesa(verificaUltimaDespesaCadastrada());
     }, [listaDespesasDeCadaPessoa, pessoaAtualIndex]);
 
     useEffect(() => { //UseEffect para resetar o índice da despesa atual sempre que a pessoa atual mudar
@@ -23,12 +26,15 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
     }, [pessoaAtualIndex]);
 
     useEffect(() => {
-        if(sucessoCadastro === true){
+        if (sucessoCadastro === true) {
             atualizarDespesas();
         }
 
     }, [sucessoCadastro])
 
+    useEffect(() => {
+        setIsUltimaDespesa(verificaUltimaDespesaCadastrada());
+    }, [despesaAtualIndex, listaDespesasDeCadaPessoa, pessoaAtualIndex]);
     //Array que vai conter um array de objetos que tem {idPessoa: id, nomePessoa: "", despesas: [], somaDespesas: 0, quantDespesas : 0}
     const criarListaDeDespesasParaCadaPessoa = () => {
         const pessoasArray = listaPessoas.pessoas; //transforma o objeto listaPessoas em um array para melhor manipulação
@@ -70,23 +76,27 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
         }
     }
 
-    const handleConfirmaEscolha = async (mesSelecionado, anoSelecionado) => {
+    const selecionarMesAno = async (mesSelecionado, anoSelecionado) => {
         if (loading) return; //se já estiver carregando, não faz nada
         setLoading(true); //indica que está carregando
         setMesAno({ mes: mesSelecionado, ano: anoSelecionado });
         //Quando confirmar o mês e ano, verificar se já existem despesas cadastradas no banco de dados correspondente a esse mês e ano. se existir, perguntar se quer substituir ou cancelar a operação
         const response = await recuperaDespesasDoMes({ mes: mesSelecionado, ano: anoSelecionado });
+
         const despesasExistentes = response.gastos;
+
+
 
         if (despesasExistentes.length > 0) { //Se existem despesas cadastradas nesse mês e ano, o usuário deve decidir se quer substituir ou cancelar a operação                      
             setLoading(false);
             setExisteDespesaCadastrada(true);
+            setEtapa(etapas[1]); //mudar para a etapa de confirmaSobrescreverDespesas
             return; //finaliza a função aqui, esperando o usuário decidir o que fazer
         }
 
 
-        //se não existir, avançar para a próxima etapa
-        setEtapa(etapas[1]); //avança para a próxima etapa
+        //se não existem despesas cadastradas, pode prosseguir para a etapa de cadastrar despesas
+        setEtapa(etapas[2]); //avança para a etapa de cadastrar despesas
         setLoading(false); //indica que terminou de carregar
         criarListaDeDespesasParaCadaPessoa(); //cria o array de despesas para cada pessoa
     }
@@ -95,13 +105,17 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
         //Função para sobrescrever as despesas existentes no banco de dados
         setExisteDespesaCadastrada(false);
         sobrescreverDespesas.current = true;
-        setEtapa(etapas[1]); //avança para a próxima etapa
+        setEtapa(etapas[2]); //avança para a próxima etapa
 
         criarListaDeDespesasParaCadaPessoa(); //cria o array de despesas para cada pessoa
     }
 
 
     const handleProximaDespesa = (formData) => {
+        if (formData.get("identificacao").trim() === "") {
+            mostrarSnackbar("A identificação da despesa não pode estar vazia!");
+            return;
+        }
         setListaDespesasDeCadaPessoa(prevLista => {
             // Cria uma cópia profunda do array
             const novaLista = prevLista.map((pessoa, indexPessoa) => {
@@ -139,9 +153,7 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
     };
 
     const handleAnteriorDespesa = () => {
-        if (despesaAtualIndex > 0) {
-            setDespesaAtualIndex(despesaAtualIndex - 1);
-        }
+        setDespesaAtualIndex(despesaAtualIndex - 1);
     }
 
     const handleProximaPessoa = () => {
@@ -157,7 +169,7 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
     }
 
     const handleFinalizar = () => {
-        setEtapa(etapas[2]); //mudar para a etapa de confirmaDespesa
+        setEtapa(etapas[3]); //mudar para a etapa de confirmaDespesa
     }
 
     const mesAnoTexto = () => {
@@ -166,6 +178,13 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
             const mesTexto = meses[mesAno.mes - 1];
             return `${mesTexto} de ${mesAno.ano}`;
         }
+    }
+
+    const verificaUltimaDespesaCadastrada = () => {
+        if (!listaDespesasDeCadaPessoa) return false;
+        if (listaDespesasDeCadaPessoa[pessoaAtualIndex]?.despesas.length === 0) return true;
+
+        return (despesaAtualIndex === (listaDespesasDeCadaPessoa[pessoaAtualIndex]?.quantDespesas));
     }
 
     const listaResumoDespesas = () => {
@@ -197,7 +216,7 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
 
             if (resultadoCadastro.success === true) {
                 setSucessoCadastro(true);
-                setEtapa(etapas[3]);
+                setEtapa(etapas[4]);
 
             } else if (resultadoCadastro.success === false) {
                 setSucessoCadastro(false); // Indica falha no cadastro
@@ -211,7 +230,7 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
     }
 
     const handleCancelaCadastroDespesas = () => {
-        setEtapa(etapas[1])//volta para a etapa de cadastrar despesas.
+        setEtapa(etapas[2])//volta para a etapa de cadastrar despesas.
     }
 
 
@@ -219,21 +238,21 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
         const valorTotalDespesas = listaDespesasDeCadaPessoa.reduce((acumuladorSomaDespesas, pessoa) => acumuladorSomaDespesas + pessoa.somaDespesas, 0);
         const numPessoas = listaDespesasDeCadaPessoa.length;
         const valorPagamentoPorPessoa = valorTotalDespesas / numPessoas;
-        
+
         //Retornar um array de objetos com valores
         //{nomePessoa: "", recebe: true/false , paga: true/false, quantia:}
         return listaDespesasDeCadaPessoa.map(pessoa => {
             const nomePessoa = pessoa.nomePessoa;
             const saldo = valorPagamentoPorPessoa - pessoa.somaDespesas;
             const recebe = saldo < 0 ? true : false;
-            const paga   = saldo > 0 ? true : false;
+            const paga = saldo > 0 ? true : false;
             const quantia = Math.abs(saldo);
 
             return {
                 nomePessoa: nomePessoa,
                 recebe: recebe,
                 paga: paga,
-                quantia : quantia
+                quantia: quantia
             }
         })
     }
@@ -249,9 +268,9 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
         const blob = await res.blob();
 
         //Compartilhar usando a API de compartilhamento nativa do navegador
-        if(navigator.share){
+        if (navigator.share) {
             const mesAnoFormatado = `${mesAno.mes}_${mesAno.ano}`;
-            const file = new File([blob], `resumo_${mesAnoFormatado}.png`, {type: "image/png"});
+            const file = new File([blob], `resumo_${mesAnoFormatado}.png`, { type: "image/png" });
             navigator.share({
                 files: [file],
                 title: "Resumo financeiro",
@@ -265,6 +284,15 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
 
     }
 
+    const mostrarSnackbar = ({msg, type}) => {
+        setSnackbar({ open: true, message: msg, type: type });
+        setTimeout(() => setSnackbar({ open: false, message: "", type: "" }), 4000);
+    };
+
+    const fecharSnackbar = () => {
+        setSnackbar({ open: false, message: "", type: "" });
+    }
+
 
 
 
@@ -275,7 +303,9 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
         existeDespesaCadastrada,
         despesaDados,
         pessoaIndexDados,
-        handleConfirmaEscolha,
+        sucessoCadastro,
+        dadosPagamento,
+        selecionarMesAno,
         handleProximaDespesa,
         handleAnteriorDespesa,
         handleProximaPessoa,
@@ -286,7 +316,8 @@ export const useCadastroDespesas = ({listaPessoas, atualizarDespesas}) => {
         handleCancelaCadastroDespesas,
         handleCompartilharResumo,
         listaResumoDespesas,
-        sucessoCadastro,
-        dadosPagamento
+        fecharSnackbar,
+        isUltimaDespesa,
+        snackbar,
     };
 }

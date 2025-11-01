@@ -5,6 +5,7 @@ import SeletorNumeroPessoas from "./SeletorNumeroPessoas";
 import PessoaInfo from "./PessoaInfo";
 import { useCadastroPessoas } from "@/hooks/useCadastroPessoas";
 import ConfirmaPessoas from "./ConfirmaPessoas";
+import ExistemPessoasCadastradas from "./ExistemPessoasCadastradas";
 
 
 
@@ -21,7 +22,7 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
         handlePrevEtapa,
         handleNextEtapa,
         handleCadastrarPessoas
-    } = useCadastroPessoas({atualizarPessoas});
+    } = useCadastroPessoas({ atualizarPessoas });
 
 
     const pessoaTemporaria = useRef(pessoas[etapa]);
@@ -46,11 +47,8 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
 
 
     if (existemPessoasCadastradas() && sucessoCadastro === null) {
-        return (<div>
-            <h2>Já existem pessoas cadastradas no sistema.</h2>
-            <p>Para modificar as pessoas cadastradas, é necessário formatar o sistema.</p>
-            <button onClick={retornarAoMenuPrincipal}>Retornar ao Menu Principal</button>
-        </div>)
+        return (
+            <ExistemPessoasCadastradas retornarAoMenuPrincipal={retornarAoMenuPrincipal} />)
     }
     if (numeroPessoas() === 0) {
         return (
@@ -60,20 +58,16 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
     }
     if (numeroPessoas() > 0 && etapa < numeroPessoas()) {
         return (
-            <div>
-                <form onSubmit={(event) => handleNextEtapa(event, pessoaTemporaria.current, etapa)}>
-                    <div>
-                        <PessoaInfo pessoa={pessoas[etapa]} onSave={(value) => pessoaTemporaria.current = value} etapa={etapa} snackbarOpen={snackbarOpen} snackbarMensagem={snackbarMsg} snackBarOnClose={handleFecharSnackbar}></PessoaInfo>
-                    </div>
-                    <div /* Menu de navegação */>
-                        <button type="button" onClick={handlePrevEtapa} disabled={etapa == 0}>Anterior</button>
-                        <button type="submit">Próximo</button>
-                    </div>
-
-                </form>
-
-            </div>
-
+            <PessoaInfo
+                pessoa={pessoas[etapa]}
+                onSave={(value) => pessoaTemporaria.current = value}
+                etapa={etapa}
+                snackbarOpen={snackbarOpen}
+                snackbarMensagem={snackbarMsg}
+                snackBarOnClose={handleFecharSnackbar}
+                handlePrevEtapa={handlePrevEtapa}
+                onProximo={(FormData, etapa) => handleNextEtapa(FormData, etapa)}
+            />
         )
     }
     if (etapa === numeroPessoas()) {

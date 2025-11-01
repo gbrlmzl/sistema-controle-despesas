@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Loading from "../ui/Loading";
+import styles from './Confirmacao.module.css';
 
-export default function Confirmacao({ onRetornaAoMenu, onConfirmaFormatacao, loading }){
+export default function Confirmacao({ onRetornaAoMenu, onConfirmaFormatacao, loading }) {
     const [textoConfirmacao, setTextoConfirmacao] = useState("");
 
     const handleCancela = () => {
@@ -13,12 +14,16 @@ export default function Confirmacao({ onRetornaAoMenu, onConfirmaFormatacao, loa
 
     }
 
-    if(loading){
-        return(
-            <div>
-                <h2>Formatar sistema</h2>
-                <Loading/>
-
+    if (loading) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.loadingContainer}>
+                    <Loading />
+                </div>
+                <div className='botoesContainer'>
+                    <button className="botaoTexto" disabled={true} onClick={handleCancela}>Cancelar</button>
+                    <button className="botaoTexto" disabled={true} onClick={handleConfirma}>Confirmar</button>
+                </div>
             </div>
 
         )
@@ -26,13 +31,19 @@ export default function Confirmacao({ onRetornaAoMenu, onConfirmaFormatacao, loa
 
 
     return (
-        <div>
-            <h2>Formatar sistema</h2>
-            <h3>Para prosseguir, digite FORMATAR SISTEMA no campo abaixo</h3>
-            <input type="text" value={textoConfirmacao} onChange={(e) => setTextoConfirmacao(e.target.value.toUpperCase())} />
-            <div>
-                <button disabled={textoConfirmacao !== "FORMATAR SISTEMA" || loading} onClick={handleConfirma}>Confirmar</button>
-                <button onClick={handleCancela}>Cancelar</button>
+        <div className={styles.container}>
+            <div className={styles.confirmacaoContainer}>
+                <div className={styles.mensagemContainer}>
+                    <p>Para concluir a ação, digite <span className={styles.destaque}>FORMATAR SISTEMA</span> e confirme</p>
+                </div>
+
+                <input type="text" value={textoConfirmacao} onChange={(e) => setTextoConfirmacao(e.target.value.toUpperCase())} />
+            </div>
+
+            <div className='botoesContainer'>
+                <button className="botaoTexto" onClick={handleCancela}>Cancelar</button>
+                <button className="botaoTexto" disabled={textoConfirmacao !== "FORMATAR SISTEMA" || loading} onClick={handleConfirma}>Confirmar</button>
+
             </div>
         </div>
     )

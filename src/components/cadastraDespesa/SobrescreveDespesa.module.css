@@ -1,0 +1,66 @@
+.container {
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+}
+
+
+.botaoTexto {
+    border-radius: 1.875rem;
+    background: #2497F3;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    padding: 0.5rem 1.5rem;
+    color: #FFF;
+    text-align: center;
+    font-family: "Roboto Condensed";
+    font-size: 1rem;
+    font-weight: 400;
+    margin-top: 0.5rem;
+}
+
+.botaoTexto:hover {
+    background: #1E7ACC;
+    cursor: pointer;
+}
+
+.botaoTexto:disabled {
+    background: #66B2FF;
+    box-shadow: none;
+    cursor: default;
+}
+
+.mensagemContainer {
+    display: flex;
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 6rem;
+    border-radius: 1.25rem;
+    border: 1px solid #000;
+    background: #2497F3;
+    gap: 1rem
+
+
+}
+
+.mensagemContainer p{
+    font-size: 1.25rem;
+    text-align: center;
+    font-family: var(--font-roboto-condensed);
+    font-weight: 500;
+    color: #FFF;
+    /*text-shadow: #000 1px 1px 2px;*/
+}
+
+.mensagemSobrescrever{
+    font-size: 1.5rem;
+    text-align: center;
+    font-family: var(--font-roboto-condensed);
+    font-weight: 500;
+    color: #000000;
+    /*text-shadow: #000 1px 1px 2px;*/ 
+}

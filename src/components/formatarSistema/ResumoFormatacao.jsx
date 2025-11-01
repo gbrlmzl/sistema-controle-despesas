@@ -1,4 +1,4 @@
-
+import styles from './ResumoFormatacao.module.css';
 
 
 
@@ -8,18 +8,21 @@ export default function ResumoFormatacao({ resultadoFormatacaoData, onRetornaAoM
 
     if (resultadoFormatacaoData) {
         return (
-            <div>
-                <h2>Formatar sistema</h2>
-                <div>
+            <div className={styles.container}>
+                <div className={styles.resumoContainer}>
                     <h3>Sistema formatado com sucesso</h3>
-                    <ul>
-                        <li>Total de gastos deletados: {resultadoFormatacaoData.gastosDeletados}</li>
-                        <li>Total de pessoas deletadas: {resultadoFormatacaoData.pessoasDeletadas}</li>
-                    </ul>
+                    <div className={styles.detalhesContainer}>
+                        <ul>
+                            <li>Gastos deletados: {resultadoFormatacaoData.gastosDeletados}</li>
+                            <li>Pessoas deletadas: {resultadoFormatacaoData.pessoasDeletadas}</li>
+                        </ul>
+                    </div>
+
                 </div>
-                <div>
-                    <button onClick={onRetornaAoMenu}>Retornar ao menu</button>
-                </div>
+                
+                <button className='botaoTexto' onClick={onRetornaAoMenu}>Menu</button>
+                    
+                
             </div>
         )
     } else {

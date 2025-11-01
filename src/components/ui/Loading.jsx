@@ -10,18 +10,19 @@ export default function Loading() {
     }}>
       <div className="spinner" />
       <style>{`
-        .spinner {
-          width: 40px;
-          height: 40px;
-          border: 4px solid #ccc;
-          border-top: 4px solid #ff6f61;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+              .spinner {
+              width: 80px;
+              height: 80px;
+              border: 10px solid #ccc;
+              border-top: 10px solid #1A78C2;
+              border-radius: 50%;
+              animation: spin 1s linear infinite;
+              }
+              @keyframes spin {
+              to { transform: rotate(360deg); }
+              }
+            `}
+      </style>
     </div>
   );
 }

@@ -17,6 +17,7 @@
     "@types/estree": "^1.0.8",
     "@types/json-schema": "^7.0.15",
     "bcrypt": "^6.0.0",
+    "dom-to-image-more": "^3.7.2",
     "html2canvas": "^1.4.1",
     "modern-css-reset": "^1.4.0",
     "next": "15.4.7",

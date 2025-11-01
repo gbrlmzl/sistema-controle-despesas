@@ -1,36 +1,36 @@
 import { useRef } from "react";
+import styles from './DespesasInfoResumo.module.css';
 
 export default function DespesasInfoResumo({ onRetornaAoMenu, mesAnoTexto, listaDespesasInfoFormatada, onCompartilhar, onAnteriorMes, onProximoMes, existeDespesaCadastrada }) {
 
-
-
-    const resumoRef = useRef();
-
-
-
-
     const handleCompartilhar = () => {
-        onCompartilhar(resumoRef);
+        onCompartilhar({listaDespesasInfoFormatada, existeDespesaCadastrada, mesAnoTexto});
 
     }
 
     return (
-        <div>
-            <div ref={resumoRef}>
-                <div style={{ "display": "flex", "flexDirection": "row", "justifyContent": "space-between", "paddingInline": 5 }}>
-                    <button style={{ borderRadius: 40 }} onClick={onAnteriorMes}>{"<"}</button>
-                    <h2>{mesAnoTexto}</h2>
-                    <button onClick={onProximoMes}>{">"}</button>
+        <div className={styles.container}>
+            <div className={styles.botoesNavMesContainer}>
+                <button className="botaoNavegacaoIcone" onClick={onAnteriorMes}>
+                    <span>
+                        <img src="/icons/anteriorNavIcon.svg" alt="Mês anterior" />
+                    </span>
+                </button>
+                <h3>{mesAnoTexto}</h3>
+                <button className="botaoNavegacaoIcone" onClick={onProximoMes}>
+                    <span>
+                        <img src="/icons/avancarNavIcon.svg" alt="Próximo mês" />
+                    </span>
+                </button>
 
-                </div>
-
-
+            </div>
+            <div className={styles.resumoContainer}>
                 <table>
                     <thead>
                         <tr>
                             <th>Pessoa</th>
                             <th>Total gasto</th>
-                            <th>Quantidade de despesas</th>
+                            <th>Despesas</th>
                             <th>Valor pago</th>
                             <th>Valor recebido</th>
                         </tr>
@@ -55,7 +55,8 @@ export default function DespesasInfoResumo({ onRetornaAoMenu, mesAnoTexto, lista
                                 </tr>
                             )))
                         }
-
+                    </tbody>
+                    <tfoot>
                         {existeDespesaCadastrada ? (
                             <tr>
                                 <td>Total</td>
@@ -75,15 +76,21 @@ export default function DespesasInfoResumo({ onRetornaAoMenu, mesAnoTexto, lista
                             </tr>
                         )
                         }
-                    </tbody>
+                    </tfoot>
                 </table>
             </div>
-
-            <div>
-                <button onClick={onRetornaAoMenu}>OK</button>
-                <button onClick={handleCompartilhar}>Compartilhar</button>
+            <div className="botoesContainer">
+                <button  onClick={onRetornaAoMenu}>
+                    <span className="botaoIcone">
+                        <img src="/icons/retornarIcon.svg" alt="Retornar" />
+                    </span>
+                </button>
+                <button onClick={handleCompartilhar} disabled={!existeDespesaCadastrada}>
+                    <span className="botaoIcone">
+                        <img src="/icons/compartilharIcon.svg" alt="Compartilhar" />
+                    </span>
+                </button>
             </div>
-
         </div>
     )
 

@@ -1,22 +1,21 @@
-import { useRef } from "react";
 import styles from "./ResumoPagamento.module.css";
 
 export default function ResumoPagamento({ dataEmTexto, dadosPagamento, onRetornaAoMenu, onCompartilhar }) {
 
-    const resumoRef = useRef();
+    
     const handleOk = () => {
         onRetornaAoMenu();
     }
 
     const handleCompartilhar = () => {
-        onCompartilhar(resumoRef);
+        onCompartilhar({dadosPagamento: dadosPagamento, mesAnoTexto: dataEmTexto()});
     }
 
 
 
     return (
         <div className={styles.container}>
-            <div className={styles.resumoContainer} ref={resumoRef}>
+            <div className={styles.resumoContainer}>
                 <h3>{dataEmTexto()}</h3>
                 <table>
                     <thead>

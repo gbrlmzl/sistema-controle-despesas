@@ -169,7 +169,7 @@ function escapeXml(str = '') {
         .replace(/>/g, '&gt;');
 }
 
-export const compartilharDespesasResumo = async ({ listaDespesasInfoFormatada = [], mesAnoTexto, existeDespesaCadastrada = false } ) => {
+export const compartilharDespesasResumo = async ({ listaDespesasInfoFormatada = [], mesAnoTexto, existeDespesaCadastrada = false }) => {
     // `listaDespesasInfoFormatada` é recebida como parâmetro no formato esperado.
 
     // dimensões e colunas
@@ -322,3 +322,136 @@ export const compartilharDespesasResumo = async ({ listaDespesasInfoFormatada = 
         link.click();
     }
 }
+
+// Exporta imagem da tabela de resumo de pagamentos (Pessoa, Recebe, Paga)
+export const compartilharResumoPagamento = async ({ dadosPagamento = [], mesAnoTexto }) => {
+    // dimensões e colunas
+    const larguraColPessoa = 300;
+    const larguraColRecebe = 180;
+    const larguraColPaga = 180;
+    const larguraTotal = larguraColPessoa + larguraColRecebe + larguraColPaga;
+    const alturaCabecalho = 28;
+    const alturaLinha = 28;
+    const linhas = Math.max(1, dadosPagamento.length);
+    const footerHeight = 32;
+    const yInicioTabela = 34;
+    const alturaTabela = alturaCabecalho + (linhas * alturaLinha) + footerHeight + 35;
+
+    // garantir fonte
+    try {
+        await document.fonts.load('16px "Roboto Condensed"');
+        await document.fonts.ready;
+    } catch (err) {
+        console.warn('document.fonts.load falhou (fallback será usado):', err);
+    }
+    const localFontPath = '/fonts/RobotoCondensed.woff2';
+    const fontDataUrl = await fetchFontAsDataUrl(localFontPath);
+    const fontFaceCss = fontDataUrl
+        ? `@font-face{font-family:'Roboto Condensed';src: url('${fontDataUrl}') format('woff2');font-weight:400;font-style:normal;}`
+        : '';
+
+    const mesAnoLabel = typeof mesAnoTexto === 'function' ? mesAnoTexto() : String(mesAnoTexto || '');
+
+    // linhas da tabela
+    const rowsHtml = dadosPagamento.map((p, i) => {
+        const y = yInicioTabela + alturaCabecalho + (i * alturaLinha);
+        const nome = escapeXml(p.nomePessoa || '');
+        const recebeText = p.recebe ? Number(p.quantia || 0).toFixed(2) : '0.00';
+        const pagaText = p.paga ? Number(p.quantia || 0).toFixed(2) : '0.00';
+        return `
+            <rect class="row-rect" x="0" y="${y}" width="${larguraTotal}" height="${alturaLinha}" />
+            <line x1="${larguraColPessoa}" y1="${y}" x2="${larguraColPessoa}" y2="${y + alturaLinha}" stroke="#000" stroke-width="1" />
+            <line x1="${larguraColPessoa + larguraColRecebe}" y1="${y}" x2="${larguraColPessoa + larguraColRecebe}" y2="${y + alturaLinha}" stroke="#000" stroke-width="1" />
+
+            <text class="cell-text" x="${larguraColPessoa / 2}" y="${y + 20}" text-anchor="middle">${nome}</text>
+            <text class="cell-text" x="${larguraColPessoa + larguraColRecebe / 2}" y="${y + 20}" text-anchor="middle">${recebeText}</text>
+            <text class="cell-text" x="${larguraColPessoa + larguraColRecebe + larguraColPaga / 2}" y="${y + 20}" text-anchor="middle">${pagaText}</text>
+        `;
+    }).join('');
+
+    // totais
+    const totalRecebe = dadosPagamento.reduce((acc, p) => acc + (p.recebe ? Number(p.quantia) || 0 : 0), 0);
+    const totalPaga = dadosPagamento.reduce((acc, p) => acc + (p.paga ? Number(p.quantia) || 0 : 0), 0);
+
+    const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="${larguraTotal}" height="${alturaTabela}">
+            <style>
+            ${fontFaceCss}
+            .title { font-family: 'Roboto Condensed', sans-serif; font-size:18px; fill:#111; }
+            .cell-text { font-family: 'Roboto Condensed', sans-serif; font-size:13px; fill:#111; }
+            .header-text { font-family: 'Roboto Condensed', sans-serif; font-size:13px; fill:#fff; font-weight:700; }
+            .header-rect { fill: #38B6FF; stroke: #000; stroke-width:1; }
+            .row-rect { fill: none; stroke: #000; stroke-width:1; }
+            .total-rect { fill: #38B6FF; stroke: #000; stroke-width:1; }
+            </style>
+
+            <rect x="0" y="0" width="${larguraTotal}" height="${alturaTabela}" fill="#ffffff" />
+            <text x="${larguraTotal / 2}" y="20" class="title" text-anchor="middle">${escapeXml(mesAnoLabel)}</text>
+
+            <!-- Cabeçalho -->
+            <rect class="header-rect" x="0" y="${yInicioTabela}" width="${larguraTotal}" height="${alturaCabecalho}" />
+            <text class="header-text" x="${larguraColPessoa / 2}" y="${yInicioTabela + 20}" text-anchor="middle">Pessoa</text>
+            <text class="header-text" x="${larguraColPessoa + larguraColRecebe / 2}" y="${yInicioTabela + 20}" text-anchor="middle">Recebe</text>
+            <text class="header-text" x="${larguraColPessoa + larguraColRecebe + larguraColPaga / 2}" y="${yInicioTabela + 20}" text-anchor="middle">Paga</text>
+
+            ${rowsHtml}
+
+            <!-- Divisória horizontal antes do footer -->
+            <line x1="0" y1="${yInicioTabela + alturaCabecalho + (linhas * alturaLinha)}" x2="${larguraTotal}" y2="${yInicioTabela + alturaCabecalho + (linhas * alturaLinha)}" stroke="#000" stroke-width="1" />
+
+            <!-- Divisórias verticais (linhas contínuas) -->
+            <line x1="${larguraColPessoa}" y1="${yInicioTabela}" x2="${larguraColPessoa}" y2="${yInicioTabela + alturaCabecalho + (linhas * alturaLinha)}" stroke="#000" stroke-width="1" />
+            <line x1="${larguraColPessoa + larguraColRecebe}" y1="${yInicioTabela}" x2="${larguraColPessoa + larguraColRecebe}" y2="${yInicioTabela + alturaCabecalho + (linhas * alturaLinha)}" stroke="#000" stroke-width="1" />
+
+            <!-- Footer totals -->
+            <rect class="total-rect" x="0" y="${alturaTabela - footerHeight}" width="${larguraTotal}" height="${footerHeight}" />
+            <!-- Divisórias verticais no footer -->
+            <line x1="${larguraColPessoa}" y1="${alturaTabela - footerHeight}" x2="${larguraColPessoa}" y2="${alturaTabela}" stroke="#000" stroke-width="1" />
+            <line x1="${larguraColPessoa + larguraColRecebe}" y1="${alturaTabela - footerHeight}" x2="${larguraColPessoa + larguraColRecebe}" y2="${alturaTabela}" stroke="#000" stroke-width="1" />
+
+            <text class="header-text" x="${larguraColPessoa / 2}" y="${alturaTabela - footerHeight + 20}" text-anchor="middle">Total</text>
+            <text class="header-text" x="${larguraColPessoa + larguraColRecebe / 2}" y="${alturaTabela - footerHeight + 20}" text-anchor="middle">${totalRecebe.toFixed(2)}</text>
+            <text class="header-text" x="${larguraColPessoa + larguraColRecebe + larguraColPaga / 2}" y="${alturaTabela - footerHeight + 20}" text-anchor="middle">${totalPaga.toFixed(2)}</text>
+        </svg>
+    `;
+
+    // converter SVG -> Blob
+    const svgBlob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = svgUrl;
+
+    await new Promise((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = (e) => reject(e);
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = larguraTotal * 2;
+    canvas.height = alturaTabela * 2;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(2, 2);
+    ctx.drawImage(img, 0, 0, larguraTotal, alturaTabela);
+
+    const pngBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    try { URL.revokeObjectURL(svgUrl); } catch (e) { /* ignore */ }
+
+    const mesAnoFormatado = mesAnoLabel.toLowerCase().replace(" de ", "_").replace("ç", "c").replace(/ /g, "_");
+    const file = new File([pngBlob], `resumo_pagamento_${mesAnoFormatado}.png`, { type: 'image/png' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+            title: `Resumo de pagamento ${mesAnoFormatado}`,
+            text: `Resumo de pagamento - ${mesAnoLabel}`,
+            files: [file],
+        });
+    } else {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(file);
+        link.download = `resumo_pagamento_${mesAnoFormatado}.png`;
+        link.click();
+    }
+};
+

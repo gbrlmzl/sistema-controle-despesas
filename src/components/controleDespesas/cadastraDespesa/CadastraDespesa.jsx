@@ -21,7 +21,7 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
         handleFinalizar,
         handleConfirmaCadastroDespesas,
         handleCancelaCadastroDespesas,
-        handleCompartilharResumo,
+        onCompartilharResumo,
         despesaDados,
         pessoaIndexDados,
         listaResumoDespesas,
@@ -96,7 +96,7 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
             dataEmTexto={mesAnoTexto}
             dadosPagamento={dadosPagamento}
             onRetornaAoMenu={retornarAoMenu}
-            onCompartilhar={handleCompartilharResumo}
+            onCompartilhar={onCompartilharResumo}
 
             />
 

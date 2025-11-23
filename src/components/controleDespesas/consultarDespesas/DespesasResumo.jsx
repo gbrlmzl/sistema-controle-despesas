@@ -1,11 +1,7 @@
 import styles from "./DespesasResumo.module.css";
 
 export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas, retornarSelecao, mesAnoTexto, mostrarDespesasPessoa, calcularResumoDespesas, onProximoMes, onAnteriorMes }) {
-
-        
-
-
-
+    
     const existemDespesasCadastradas = despesasMesAnoSelecionado.length > 0;
     const calcularTotalGasto = () => {
         if (!existemDespesasCadastradas){
@@ -77,8 +73,8 @@ export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas
             </div>
             
             <div className="botoesContainer">
-                <button className="botaoIcone" onClick={retornarSelecao}>
-                    <span >
+                <button onClick={retornarSelecao}>
+                    <span className="botaoIcone" >
                         <img src="./icons/retornarIcon.svg" alt="retornar" />
                     </span>
                 </button>  

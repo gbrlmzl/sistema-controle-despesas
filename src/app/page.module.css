@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   min-height: 100svh;
+  font-family: var(--font-roboto);
 
 
 }
@@ -12,6 +13,7 @@
     --gray-rgb: 255, 255, 255;
     --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
     --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
+
 
     --button-primary-hover: #ccc;
     --button-secondary-hover: #1a1a1a;

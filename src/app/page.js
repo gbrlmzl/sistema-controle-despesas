@@ -8,7 +8,10 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <h1>Projetos</h1>
-        <a href="/controledespesas">Controle de Despesas</a>
+        <div style={{backgroundColor: "lightblue", padding: 10}}>
+          <a href="/controledespesas">Controle de Despesas</a>
+        </div>
+        
         <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1vh"}}>
           <div style={{ borderRadius: 400, overflow: "hidden", border: "5px solid", borderColor: "lightgreen", background: "lightgray", maxWidth: "300px" }}>
             <Image

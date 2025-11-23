@@ -1,5 +1,5 @@
-import html2canvas from "html2canvas";
 import { useEffect, useState, useRef } from "react";
+import { compartilharResumoPagamento  } from '../app/utils/compartilharDespesas';
 
 export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     const etapas = ["selecaoMes", "confirmaSobrescreverDespesas", "cadastroDespesa", "confirmaDespesa", "resumoPagamento"];
@@ -259,29 +259,8 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
 
     const dadosPagamento = calcularPagamento();
 
-    const handleCompartilharResumo = async (resumoRef) => {
-        const canvas = await html2canvas(resumoRef.current);
-        const dataUrl = canvas.toDataURL("image/png");
-
-        //Converter para blob
-        const res = await fetch(dataUrl);
-        const blob = await res.blob();
-
-        //Compartilhar usando a API de compartilhamento nativa do navegador
-        if (navigator.share) {
-            const mesAnoFormatado = `${mesAno.mes}_${mesAno.ano}`;
-            const file = new File([blob], `resumo_${mesAnoFormatado}.png`, { type: "image/png" });
-            navigator.share({
-                files: [file],
-                title: "Resumo financeiro",
-                text: "",
-            });
-        } else {
-            console.log("Erro ao compartilhar");
-
-        }
-
-
+    const onCompartilharResumo = async ({dadosPagamento, mesAnoTexto}) => {
+        await compartilharResumoPagamento ({dadosPagamento, mesAnoTexto});
     }
 
     const mostrarSnackbar = ({msg, type}) => {
@@ -314,7 +293,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
         handleFinalizar,
         handleConfirmaCadastroDespesas,
         handleCancelaCadastroDespesas,
-        handleCompartilharResumo,
+        onCompartilharResumo,
         listaResumoDespesas,
         fecharSnackbar,
         isUltimaDespesa,

@@ -2,6 +2,7 @@
   "name": "sistema-controle-despesas",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -13,11 +14,13 @@
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.1",
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
     "@types/estree": "^1.0.8",
     "@types/json-schema": "^7.0.15",
     "bcrypt": "^6.0.0",
     "dom-to-image-more": "^3.7.2",
+    "dotenv": "^17.2.3",
     "html2canvas": "^1.4.1",
     "modern-css-reset": "^1.4.0",
     "next": "15.4.7",
@@ -29,6 +32,6 @@
     "@eslint/eslintrc": "^3",
     "eslint": "^9",
     "eslint-config-next": "15.4.7",
-    "prisma": "^6.16.2"
+    "prisma": "^7.0.0"
   }
 }

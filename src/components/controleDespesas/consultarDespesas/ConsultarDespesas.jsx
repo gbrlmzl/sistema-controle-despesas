@@ -1,4 +1,4 @@
-import useConsultarDespesas from "../../hooks/useConsultarDespesas";
+import useConsultarDespesas from "../../../hooks/useConsultarDespesas";
 import DespesasDetalhes from "./DespesasDetalhes";
 import DespesasResumo from "./DespesasResumo";
 import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";

@@ -1,13 +1,8 @@
 import "modern-css-reset/dist/reset.min.css";
 import { Montserrat, Roboto_Condensed, Roboto, Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/ui/Navbar";
-import SessionProvider from "@/components/providers/SessionProvider";
-
-import { getServerSession } from "next-auth";
-import {auth} from "../../auth";
-
-
+import Navbar from "@/components/controleDespesas/ui/Navbar";
+import SessionProvider from "@/components/controleDespesas/providers/SessionProvider";
 
 const montserratSemibold = Montserrat({
   weight: ["600"],

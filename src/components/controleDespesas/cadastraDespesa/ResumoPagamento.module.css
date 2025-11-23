@@ -18,6 +18,10 @@
     overflow-y: auto;
   
 }
+
+.resumoContainer h3{
+    font-family: var(--font-roboto);
+}
 .botoesContainer {
     display: flex;
     flex-direction: row;
@@ -35,6 +39,7 @@
     border-collapse: collapse;
     width: 100%;
     background-color:#38B6FF;
+    font-family: var(--font-roboto-condensed);
 }
 
 .resumoContainer table th, .resumoContainer table td {

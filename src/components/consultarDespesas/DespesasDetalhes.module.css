@@ -1,0 +1,76 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    color: black;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+
+.tabelaContainer{
+    width: 100%;
+    height: 80%;
+    overflow-y: auto;
+}
+
+.detalhesContainer{
+    height: 70%;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 0.8rem;
+    
+}
+.detalhesContainer h3{
+    font-family: var(--font-roboto);
+    font-size: 1.25rem;
+    padding-bottom: 0.5rem;
+}
+
+.tabelaDespesasContainer{
+    display: block;
+    justify-content: center;
+    height: 65%;
+    width: 100%;
+    overflow-y: auto;
+    position: relative;
+}
+
+.tabelaDespesasContainer table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: var(--font-roboto-condensed);
+}
+
+.tabelaDespesasContainer table th, .tabelaDespesasContainer table td {
+    border: 1px solid black;
+    padding: 0.25rem;
+    text-align: center;
+}
+
+.tabelaDespesasContainer table thead, .tabelaDespesasContainer table tfoot {
+    background-color: #38B6FF;
+    font-weight: bold;
+}
+
+.tabelaDespesasContainer thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    
+}
+
+
+.totalGasto{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    background: #38B6FF;
+    font-family: var(--font-roboto-condensed);
+    border: 1px solid black;
+    font-size: 1.1rem;
+    
+    
+}

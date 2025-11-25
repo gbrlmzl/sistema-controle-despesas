@@ -1,0 +1,84 @@
+.seletorMesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    padding-top: 3rem;
+}
+
+.seletorMesContainer h2 {
+    color: black;
+    font-family: var(--font-montserrat_semibold);
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.selectContainer {
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 80%;
+
+}
+
+.selectContainer select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: none;
+    max-height: 50px;
+    overflow: scroll;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    font-family: var(--font-roboto-condensed);
+    text-align: center;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    
+}
+
+.botoesContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.botoesContainer button {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.botaoIcone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2497F3;
+    border-radius: 40px;
+    height: 60px;
+    width: 60px;
+    padding: 5px;
+}
+
+.botaoIcone:hover {
+    background-color: #1A78C2;
+    cursor: pointer;
+}
+
+.botaoIcone img {
+    width: 80%;
+    height: 80%;
+}
+
+/* quando o botão pai estiver desabilitado, altere o fundo do ícone e o cursor */
+.botoesContainer button:disabled .botaoIcone {
+    background-color: #66B2FF; /* cinza claro */
+    cursor: auto;
+    opacity: 0.9;
+}

@@ -1,4 +1,4 @@
-import ControleDespesas from "../../components/controleDespesas/ControleDespesas"
+import ControleDespesas from "../../components/ControleDespesas"
 
 
 export default function Home() {

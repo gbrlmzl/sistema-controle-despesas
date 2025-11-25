@@ -12,11 +12,19 @@ export default async function registerAction(_prevState, formData) {
 
 
     //Se não tiver email, nome ou senha, retorna erro
-    if (!data.email || !data.name || !data.password){
+    if (!data.email || !data.name || !data.password || !data.confirmPassword) {
         
         return {
             message: 'Preencha todos os campos',
             success : false,
+        }
+    }
+
+    //Se a senha e a confirmação de senha forem diferentes, retorna erro
+    if (data.password !== data.confirmPassword) {
+        return {
+            message: 'As senhas não coincidem',
+            success: false,
         }
     }
 

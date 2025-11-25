@@ -1,6 +1,6 @@
 import { useState } from "react";
 import html2canvas from "html2canvas";
-import {compartilharDespesasDetalhes} from '../app/utils/compartilharDespesas';
+import {compartilharDespesasDetalhes} from '../utils/compartilharDespesas';
 
 export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
     const etapas = ["selecaoMes", "despesasResumo", "despesasDetalhes"];

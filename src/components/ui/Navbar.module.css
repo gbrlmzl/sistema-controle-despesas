@@ -6,7 +6,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 2rem;
+    padding: 2rem 0.5rem;
 
     font-family: var(--font-poppins);
     
@@ -30,14 +30,16 @@
 
 }
 .skeletonAvatar{
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: #e0e0e0;
     animation: pulse 1.2s infinite;
 }
 .skeletonLines{
-    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
 }
 .skeletonLine{
     border-radius: 6px;
@@ -50,3 +52,168 @@
     50% { opacity: 0.5; }
     100% { opacity: 1; }
 }
+
+.loginButton{
+    color: #000000;
+    background-color: #11B5E4;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.loginButton:hover{
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+.navTextLinks{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.navTextLinks a:hover{
+    color: #01F7FF;
+}
+
+
+.userOptionsContainer{
+    display: none;
+    
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: #11204C;
+    border-top: 2px solid #11B5E4;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /*padding: 15px;*/
+    gap: 10px;
+    z-index: 1000;
+
+    text-align: left;
+}
+
+.userContainer{
+    display: none;
+    padding: 10px 0px;
+}
+.userContainer:hover .userOptionsContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.userOptionsContainer:hover{
+    display: flex;
+}
+
+.userInfo{
+    border-bottom: 1px solid #727272;
+    padding: 10px 20px;
+}
+
+.userActions{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 5px;
+    gap: 5px;
+}
+
+.userActionButton{
+    display: flex;
+    ;
+    width: 100%;
+    border-radius: 5px;
+    padding: 2px 8px;
+}
+.userActionButton:hover{
+    background-color: #173A62;
+    cursor: pointer;
+
+}
+
+.homeLink{
+    display: none;
+    align-items: center;
+    
+    text-decoration: none;
+    color: inherit;
+}
+
+.mobileToolbar{
+    display: flex;
+    align-items: center;
+}
+
+
+.mobileToolbarOptionsContainer{
+    position: absolute;
+    top: 3.5rem;
+    left: 1rem;
+
+    background-color: #11204C;
+    border-top: 2px solid #11B5E4;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    justify-content: flex-start;
+    z-index: 1000;
+    transform: translateY(-8px);
+
+}
+
+
+.mobileToolbarOptionsContainer button{
+    text-align: left;
+}
+
+.mobileUserOptionsContainer{
+    position: absolute;
+    top: 3.5rem;
+    right: 1rem;
+
+    background-color: #11204C;
+    border-top: 2px solid #11B5E4;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    
+    gap: 0.25rem;
+    justify-content: flex-start;
+    z-index: 1000;
+    transform: translateY(-8px);
+
+}
+
+@media (min-width: 768px) {
+    .navbar{
+        padding: 2rem 1rem;
+    }
+    .mobileToolbar{
+        display: none;
+    }
+    .homeLink{
+        display: flex;
+    }
+    .navTextLinks{
+        display: flex;
+    }
+    .userContainer{
+        display: flex;
+    }
+
+    .mobileUserContainer{
+        display: none;
+    }
+}
+
+

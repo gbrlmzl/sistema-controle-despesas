@@ -61,16 +61,6 @@ export default function LoginForm() {
                             </span>
                         </button>
                     </div>
-                   {
-                    /* <div className={styles.socialMediaLogin}>
-                        <span className="socialMediaLoginIcon">
-                            <img src="/icons/googleIcon.svg" alt="Login via google" />
-                        </span>
-                    </div>
-                    <div className={styles.rememberMe}>
-                        <input type="checkbox" name="permanecerConectado" id="permanecerConectado" />
-                        <label htmlFor="permanecerConectado">Permanecer conectado</label>
-                    </div>*/}
                 </div>
                 <div className={styles.submitButtonContainer}>
                     <button type="submit" disabled={isPending || !dadosPreenchidos}>

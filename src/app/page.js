@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Link from "next/link";
 
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
             {/* Componente */}
           </div>
           <div style={{ backgroundColor: "lightblue", padding: 10 }}>
-            <a href="/controledespesas">Controle de Despesas</a>
+            <Link href="/app">Controle de Despesas</Link>
           </div>
         </div>
 

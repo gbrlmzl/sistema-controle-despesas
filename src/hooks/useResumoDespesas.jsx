@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import html2canvas from "html2canvas";
-import { compartilharDespesasResumo } from "../app/utils/compartilharDespesas";
+import { compartilharDespesasResumo } from "../utils/compartilharDespesas";
 
 export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
     const etapas = ["selecionarMesAno", "resumoDespesa"]

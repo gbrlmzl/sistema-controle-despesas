@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { compartilharResumoPagamento  } from '../app/utils/compartilharDespesas';
+import { compartilharResumoPagamento  } from '../utils/compartilharDespesas';
 
 export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     const etapas = ["selecaoMes", "confirmaSobrescreverDespesas", "cadastroDespesa", "confirmaDespesa", "resumoPagamento"];

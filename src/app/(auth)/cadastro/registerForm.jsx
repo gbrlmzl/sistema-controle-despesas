@@ -18,6 +18,10 @@ export default function RegisterForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
+    const [atLeast8Chars, setAtLeast8Chars] = useState(false);
+    const [hasNumberOrSymbol, setHasNumberOrSymbol] = useState(false);
+    const [passwordsMatch, setPasswordsMatch] = useState(false);
     const { update } = useSession();
     const router = useRouter();
 
@@ -26,6 +30,12 @@ export default function RegisterForm() {
     const togglePasswordVisibility = () => {
         setShowPassword(prev => !prev);
     }
+
+    useEffect(() => {
+        setAtLeast8Chars(password.length >= 8);
+        setHasNumberOrSymbol(/[\d\W]/.test(password));
+        setPasswordsMatch(password.length !== 0 && password === confirmPassword);
+    }, [password, confirmPassword]);
 
 
     useEffect(() => {
@@ -39,9 +49,9 @@ export default function RegisterForm() {
         <div className={styles.container}>
             <h1>Crie sua conta</h1>
             {state?.success === false && (
-                <div className="a" role="alert">
-                    <strong className="aaa">Erro! </strong>
-                    <span className="aa">{state?.message}</span>
+                <div className={styles.errorMessage}>
+
+                    <span className={styles.errorMessageText}>{state?.message}</span>
                 </div>
             )}
             <Form action={formAction}>
@@ -50,18 +60,59 @@ export default function RegisterForm() {
                     <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <div className={styles.passwordField}>
                         <input type={showPassword ? 'text' : 'password'} name="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <button type="button" onClick={togglePasswordVisibility}>
-                            <span>
-                                {showPassword ? (
-                                    <img src="/icons/olhoIcon.svg" alt="Mostrar/Ocultar senha" />
-                                ) : (
-                                    <img src="/icons/olhoCortadoIcon.svg" alt="Mostrar/Ocultar senha" />)
-                                }
+                        
+                        <span className={styles.passwordToggle} onClick={togglePasswordVisibility}>
+                            {showPassword ? (
+                                <img src="/icons/olhoIcon.svg" alt="Mostrar/Ocultar senha" />
+                            ) : (
+                                <img src="/icons/olhoCortadoIcon.svg" alt="Mostrar/Ocultar senha" />)
+                            }
 
-                            </span>
-                        </button>
+                        </span>
+                        
                     </div>
                     <input type={showPassword ? 'text' : 'password'} name="confirmPassword" placeholder="Confirmar Senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                </div>
+                <div className={styles.passwordConditionsContainer}>
+                    <div className={styles.passwordCondition}>
+                        {atLeast8Chars ? (
+                            <span>
+                                <img src="/icons/checkedIcon.svg" alt="Condição atendida"/>
+                            </span>
+                        ) : (
+                            <span>
+                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida"/>
+                            </span>
+                        )}
+                        <p>Ao menos 8 caracteres</p>
+                    </div>
+                    <div className={styles.passwordCondition}>
+                        {hasNumberOrSymbol ? (
+                            <span>
+                                <img src="/icons/checkedIcon.svg" alt="Condição atendida"/>
+                            </span>
+                        ) : (
+                            <span>
+                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida"/>
+                            </span>
+                        )}
+                        <p>Deve conter um número ou símbolo </p>
+                    </div>
+                    <div className={styles.passwordCondition}>
+                        {passwordsMatch ? (
+                            <span>
+                                <img src="/icons/checkedIcon.svg" alt="Condição atendida"/>
+                            </span>
+                        ) : (
+                            <span>
+                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida"/>
+                            </span>
+                        )}
+                        <p>As senhas devem coincidir</p>
+                    </div>
+
+
+
                 </div>
                 <div className={styles.submitButtonContainer}>
                     <button type="submit" disabled={isPending || !dadosPreenchidos}>

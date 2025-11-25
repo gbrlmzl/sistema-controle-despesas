@@ -1,9 +1,9 @@
 'use server';
+
 import { signIn } from "../../../../auth";
 
 export default async function loginAction(_prevState, formData){
     try{
-        //await signIn('credentials', formData); dessa forma ele redireciona.
         await signIn('credentials', {
             email : formData.get('email'),
             password : formData.get('password'),
@@ -13,7 +13,7 @@ export default async function loginAction(_prevState, formData){
     } catch (e) {
 
         if (e.type === 'CredentialsSignin'){
-            return {success : false, message : "Dados incorretos"};
+            return {success : false, message : "Dados incorretos!"};
         }
         if(e.type === 'NEXT_REDIRECT'){
             return {success : true};

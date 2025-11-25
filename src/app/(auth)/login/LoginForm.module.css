@@ -8,7 +8,7 @@
     color: black;
     background-color: #E5E5E5;
     font-family: var(--font-roboto);
-    margin-top: 5rem;
+    margin-top: 2rem;
     padding-block: 2rem;
 }
 
@@ -75,7 +75,7 @@
     /* garante que o texto do input não fique escondido atrás do botão */
     padding-right: 44px;
 }
-.passwordField button{
+.passwordField span{
     position: absolute;
     right: 8px;
     top: 50%;
@@ -145,10 +145,26 @@
     cursor: pointer;
 }
 
+.submitButtonContainer button:focus{
+    background-color: #0069D9;
+    
+}
+
 .submitButtonContainer button:disabled{
     background-color: #B3B3B3;
     cursor: not-allowed;
     border: 1px solid #7A7A7A;
+}
+
+.errorMessage{
+    background-color: #F8D7DA;
+    border: 1px solid #F5C2C7;
+    color: #842029;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+    width: 75%;
+    text-align: center;
 }
 
 

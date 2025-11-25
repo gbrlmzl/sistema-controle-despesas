@@ -38,8 +38,7 @@ export default function LoginForm() {
         <div className={styles.container}>
             <h1>Fazer login</h1>
             {state?.success === false && (
-                <div className="a" role="alert">
-                    <strong className="aaa">Erro! </strong>
+                <div className={styles.errorMessage}>
                     <span className="aa">{state?.message}</span>
                 </div>
 
@@ -50,16 +49,14 @@ export default function LoginForm() {
                     <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <div className={styles.passwordField}>
                         <input type={showPassword ? 'text' : 'password'} name="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        <button type="button" onClick={togglePasswordVisibility}>
-                            <span>
-                                {showPassword ? (
-                                    <img src="/icons/olhoIcon.svg" alt="Mostrar/Ocultar senha" />
-                                ) : (
-                                    <img src="/icons/olhoCortadoIcon.svg" alt="Mostrar/Ocultar senha" />)
-                                }
+                        <span className={styles.passwordToggle} onClick={togglePasswordVisibility}>
+                            {showPassword ? (
+                                <img src="/icons/olhoIcon.svg" alt="Mostrar/Ocultar senha" />
+                            ) : (
+                                <img src="/icons/olhoCortadoIcon.svg" alt="Mostrar/Ocultar senha" />)
+                            }
 
-                            </span>
-                        </button>
+                        </span>
                     </div>
                 </div>
                 <div className={styles.submitButtonContainer}>

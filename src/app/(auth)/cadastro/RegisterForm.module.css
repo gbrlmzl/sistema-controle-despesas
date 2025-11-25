@@ -8,8 +8,9 @@
     color: black;
     background-color: #E5E5E5;
     font-family: var(--font-roboto);
-    margin-top: 5rem;
-    padding-block: 2rem;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
 }
 
 
@@ -25,7 +26,8 @@
 @media (min-width: 300px) {
   .container {
     width: 90vw;
-    height: 70vh;
+    height: auto;
+    
     
 
   }
@@ -41,6 +43,8 @@
 @media (min-width: 1024px) {
   .container {
     width: 35vw;
+    margin-top: 1rem;
+    padding-block: 2rem;
   }
 }
 
@@ -76,7 +80,7 @@
     /* garante que o texto do input não fique escondido atrás do botão */
     padding-right: 44px;
 }
-.passwordField button{
+.passwordField span{
     position: absolute;
     right: 8px;
     top: 50%;
@@ -150,6 +154,42 @@
     background-color: #B3B3B3;
     cursor: not-allowed;
     border: 1px solid #7A7A7A;
+}
+
+.passwordConditionsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 0.75rem;
+}
+
+.passwordCondition{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 0.8rem;
+    gap: 5px;
+}
+
+.passwordCondition span img{
+    width: 1rem;
+    height: 1rem;
+}
+
+.errorMessage{
+    background-color: #F8D7DA;
+    border: 1px solid #F5C2C7;
+    color: #842029;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+    width: 75%;
+    text-align: center;
+}
+
+.submitButtonContainer button:focus{
+    background-color: #0069D9;
+    
 }
 
 

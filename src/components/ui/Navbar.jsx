@@ -132,7 +132,7 @@ export default function Navbar() {
             <Link href="/">Início</Link>
             <Link href="/app">Aplicativo</Link>
           </div>
-          <Link href="/login">
+          <Link href="/login" className={styles.loginLink}>
             Login
           </Link>
         </div>

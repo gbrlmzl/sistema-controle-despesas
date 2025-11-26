@@ -194,6 +194,20 @@
 
 }
 
+.loginLink{
+    color: #000000;
+    background-color: #11B5E4;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.loginLink:hover{
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
 @media (min-width: 768px) {
     .navbar{
         padding: 2rem 1rem;

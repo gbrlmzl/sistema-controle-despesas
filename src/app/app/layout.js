@@ -4,6 +4,7 @@ import { auth } from "../../../auth";
 import "./app.css";
 
 
+
 export default async function ControleDespesasLayout({ children }) {
     const session = await auth();
     if (!session) {
@@ -14,7 +15,7 @@ export default async function ControleDespesasLayout({ children }) {
         <div className="paginaConteudo" style={{ }}>
             <header className="tituloPrincipal">
                 <span>
-                    <a href="/app">Controle de Despesas</a>
+                    <a href="/app" >Controle de Despesas</a>
                 </span>
             </header>
             <main>

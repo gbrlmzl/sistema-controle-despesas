@@ -15,7 +15,7 @@ export default function Inicio({ session }) {
                         registrando cada despesa e determinando quanto cada residente paga e recebe. </p>
                     {session ? (
                         <div className={styles.contextContainer}>
-                            <p>Comece a utilizar o Cronos!</p>
+                            <p>Comece a utilizar!</p>
                             <Link href="/app" className={styles.linkButton}>Começar</Link>
                         </div>
                     ) : (
@@ -35,7 +35,7 @@ export default function Inicio({ session }) {
                                 registrando cada despesa e determinando quanto cada residente paga e recebe. </p>
                             {session ? (
                                 <div className={styles.contextContainer}>
-                                    <p>Comece a utilizar o Cronos!</p>
+                                    <p>Comece a utilizar!</p>
                                     <Link href="/app" className={styles.linkButton}>Começar</Link>
                                 </div>
                             ) : (

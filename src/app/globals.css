@@ -5,12 +5,14 @@
   --color-bg: #0a122a;
 }
 
+
+
 body{
   background: var(--color-bg);
   color: var(--color-primary);
   display: flex;
   flex-direction: column;
-  
+  color: black;
 
 }
 

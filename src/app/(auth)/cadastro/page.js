@@ -1,6 +1,6 @@
 import Link from "next/link";
 import RegisterForm from "./RegisterForm";
-import { auth } from "../../../../auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 import styles from './page.module.css';

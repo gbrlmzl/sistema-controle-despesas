@@ -1,5 +1,5 @@
-import db from "../../../../lib/prisma";
-import { auth } from "../../../../auth";
+import db from "../../../lib/prisma";
+import { auth } from "../../../auth";
 
 export async function GET(req) {
     const session = await auth()

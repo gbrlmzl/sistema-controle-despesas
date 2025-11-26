@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import Inicio from "./Inicio";
 
-import { auth } from '../../auth';
+import { auth } from '../auth';
 
 export default async function Home() {
 

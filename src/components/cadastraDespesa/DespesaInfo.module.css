@@ -64,6 +64,7 @@
 .formCamposContainer input {
     display: flex;
     padding: 0.6rem 1.4rem;
+    font-family: var(--font-roboto-condensed);
 
 
     border-radius: 2.5rem;
@@ -104,5 +105,16 @@
     cursor: default;
 }
 
+@media (min-width: 768px) {
+    .despesaNavContainer {
+        width: 70%;
+    }
+    
+    .somatorioContainer{
+        width: 70%;
+    }
+
+    
+}
 
 

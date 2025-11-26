@@ -3,7 +3,6 @@
 import Form from "next/form";
 import loginAction from "./loginAction";
 import { useActionState } from "react";
-import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

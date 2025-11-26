@@ -1,6 +1,6 @@
 'use server'
-import { auth } from "../../../../../../auth";
-import db from "../../../../../../lib/prisma";
+import { auth } from "../../../../../auth";
+import db from "../../../../../lib/prisma";
 import { hash, compare } from "bcrypt";
 
 export default async function settingsAction(_prevState, formData) {

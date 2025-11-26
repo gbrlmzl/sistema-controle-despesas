@@ -111,7 +111,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     }
 
 
-    const handleProximaDespesa = (formData) => {
+    const adicionarNovaDespesa = (formData) => {
         if (formData.get("identificacao").trim() === "") {
             mostrarSnackbar("A identificação da despesa não pode estar vazia!");
             return;
@@ -168,7 +168,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
         }
     }
 
-    const handleFinalizar = () => {
+    const finalizarCadastroDespesas = () => {
         setEtapa(etapas[3]); //mudar para a etapa de confirmaDespesa
     }
 
@@ -285,12 +285,12 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
         sucessoCadastro,
         dadosPagamento,
         selecionarMesAno,
-        handleProximaDespesa,
+        adicionarNovaDespesa,
         handleAnteriorDespesa,
         handleProximaPessoa,
         handleAnteriorPessoa,
         handleSobrescrever,
-        handleFinalizar,
+        finalizarCadastroDespesas,
         handleConfirmaCadastroDespesas,
         handleCancelaCadastroDespesas,
         onCompartilharResumo,

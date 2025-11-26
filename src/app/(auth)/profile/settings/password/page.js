@@ -1,4 +1,4 @@
-import { auth } from '../../../../../../auth';
+import { auth } from '../../../../../auth';
 import { redirect } from 'next/navigation';
 import styles from './page.module.css';
 import ChangePasswordForm from './ChangePasswordForm';

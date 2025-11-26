@@ -12,7 +12,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       //procura usuarios com credenciais
       const user = await findUserByCredentials(credentials.email, credentials.password);
       
-
       //se não autenticado, retorna null
       //se autenticado, retorna user
 

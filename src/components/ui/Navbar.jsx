@@ -2,7 +2,6 @@
 import styles from "./Navbar.module.css"
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
-import LogoutButton from "./LogoutButton";
 import Link from "next/link";
 import { useState } from "react";
 

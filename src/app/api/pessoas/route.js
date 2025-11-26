@@ -1,6 +1,6 @@
-import db from "../../../../lib/prisma";
+import db from "../../../lib/prisma";
 import { NextResponse } from "next/server";
-import { auth } from "../../../../auth";
+import { auth } from "../../../auth";
 
 //Gere a estrutura de um metodo POST
 export async function POST(req) {

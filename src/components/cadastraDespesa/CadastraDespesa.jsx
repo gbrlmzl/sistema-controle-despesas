@@ -14,11 +14,11 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
         existeDespesaCadastrada,
         selecionarMesAno,
         handleSobrescrever,
-        handleProximaDespesa,
+        adicionarNovaDespesa,
         handleAnteriorDespesa,
         handleProximaPessoa,
         handleAnteriorPessoa,
-        handleFinalizar,
+        finalizarCadastroDespesas,
         handleConfirmaCadastroDespesas,
         handleCancelaCadastroDespesas,
         onCompartilharResumo,
@@ -67,11 +67,11 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
                 mesAnoTexto={mesAnoTexto()}
                 despesaDados={despesaDados}
                 pessoaIndexDados={pessoaIndexDados}
-                onProxima={(formData) => handleProximaDespesa(formData)}
+                onProxima={(formData) => adicionarNovaDespesa(formData)}
                 onAnterior={handleAnteriorDespesa}
                 onProximaPessoa={handleProximaPessoa}
                 onAnteriorPessoa={handleAnteriorPessoa}
-                onFinaliza={handleFinalizar}
+                onFinaliza={finalizarCadastroDespesas}
                 snackbar={snackbar}
                 onFecharSnackbar={fecharSnackbar}
                 isUltimaDespesa={isUltimaDespesa}

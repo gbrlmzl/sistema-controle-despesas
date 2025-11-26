@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn } from "../../../../auth";
+import { signIn } from "@/auth";
 
 export default async function loginAction(_prevState, formData){
     try{

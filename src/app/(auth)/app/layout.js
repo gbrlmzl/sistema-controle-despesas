@@ -1,6 +1,6 @@
 'use server';
 import { redirect } from "next/navigation";
-import { auth } from "../../../auth";
+import { auth } from "@/auth";
 import "./app.css";
 
 
@@ -12,17 +12,12 @@ export default async function ControleDespesasLayout({ children }) {
     }
 
     return (
-        <div className="paginaConteudo" style={{ }}>
-            <header className="tituloPrincipal">
-                <span>
-                    <a href="/app" >Controle de Despesas</a>
-                </span>
-            </header>
+        <div className="paginaConteudo">
             <main>
                 {children}
             </main>
             <footer>
-                <small>Instagram - gbrlmzl</small>
+                <a href="https://github.com/gbrlmzl" target="_blank" rel="noopener noreferrer" style={{fontFamily: "var(--font-roboto-condensed)"}}>github.com/gbrlmzl</a>
             </footer>
         </div>
     );

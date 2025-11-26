@@ -1,25 +1,23 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Link from "next/link";
+import Inicio from "./Inicio";
 
+import { auth } from '../../auth';
 
-export default function Home() {
+export default async function Home() {
+
+  const session = await auth();
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <div>
-          <div>
-            {/* Componente */}
-          </div>
-          <div style={{ backgroundColor: "lightblue", padding: 10 }}>
-            <Link href="/app">Controle de Despesas</Link>
-          </div>
-        </div>
+        <Inicio session={session}/>
+
 
       </main>
       <footer className={styles.footer}>
-        <p>Footer</p>
+        
       </footer>
     </div>
   );

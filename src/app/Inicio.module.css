@@ -1,0 +1,116 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.25rem;
+
+}
+
+.mobileContextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+.container h1{
+    font-family: var(--font-russo-one);
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+}
+
+
+.description p{
+    text-align: left;
+    
+}
+
+.contextContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.linkButton{
+    color: #000000;
+    background-color: #11B5E4;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.linkButton:hover{
+    cursor: pointer;
+    background-color: #0d8bbd;
+}
+
+.linkButton:focus{
+    background-color: #0d8bbd;
+}
+
+.desktopContextContainer {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5rem;
+    gap: 3rem;
+}
+
+.desktopContextContainer img{
+    border-radius: 10px;
+    
+}
+
+.descriptionContainer{
+    display: flex;
+    flex-direction: column;
+    max-width: 33%;
+    padding-inline: 2rem; ;
+    
+}
+
+.desktopContent .descriptionContainer .description{
+    gap: 2rem;
+    
+
+}
+
+.desktopContent .descriptionContainer .description .contextContainer{
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+
+.descriptionContainer h1{
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.desktopContent{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    ;
+}
+
+
+@media (min-width: 768px) {
+  .mobileContextContainer {
+    display: none;
+  }
+
+  .desktopContextContainer{
+    display: flex;
+  }
+
+  .desktopContextContainer h1{
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+}

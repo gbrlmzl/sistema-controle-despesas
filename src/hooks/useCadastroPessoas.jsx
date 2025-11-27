@@ -50,7 +50,17 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
 
 
     const handlePrevEtapa = () => {
-        if (etapa !== 0) { setEtapa(prev => prev - 1); };
+        if(etapa === "confirmaCadastroPessoas"){
+            setEtapa(etapas[1]);
+            return;
+        }
+
+    }
+
+    const pessoaAnterior = () => {
+        if (pessoaAtualIndex > 0) {
+            setPessoaAtualIndex(pessoaAtualIndex - 1);
+        }
     }
 
     const handleNextEtapa = (formData, etapa) => {
@@ -127,7 +137,8 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
           respostaCadastro,
           pessoaAtualIndex, 
           handleFecharSnackbar, 
-          handleConfirmaNumeroPessoas, 
+          handleConfirmaNumeroPessoas,
+          pessoaAnterior, 
           handlePrevEtapa, 
           handleNextEtapa, 
           handleCadastrarPessoas

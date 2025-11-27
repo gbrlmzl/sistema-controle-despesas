@@ -35,7 +35,13 @@ export default function PessoaInfo({ pessoa, onSave, pessoaAtualIndex, snackbarO
             <Form className={styles.formContainer} action={(FormData) => onProximo(FormData, pessoaAtualIndex)}>
                 <div className={styles.formCampos}>
                     <input name="nome" type="text" onChange={handleDados} placeholder="Nome" value={localPessoa.nome} required ref={inputRef} />
-                    <input name="email" type="text" onChange={handleDados} placeholder="E-mail" value={localPessoa.email} required />
+                    <div className={styles.emailContainer}>
+                        <input name="email" type="text" onChange={handleDados} placeholder="E-mail" value={localPessoa.email} required />
+                        {/* letrinha pequena em baixo do campo email dizendo "para notificações" */}
+                        <span className={styles.paraNotificacoesText}>* para receber notificações sobre as despesas</span>
+
+                    </div>
+                    
                 </div>
                 <div className="botoesContainer">
                     <button type="button" onClick={handlePrevEtapa} disabled={pessoaAtualIndex === 0}>

@@ -1,73 +1,105 @@
 import db from "../../../lib/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "../../../auth";
+import { pessoasPayloadSchema } from "@/schemas/pessoas";
+import { ca, da } from "zod/v4/locales";
 
-//Gere a estrutura de um metodo POST
+
 export async function POST(req) {
-
-    const session = await auth(); //Pega a sessão do usuário logado
+    const session = await auth();
     if (!session) {
-        return new Response(JSON.stringify({ success: false, message: "Usuário não autenticado" }), { status: 401 });
-    }//Se não tiver sessão, retorna erro 401 - não autorizado
+        return NextResponse.json({ success: false, message: "Usuário não autenticado" }, { status: 401 });
+    }
+    //Se não estiver autenticado, retorna erro 401 - não autorizado
 
-    const emailRegex = /\S+@\S+\.\S+/;
-    const listaPessoasObj = await req.json(); //Pega o corpo da requisição e transforma em JSON
-    const listaPessoas = listaPessoasObj.listaPessoasACadastrar; //Pega a lista de pessoas do JSON
+    let body;
+    try {
+        body = await req.json();
+        if (!body.listaPessoasACadastrar) {
+            throw new Error();
+        }
+    } catch (error) {
+        return NextResponse.json({ success: false, message: "JSON inválido" }, { status: 400 });
+    }
 
-    //Encontra o usuário correspondente no banco de dados
+    const parseResult = pessoasPayloadSchema.safeParse(body.listaPessoasACadastrar);
+    if (!parseResult.success) {
+        console.log("deu errado aqui", parseResult.error);
+        return NextResponse.json({ success: false, message: "Dados inválidos" }, { status: 400 });
+    }
+
+    const payload = parseResult.data;
+
     const usuario = await db.usuario.findUnique({
         where: {
             email: session.user.email,
         },
     });
 
-    for (const pessoa of listaPessoas) {
-        if (!pessoa.nome || !pessoa.email) { //Verifica se o nome e email existem
-            return new Response(JSON.stringify({ success: false, message: "Nome e email são obrigatórios para cada pessoa" }), { status: 400 });
-        } else if (!emailRegex.test(pessoa.email)) { //Verifica se o email é válido
-            return new Response(JSON.stringify({ success: false, message: `Email inválido para a pessoa ${pessoa.nome}` }), { status: 400 });
-        }
-        //Se os dados forem válidos, cadastra a pessoa no banco de dados
-        await db.pessoa.create({
-            data: {
-                name: pessoa.nome,
-                email: pessoa.email,
-                idUsuario: usuario.id //Associa a pessoa ao usuário logado
-            },
-        });
+    if (!usuario) {
+        return NextResponse.json({ success: false, message: 'Erro de autenticação' }, { status: 401 });
     }
 
-    //Ocorrendo tudo certo no cadastro das pessoas no banco de dados, retorna uma resposta positiva
-    return new Response(
-        JSON.stringify({ success: true, message: "Pessoas cadastradas com sucesso" }),
-        { status: 201, headers: { "Content-Type": "application/json" } }
-    );
+    try {
+        for (const pessoa of payload) {
+            //Se os dados forem válidos, cadastra a pessoa no banco de dados
+            await db.pessoa.create({
+                data: {
+                    name: pessoa.nome,
+                    email: pessoa.email,
+                    idUsuario: usuario.id //Associa a pessoa ao usuário autenticado
+                },
+            });
+        }
+
+
+    } catch (error) {
+        return NextResponse.json({ success: false, message: "Erro ao cadastrar pessoas" }, { status: 500 });
+
+    }
+
+    return NextResponse.json({ success: true, message: 'Pessoas cadastradas com sucesso!' }, { status: 201 });
+
 }
+
+
+
+
+
+
 
 export async function GET() {
     const session = await auth()
     if (!session) {
-        return new Response(JSON.stringify({ success: false, message: "Usuário não autenticado" }), { status: 401 });
-    }//Se não tiver sessão, retorna erro 401 - não autorizado
+        return NextResponse.json({ success: false, data: null, message: "Usuário não autenticado" }, { status: 401 });
+    }
+    //Se não tiver sessão, retorna erro 401 - não autorizado
 
-    const usuario = await db.usuario.findUnique({
-        where: {
-            email: session.user.email,
-        },
-    });
+    try {
+        const usuario = await db.usuario.findUnique({
+            select: { id: true },
+            where: {
+                email: session.user.email,
+            },
+        });
 
-    const pessoas = await db.pessoa.findMany({
-        where: {
-            idUsuario: usuario.id
+        if (!usuario) {
+            return NextResponse.json({ success: false, data: null, message: 'Erro de autenticação' }, { status: 401 });
         }
-    })
+
+        const pessoas = await db.pessoa.findMany({
+            where: {
+                idUsuario: usuario.id
+            }
+        })
+
+        return NextResponse.json({ success: true, data: pessoas, message: 'Pessoas buscadas com sucesso!' }, { status: 200 });
+
+    } catch (error) {
+        return NextResponse.json({ success: false, message: "Erro ao buscar pessoas" }, { status: 500 });
+    }
 
 
-
-    return new Response(
-        JSON.stringify({pessoas}),
-        { status: 200, headers: { "Content-Type": "application/json" } }
-    );
 
 }
 

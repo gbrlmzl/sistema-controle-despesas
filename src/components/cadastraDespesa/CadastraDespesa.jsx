@@ -6,12 +6,12 @@ import ResumoPagamento from "./ResumoPagamento";
 import SobrescreveDespesa from "./SobrescreveDespesa";
 import SeletorMes from "../shared/SeletorMes";
 import PessoasNaoCadastradas from "./PessoasNaoCadastradas";
+import ResultadoCadastro from "./ResultadoCadastro";
 export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaPessoas, atualizarDespesas}) {
     const { 
         etapa, 
         mesAnoTexto,
         loading,
-        existeDespesaCadastrada,
         selecionarMesAno,
         handleSobrescrever,
         adicionarNovaDespesa,
@@ -21,6 +21,8 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
         finalizarCadastroDespesas,
         handleConfirmaCadastroDespesas,
         handleCancelaCadastroDespesas,
+        avancarParaResumoPagamento,
+        respostaCadastro,
         onCompartilharResumo,
         despesaDados,
         pessoaIndexDados,
@@ -29,12 +31,11 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
         snackbar,
         fecharSnackbar,
         isUltimaDespesa,
-        sucessoCadastro} = useCadastroDespesas({listaPessoas, atualizarDespesas});
+        } = useCadastroDespesas({listaPessoas, atualizarDespesas});
         
-    const pessoasArray = listaPessoas.pessoas; //transforma o objeto em array
 
     //Se o usuário não possuir pessoas cadastradas, deve retornar um menu avisando que ele precisa cadastrar pessoas antes e um botão de menu principal e outro que leva para tela de cadastrar Pessoa
-    if (pessoasArray.length === 0) {
+    if (listaPessoas.length === 0) {
         return (
             <PessoasNaoCadastradas
                 onRetornaAoMenu={retornarAoMenu}
@@ -86,11 +87,19 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
                 onCancelar={handleCancelaCadastroDespesas}
                 onRetornaAoMenu={retornarAoMenu}
                 loading= {loading}
-                sucesso={sucessoCadastro}
                  />
         )
 
-    } else if (etapa === "resumoPagamento") {
+    } else if (etapa === "resultadoCadastro") {
+        return (
+            <ResultadoCadastro
+             respostaCadastro={respostaCadastro}
+             onRetornaAoMenu={retornarAoMenu}
+             onExibirResumo={avancarParaResumoPagamento}
+            />
+        )
+    }
+     else if (etapa === "resumoPagamento") {
         return (
             <ResumoPagamento
             dataEmTexto={mesAnoTexto}

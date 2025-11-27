@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { compartilharResumoPagamento  } from '../utils/compartilharDespesas';
+import { set } from "zod";
 
 export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
-    const etapas = ["selecaoMes", "confirmaSobrescreverDespesas", "cadastroDespesa", "confirmaDespesa", "resumoPagamento"];
+    const etapas = ["selecaoMes", "confirmaSobrescreverDespesas", "cadastroDespesa", "confirmaDespesa","resultadoCadastro", "resumoPagamento"];
+    const [etapa, setEtapa] = useState(etapas[0]);
     const [mesAno, setMesAno] = useState({ mes: null, ano: null });
     const [pessoaAtualIndex, setPessoaAtualIndex] = useState(0);
     const [despesaAtualIndex, setDespesaAtualIndex] = useState(0);
@@ -11,11 +13,12 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     const [existeDespesaCadastrada, setExisteDespesaCadastrada] = useState(false);
     const [somaDespesasPessoaAtual, setSomaDespesasPessoaAtual] = useState(0);
     const [listaDespesasDeCadaPessoa, setListaDespesasDeCadaPessoa] = useState([]);
-    const [etapa, setEtapa] = useState(etapas[0]);
-    const [sucessoCadastro, setSucessoCadastro] = useState(null); // null = não tentou cadastrar, true = sucesso, false = falha
+    
     const [isUltimaDespesa, setIsUltimaDespesa] = useState(false);
-    const sobrescreverDespesas = useRef(false);
+    const [respostaCadastro, setRespostaCadastro] = useState(null); // null = não tentou cadastrar, true = sucesso, false = falha
 
+    
+    
     useEffect(() => { //UseEffect para atualizar a soma das despesas da pessoa atual sempre que a lista de despesas ou o índice da pessoa atual mudar  
         setSomaDespesasPessoaAtual(listaDespesasDeCadaPessoa[pessoaAtualIndex]?.somaDespesas || 0);
         //setIsUltimaDespesa(verificaUltimaDespesaCadastrada());
@@ -26,27 +29,27 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     }, [pessoaAtualIndex]);
 
     useEffect(() => {
-        if (sucessoCadastro === true) {
+        if (respostaCadastro?.success === true) {
             atualizarDespesas();
         }
 
-    }, [sucessoCadastro])
+    }, [respostaCadastro])
 
     useEffect(() => {
         setIsUltimaDespesa(verificaUltimaDespesaCadastrada());
     }, [despesaAtualIndex, listaDespesasDeCadaPessoa, pessoaAtualIndex]);
     //Array que vai conter um array de objetos que tem {idPessoa: id, nomePessoa: "", despesas: [], somaDespesas: 0, quantDespesas : 0}
     const criarListaDeDespesasParaCadaPessoa = () => {
-        const pessoasArray = listaPessoas.pessoas; //transforma o objeto listaPessoas em um array para melhor manipulação
+        
         const novaListaDespesasDeCadaPessoa = [];
-        for (const pessoa of pessoasArray) {
+        for (const pessoa of listaPessoas) {
             novaListaDespesasDeCadaPessoa.push({ idPessoa: pessoa.id, nomePessoa: pessoa.name, despesas: [], somaDespesas: 0, quantDespesas: 0 });
         }
         setListaDespesasDeCadaPessoa(novaListaDespesasDeCadaPessoa);
     }
 
     const despesaDados = {
-        nomePessoa: listaPessoas.pessoas[pessoaAtualIndex]?.name || "",
+        nomePessoa: listaPessoas[pessoaAtualIndex]?.name || "",
         numDespesa: (despesaAtualIndex + 1),
         somaDespesas: somaDespesasPessoaAtual,
         identificacao: listaDespesasDeCadaPessoa[pessoaAtualIndex]?.despesas[despesaAtualIndex]?.identificacao || "",
@@ -56,7 +59,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     const pessoaIndexDados = {
         pessoaAtualIndex: pessoaAtualIndex,
         isFirstPessoa: pessoaAtualIndex === 0,
-        isLastPessoa: pessoaAtualIndex === (listaPessoas.pessoas.length - 1)
+        isLastPessoa: pessoaAtualIndex === (listaPessoas.length - 1)
     }
 
 
@@ -104,7 +107,6 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     const handleSobrescrever = () => {
         //Função para sobrescrever as despesas existentes no banco de dados
         setExisteDespesaCadastrada(false);
-        sobrescreverDespesas.current = true;
         setEtapa(etapas[2]); //avança para a próxima etapa
 
         criarListaDeDespesasParaCadaPessoa(); //cria o array de despesas para cada pessoa
@@ -157,7 +159,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
     }
 
     const handleProximaPessoa = () => {
-        if (pessoaAtualIndex < listaPessoas.pessoas.length - 1) {
+        if (pessoaAtualIndex < listaPessoas.length - 1) {
             setPessoaAtualIndex(pessoaAtualIndex + 1);
         }
     }
@@ -207,26 +209,22 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
                     lista: listaDespesasDeCadaPessoa,
                     mes: mesAno.mes,
                     ano: mesAno.ano,
-                    sobrescreverDespesas: sobrescreverDespesas.current
                 }),
 
             });
 
             const resultadoCadastro = await response.json();
-
-            if (resultadoCadastro.success === true) {
-                setSucessoCadastro(true);
-                setEtapa(etapas[4]);
-
-            } else if (resultadoCadastro.success === false) {
-                setSucessoCadastro(false); // Indica falha no cadastro
-            }
+            setRespostaCadastro(resultadoCadastro);
         } catch (err) {
-            console.log(err);
+            setRespostaCadastro({ success: false, message: 'Erro ao cadastrar despesas.' });
         } finally {
             setLoading(false);
-            sobrescreverDespesas.current = false;
+            setEtapa(etapas[4]);
         }
+    }
+
+    const avancarParaResumoPagamento = () => {
+        setEtapa(etapas[5]);
     }
 
     const handleCancelaCadastroDespesas = () => {
@@ -274,7 +272,6 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
 
 
 
-
     return {
         etapa,
         mesAnoTexto,
@@ -282,8 +279,8 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
         existeDespesaCadastrada,
         despesaDados,
         pessoaIndexDados,
-        sucessoCadastro,
         dadosPagamento,
+        respostaCadastro,
         selecionarMesAno,
         adicionarNovaDespesa,
         handleAnteriorDespesa,
@@ -296,6 +293,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
         onCompartilharResumo,
         listaResumoDespesas,
         fecharSnackbar,
+        avancarParaResumoPagamento,
         isUltimaDespesa,
         snackbar,
     };

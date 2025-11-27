@@ -2,6 +2,7 @@
 
 import db from "@/lib/prisma";
 import { hash } from "bcrypt";
+import { registerSchema } from "@/schemas/usuarios";
 
 
 
@@ -9,7 +10,7 @@ export default async function registerAction(_prevState, formData) {
     const entries = Array.from(formData.entries()); //Converte os dados do formulário em um array de pares
     const data = Object.fromEntries(entries); //Transforma o array de pares em um objeto, onde cada campo do formulário vira uma propriedade do objeto.
     const saltRounds = 10;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
 
 
     //Se não tiver email, nome ou senha, retorna erro
@@ -21,39 +22,24 @@ export default async function registerAction(_prevState, formData) {
         }
     }
 
-    if (!emailRegex.test(data.email)) {
+    //Valida os dados do formulário usando o schema do Zod
+    const parseResult = registerSchema.safeParse(data);
+    if (!parseResult.success) {
+        const firstError = parseResult.error.issues[0];
+        console.log(firstError);
         return {
-            message: 'Email inválido',
+            message: firstError.message,
             success: false,
         }
     }
 
-    if (data.password.length < 8) {
-        return {
-            message: 'A senha deve ter pelo menos 8 caracteres',
-            success: false,
-        }
-    }
+    const payload = parseResult.data;
 
-    if (!/[\d\W]/.test(data.password)) {
-        return {
-            message: 'A senha deve conter ao menos um número ou símbolo',
-            success: false,
-        }
-    }
-
-    //Se a senha e a confirmação de senha forem diferentes, retorna erro
-    if (data.password !== data.confirmPassword) {
-        return {
-            message: 'As senhas não coincidem',
-            success: false,
-        }
-    }
 
     //se o usuário existe, retorna erro
     const user = await db.usuario.findUnique({
         where: {
-            email: data.email,
+            email: payload.email,
         }
     });
 
@@ -67,11 +53,11 @@ export default async function registerAction(_prevState, formData) {
 
     //após a validação dos dados e verificado que não existe usuário cadastrado com esse email, cadastra o novo usuário
     try {
-        const senhaHash = await hash(data.password, saltRounds) //Criptografa a senha do usuário
+        const senhaHash = await hash(payload.password, saltRounds) //Criptografa a senha do usuário
         await db.usuario.create({
             data: {
-                name: data.name,
-                email: data.email,
+                name: payload.name,
+                email: payload.email,
                 password: senhaHash, //salva a senha criptografada no banco de dados
 
             }
@@ -79,11 +65,11 @@ export default async function registerAction(_prevState, formData) {
 
         return {
             success: true,
+            message: 'Usuário cadastrado com sucesso!',
         }
 
     }
     catch (error) {
-        console.error("Erro ao cadastrar usuário:", error);
         return {
             message: 'Erro ao cadastrar usuário. Tente novamente mais tarde.',
             success: false,

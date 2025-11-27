@@ -24,7 +24,7 @@ export const useControleDespesas = () => {
                 headers: { "Content-Type": "application/json" },
             });
             const resultadoBusca = await response.json();
-            return resultadoBusca;
+            return resultadoBusca.data;
         } catch (err) {
             console.log(err);
         }
@@ -80,7 +80,7 @@ export const useControleDespesas = () => {
     }
 
     const existemPessoasCadastradas = () => {
-        return listaPessoas.pessoas.length > 0;
+        return listaPessoas.length > 0;
     }
 
 

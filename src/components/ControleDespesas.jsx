@@ -3,7 +3,7 @@
 import ControleDespesasMenu from "./ControleDespesasMenu";
 import SistemaComponent from "./sistema/Sistema";
 import { useControleDespesas } from "../hooks/useControleDespesas";
-import CadastraPessoa from "./cadastroPessoa/CadastraPessoa";
+import CadastraPessoa from "./cadastraPessoa/CadastraPessoa";
 import CadastraDespesa from "./cadastraDespesa/CadastraDespesa";
 import ResumoDespesas from "./resumoDespesas/ResumoDespesas";
 import FormatarSistema from "./formatarSistema/FormatarSistema";

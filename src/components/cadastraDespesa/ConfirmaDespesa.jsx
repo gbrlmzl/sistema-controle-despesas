@@ -26,8 +26,7 @@ export default function ConfirmaDespesa({ listaResumoDespesas, onConfirmar, onCa
 
     return (
         <div className={styles.container}>
-            <h2>Resumo</h2>
-
+            <h2>Confirmação</h2>
             <div className={styles.resumoContainer}>
                 <table>
                     <thead>

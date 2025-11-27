@@ -5,7 +5,7 @@ import styles from './PessoaInfo.module.css';
 import Form from "next/form";
 
 
-export default function PessoaInfo({ pessoa, onSave, etapa, snackbarOpen, snackbarMensagem, snackBarOnClose, handlePrevEtapa, onProximo }) {
+export default function PessoaInfo({ pessoa, onSave, pessoaAtualIndex, snackbarOpen, snackbarMensagem, snackBarOnClose, handlePrevEtapa, onProximo }) {
     const [localPessoa, setLocalPessoa] = useState(pessoa); //Estado local para armazenar os dados da pessoa temporariamente
     const inputRef = useRef(null);
 
@@ -29,17 +29,16 @@ export default function PessoaInfo({ pessoa, onSave, etapa, snackbarOpen, snackb
     }
 
 
-
     return (
         <div className={styles.container}>
-            <h3>Pessoa {etapa + 1}</h3>
-            <Form className={styles.formContainer} action={(FormData) => onProximo(FormData, etapa)}>
+            <h3>Pessoa {pessoaAtualIndex + 1}</h3>
+            <Form className={styles.formContainer} action={(FormData) => onProximo(FormData, pessoaAtualIndex)}>
                 <div className={styles.formCampos}>
                     <input name="nome" type="text" onChange={handleDados} placeholder="Nome" value={localPessoa.nome} required ref={inputRef} />
                     <input name="email" type="text" onChange={handleDados} placeholder="E-mail" value={localPessoa.email} required />
                 </div>
                 <div className="botoesContainer">
-                    <button type="button" onClick={handlePrevEtapa} disabled={etapa === 0}>
+                    <button type="button" onClick={handlePrevEtapa} disabled={pessoaAtualIndex === 0}>
                         <span className="botaoIcone">
                             <img src="/icons/retornarIcon.svg" alt="Anterior" />
                         </span>

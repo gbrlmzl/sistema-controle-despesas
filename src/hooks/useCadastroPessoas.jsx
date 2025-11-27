@@ -1,23 +1,27 @@
 //TODO => Separar responsabilidades dos hooks que controlam as pessoas e o hook que controla as despesas em si.
 
 import { useEffect, useState } from "react";
+import { set } from "zod";
 
 export const useCadastroPessoas = ({atualizarPessoas}) => {
     const [pessoas, setPessoas] = useState([]);
-    const [etapa, setEtapa] = useState(0);
+
+    const etapas = ["selecaoNumeroPessoas", "cadastroPessoas", "confirmaCadastroPessoas", "resultadoCadastro"];
+    const [etapa, setEtapa] = useState(etapas[0]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMsg, setSnackbarMsg] = useState("");
     const [loadingCadastro, setLoadingCadastro] = useState(false);
-    const [sucessoCadastro, setSucessoCadastro] = useState(null); // null = não tentou cadastrar, true = sucesso, false = falha
+    const [pessoaAtualIndex, setPessoaAtualIndex] = useState(0);
+    const [respostaCadastro, setRespostaCadastro] = useState(null);
     
 
 
     useEffect(() => {
-        if (sucessoCadastro === true) {
+        if (respostaCadastro?.success === true) {
             //chamar a função para atualizar a lista de pessoas no hook useControleDespesas
             atualizarPessoas();
         }
-    }, [sucessoCadastro]);
+    }, [respostaCadastro]);
     
     //Criar um array de objetos Pessoa com o numero de pessoas escolhidas
     const criarArrayPessoas = (numeroPessoas) => {
@@ -32,7 +36,6 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
     const mostrarSnackbar = (msg) => {
         setSnackbarMsg(msg);
         setSnackbarOpen(true);
-        //setTimeout(() => setSnackbarOpen(false), 5000);
     };
 
     const handleFecharSnackbar = () => {
@@ -42,6 +45,7 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
     const handleConfirmaNumeroPessoas = (numeroPessoas) => {
         const listaPessoas = criarArrayPessoas(numeroPessoas);
         setPessoas(listaPessoas);
+        setEtapa(etapas[1]); //Avança para a próxima etapa de cadastro de pessoas
     }
 
 
@@ -59,8 +63,13 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
         
         if (validarEmail(emailPessoa)) {
             adicionaNovaPessoa({nome: nomePessoa, email: emailPessoa}, etapa);
-            setEtapa(prev => prev + 1);
             setSnackbarOpen(false); //Fecha o snackbar caso ele esteja aberto
+            if (etapa < pessoas.length - 1) {
+                setPessoaAtualIndex(pessoaAtualIndex + 1);
+            }else{
+                setEtapa(etapas[2]); //Avança para a etapa de confirmação de cadastro
+            }
+
 
         } else {
             mostrarSnackbar("Insira um email válido!")
@@ -76,10 +85,6 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
     }
 
     const handleCadastrarPessoas = async (listaPessoasACadastrar) => {
-        //Recebe uma lista de objetos 'pessoa' com nome e email.
-        //Faz um POST desse array para a rota api/pessoas
-        //Recebe a resposta
-        //Retorna sucesso ou falha.
         if (loadingCadastro) return; // Impede execução se já estiver carregando
         setLoadingCadastro(true);
 
@@ -94,16 +99,12 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
             });
 
             const resultadoCadastro = await response.json();
-
-            if (resultadoCadastro.success === true) {
-                setSucessoCadastro(true); 
-            } else {
-                setSucessoCadastro(false); // Indica falha no cadastro
-            }
+            setRespostaCadastro(resultadoCadastro);
         } catch (err) {
             console.log(err);
         } finally {
             setLoadingCadastro(false);
+            setEtapa(etapas[3]); //Avança para a etapa de resultado do cadastro
 
 
         }
@@ -118,6 +119,19 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
 
 
 
-    return { pessoas, etapa, snackbarOpen, snackbarMsg, loadingCadastro, sucessoCadastro, handleFecharSnackbar, handleConfirmaNumeroPessoas, handlePrevEtapa, handleNextEtapa, handleCadastrarPessoas}
+    return { 
+          pessoas,
+          etapa,
+          snackbarOpen, 
+          snackbarMsg, 
+          loadingCadastro, 
+          respostaCadastro,
+          pessoaAtualIndex, 
+          handleFecharSnackbar, 
+          handleConfirmaNumeroPessoas, 
+          handlePrevEtapa, 
+          handleNextEtapa, 
+          handleCadastrarPessoas
+        }
 
 }

@@ -6,6 +6,7 @@ import PessoaInfo from "./PessoaInfo";
 import { useCadastroPessoas } from "@/hooks/useCadastroPessoas";
 import ConfirmaPessoas from "./ConfirmaPessoas";
 import ExistemPessoasCadastradas from "./ExistemPessoasCadastradas";
+import ResultadoCadastro from "./ResultadoCadastro";
 
 
 
@@ -17,24 +18,24 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
         snackbarOpen,
         snackbarMsg,
         loadingCadastro,
-        sucessoCadastro,
+        pessoaAtualIndex,
         handleFecharSnackbar,
         handlePrevEtapa,
         handleNextEtapa,
-        handleCadastrarPessoas
+        handleCadastrarPessoas,
+        respostaCadastro,
     } = useCadastroPessoas({ atualizarPessoas });
 
 
-    const pessoaTemporaria = useRef(pessoas[etapa]);
+    const pessoaTemporaria = useRef(pessoas[pessoaAtualIndex]); //Armazena temporariamente os dados da pessoa enquanto o usuário edita
 
     const handleNumeroPessoas = (numero) => {
         //chamar função do hook useCadastroPessoas para criar o array com numero X de pessoas e substituir o array vazio
-        if (handleConfirmaNumeroPessoas) { handleConfirmaNumeroPessoas(numero) };
+        if (handleConfirmaNumeroPessoas) {
+            handleConfirmaNumeroPessoas(numero) 
+        };
     }
 
-    const numeroPessoas = () => {
-        return pessoas.length;
-    }
 
     const retornarAoMenu = () => {
         handleOpcaoMenu("sistema");
@@ -46,22 +47,22 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
 
 
 
-    if (existemPessoasCadastradas() && sucessoCadastro === null) {
+    if (existemPessoasCadastradas() && respostaCadastro === null) {
         return (
             <ExistemPessoasCadastradas retornarAoMenuPrincipal={retornarAoMenuPrincipal} />)
     }
-    if (numeroPessoas() === 0) {
+    if (etapa === "selecaoNumeroPessoas") {
         return (
-            <SeletorNumeroPessoas onCancela={retornarAoMenu} onConfirma={(numero) => handleNumeroPessoas(numero)} />
+            <SeletorNumeroPessoas onCancela={retornarAoMenu} onConfirma={(quantidade) => handleNumeroPessoas(quantidade)} />
 
         )
     }
-    if (numeroPessoas() > 0 && etapa < numeroPessoas()) {
+    if (etapa === "cadastroPessoas") {
         return (
             <PessoaInfo
-                pessoa={pessoas[etapa]}
+                pessoa={pessoas[pessoaAtualIndex]}
                 onSave={(value) => pessoaTemporaria.current = value}
-                etapa={etapa}
+                pessoaAtualIndex={pessoaAtualIndex}
                 snackbarOpen={snackbarOpen}
                 snackbarMensagem={snackbarMsg}
                 snackBarOnClose={handleFecharSnackbar}
@@ -70,14 +71,22 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
             />
         )
     }
-    if (etapa === numeroPessoas()) {
+    if (etapa === "confirmaCadastroPessoas") {
         return (
             <ConfirmaPessoas pessoas={pessoas}
                 onConfirma={handleCadastrarPessoas}
-                loading={loadingCadastro}
-                sucesso={sucessoCadastro}
                 retornarAoMenu={retornarAoMenuPrincipal}
                 voltarEtapa={handlePrevEtapa}
+            />
+        )
+    }
+    if (etapa === "resultadoCadastro") {
+        return (
+            <ResultadoCadastro
+            loading={loadingCadastro}
+            respostaCadastro={respostaCadastro}
+            onRetornaAoMenu={retornarAoMenuPrincipal}
+                
             />
         )
     }

@@ -16,7 +16,7 @@ export const useFormatarSistema = (handleOpcaoMenu, atualizarDadosLocais) => {
         }
     }
 
-    const formatarSistema = async () => {
+    const formatarSistema = async (textoConfirmacao) => {
         //Fazer uma chamada para a API para formatar o sistema, if sucesso, ir para o resumo
         if (loading) return; //se já estiver carregando, não faz nada
         setLoading(true); //indica que está carregando
@@ -24,6 +24,9 @@ export const useFormatarSistema = (handleOpcaoMenu, atualizarDadosLocais) => {
             const response = await fetch("/api/usuarios/dados", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    textoConfirmacao 
+                }),
 
             });
 
@@ -44,8 +47,9 @@ export const useFormatarSistema = (handleOpcaoMenu, atualizarDadosLocais) => {
 
     }
 
-    const confirmarFormatacao = async () => {
-        const resultadoFormatacao = await formatarSistema();
+    const confirmarFormatacao = async (textoConfirmacao) => {
+
+        const resultadoFormatacao = await formatarSistema(textoConfirmacao);
         if(resultadoFormatacao.success){
             setEtapa(etapas[2]);
             setResultadoFormatacaoData(resultadoFormatacao.data);

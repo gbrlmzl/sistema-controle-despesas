@@ -14,24 +14,7 @@ export default function Snackbar({ open, message, onClose, type }) {
 
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        position: "fixed",
-        bottom: "25%",
-        left: "50%",
-        transform: "translateX(-50%)",
-        background: backgroundColors[type] || "#00c7c7ff",
-        color: "#fff",
-        borderRadius: 8,
-        zIndex: 9999,
-        width: "75vw", //TODO => Tornar isso responsivo para diferentes resoluções
-        border: "1px solid #000",
-        opacity: open ? 1 : 0,
-        transition: "opacity 3s ease-in-out",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-      }}>
+    <div className={styles.container} style={{ backgroundColor: backgroundColors[type] || "#333", opacity: open ? 1: 0, transition: "opacity 3s ease-in-out", }}>
       <div className={styles.mensagemContainer}>
         {message}
       </div>

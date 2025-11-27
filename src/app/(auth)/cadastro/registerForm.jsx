@@ -26,7 +26,7 @@ export default function RegisterForm() {
     const router = useRouter();
 
 
-    const dadosPreenchidos = email.trim().length > 0 && password.trim().length > 0 && name.trim().length > 0 && confirmPassword.trim().length > 0;
+    const dadosPreenchidos = email.trim().length > 0 && atLeast8Chars && hasNumberOrSymbol && passwordsMatch && name.trim().length > 0;
     const togglePasswordVisibility = () => {
         setShowPassword(prev => !prev);
     }

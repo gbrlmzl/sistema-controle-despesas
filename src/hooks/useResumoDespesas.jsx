@@ -14,11 +14,11 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
 
     const calcularResumoDespesas = () => {
         const valorTotalDespesas = listaDespesasMesAnoSelecionado.reduce((acumuladorSomaDespesas, despesa) => acumuladorSomaDespesas + despesa.value, 0);
-        const numPessoas = listaPessoas.pessoas.length;
+        const numPessoas = listaPessoas.length;
         const valorPagamentoPorPessoa = valorTotalDespesas / numPessoas;
 
 
-        return listaPessoas.pessoas.map(pessoa => {
+        return listaPessoas.map(pessoa => {
             const totalGastoPessoa = listaDespesasMesAnoSelecionado.reduce(
                 (acumuladorSomaDespesas, despesa) =>
                     despesa.idPessoa === pessoa.id

@@ -1,7 +1,6 @@
 //TODO => Separar responsabilidades dos hooks que controlam as pessoas e o hook que controla as despesas em si.
 
 import { useEffect, useState } from "react";
-import { set } from "zod";
 
 export const useCadastroPessoas = ({atualizarPessoas}) => {
     const [pessoas, setPessoas] = useState([]);

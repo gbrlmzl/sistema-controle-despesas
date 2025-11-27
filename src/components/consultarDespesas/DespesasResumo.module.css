@@ -61,3 +61,8 @@
     font-weight: bold;
 }
 
+.nomePessoaTabela:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+

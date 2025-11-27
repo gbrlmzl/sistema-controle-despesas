@@ -24,6 +24,11 @@ export default function ResultadoCadastro({respostaCadastro, onRetornaAoMenu, on
                         <p>Menu</p>
                     </span>
                 </button>
+                <button onClick={onExibirResumo}>
+                    <span className="botaoPrimario">
+                        <p>Resumo</p>
+                    </span>
+                </button>
             </div>
         </div>
     )

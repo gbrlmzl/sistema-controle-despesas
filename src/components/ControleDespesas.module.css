@@ -14,3 +14,12 @@
     font-weight: 600;
     font-size: 1.4rem;
 }
+
+.containerMenu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 400px;
+    margin-top: 2rem;
+}

@@ -52,3 +52,9 @@
 .resumoContainer table td {
     font-family: var(--font-poppins);
 }
+
+@media (min-width: 768px) {
+    .botoesContainer {
+        width: 90%;
+    }
+}

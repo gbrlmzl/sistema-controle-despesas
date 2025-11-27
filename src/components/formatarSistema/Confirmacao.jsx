@@ -10,7 +10,7 @@ export default function Confirmacao({ onRetornaAoMenu, onConfirmaFormatacao, loa
     }
 
     const handleConfirma = () => {
-        onConfirmaFormatacao();
+        onConfirmaFormatacao(textoConfirmacao);
 
     }
 

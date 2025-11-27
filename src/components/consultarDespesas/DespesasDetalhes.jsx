@@ -62,13 +62,13 @@ export default function DespesasDetalhes({ despesasPessoa, retornarResumo, mesAn
 
             </div>
             <div className="botoesContainer">
-                <button className={"botaoIcone"} onClick={retornarResumo}>
-                    <span>
+                <button onClick={retornarResumo}>
+                    <span className="botaoIcone">
                         <img src="./icons/retornarIcon.svg" alt="Voltar" />
                     </span>
                 </button>
-                <button className={"botaoIcone"} onClick={handleCompartilhar}>
-                    <span>
+                <button onClick={handleCompartilhar}>
+                    <span className="botaoIcone">
                         <img src="./icons/compartilharIcon.svg" alt="Compartilhar" />
                     </span>
                 </button>

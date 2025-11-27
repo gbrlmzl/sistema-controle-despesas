@@ -33,23 +33,25 @@ export default function Inicio({ session }) {
                         <div className={styles.description}>
                             <p>O Cronos te ajuda a organizar as despesas mensais da residência que você divide com seus colegas,
                                 registrando cada despesa e determinando quanto cada residente paga e recebe. </p>
-                            {session ? (
-                                <div className={styles.contextContainer}>
-                                    <p>Comece a utilizar!</p>
-                                    <Link href="/app" className={styles.linkButton}>Começar</Link>
-                                </div>
-                            ) : (
-                                <div className={styles.contextContainer}>
-                                    <p>Cadastre-se e comece a utilizar o Cronos!</p>
-                                    <Link href="/cadastro" className={styles.linkButton}>Criar conta</Link>
-                                </div>
-                            )}
                         </div>
+
                     </div>
 
-                    <Image src="/assets/appImage.svg" alt="App imagem" width={480} height={320} />
+
+                    <Image src="/assets/appImage.svg" alt="App imagem" width={450} height={450} />
 
                 </div>
+                {session ? (
+                    <div className={styles.contextContainer}>
+                        <p>Comece a utilizar!</p>
+                        <Link href="/app" className={styles.linkButton}>Começar</Link>
+                    </div>
+                ) : (
+                    <div className={styles.contextContainer}>
+                        <p>Cadastre-se e comece a utilizar o Cronos!</p>
+                        <Link href="/cadastro" className={styles.linkButton}>Criar conta</Link>
+                    </div>
+                )}
 
 
             </div>

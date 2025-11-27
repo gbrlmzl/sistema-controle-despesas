@@ -76,6 +76,7 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
                 snackbar={snackbar}
                 onFecharSnackbar={fecharSnackbar}
                 isUltimaDespesa={isUltimaDespesa}
+                onRetornaAoMenu={retornarAoMenu}
                 ></DespesaInfo>
         )
 

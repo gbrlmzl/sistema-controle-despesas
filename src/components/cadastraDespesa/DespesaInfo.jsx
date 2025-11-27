@@ -4,7 +4,7 @@ import Snackbar from "../ui/Snackbar";
 import styles from './DespesaInfo.module.css';
 
 
-export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima, onAnterior, onFinaliza, onProximaPessoa, onAnteriorPessoa, snackbar, onFecharSnackbar, mesAnoTexto, isUltimaDespesa }) {
+export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima, onAnterior, onFinaliza, onProximaPessoa, onAnteriorPessoa, snackbar, onFecharSnackbar, mesAnoTexto, isUltimaDespesa, onRetornaAoMenu }) {
     const [localData, setLocalData] = useState({ numeroDespesa: "", nomePessoa: "", identificacao: "", valor: "", somaDespesas: 0 });
     const inputRef = useRef(null);
 
@@ -19,10 +19,9 @@ export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima,
             return; //limita o valor de entrada a 50 caracteres
         }
         if (name === "valor") {
-            // Remove qualquer caractere que não seja número ou ponto decimal
-            const valorFormatado = value.replace(/[^0-9.]/g, '');
-            //Só permite um ponto decimal, e o ponto só pode estar entre números
-            //procurar um número, se encontrar, o usuário pode digitar um ponto, se não, não pode
+            let valorFormatado = value.replace(/,/g, '.');
+
+            valorFormatado = valorFormatado.replace(/[^0-9.]/g, '');
             const pontos = valorFormatado.match(/\./g);
             if (pontos && pontos.length > 1) {
                 //se existir um ponto digitado, excluir qualquer outro ponto digitado
@@ -54,6 +53,11 @@ export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima,
         onFinaliza();
     }
 
+    const handleCancela = () => {
+        //perguntar se deseja cancelar mesmo
+        onRetornaAoMenu();
+    }
+
 
 
 
@@ -63,8 +67,8 @@ export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima,
                 <h3>{mesAnoTexto}</h3>
 
                 <div className={styles.pessoaNavContainer}>
-                    {pessoaIndexDados.isFirstPessoa && <div /> /* div gerada para fins de estilização */}
-                    <button type="button" onClick={handleAnteriorPessoa} disabled={pessoaIndexDados.isFirstPessoa}>
+                    {/*pessoaIndexDados.isFirstPessoa && <div /> /* div gerada para fins de estilização */}
+                    <button type="button" onClick={handleAnteriorPessoa} disabled={pessoaIndexDados.isFirstPessoa} >
                         <span className="botaoNavegacaoIcone">
                             <img src="/icons/anteriorNavIcon.svg" alt="Mês anterior" />
                         </span>
@@ -72,12 +76,12 @@ export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima,
                     <div className={styles.nomePessoaContainer}>
                         <p>{localData.nomePessoa}</p>
                     </div>
-                    <button type="button" onClick={handleProximaPessoa} disabled={pessoaIndexDados.isLastPessoa}>
+                    <button type="button" onClick={handleProximaPessoa} disabled={pessoaIndexDados.isLastPessoa} >
                         <span className="botaoNavegacaoIcone">
                             <img src="/icons/avancarNavIcon.svg" alt="Próximo mês" />
                         </span>
                     </button>
-                    {pessoaIndexDados.isLastPessoa && <div /> /* div gerada para fins de estilização */}
+                    {/*pessoaIndexDados.isLastPessoa && <div/> /* div gerada para fins de estilização */}
                 </div>
                 <div className={styles.somatorioContainer}>
                     <p>Despesa nº {localData.numeroDespesa} de {localData.nomePessoa}</p>
@@ -91,8 +95,8 @@ export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima,
                     <input type="text" name="identificacao" value={localData.identificacao} onChange={handleChange} placeholder="Identificação" ref={inputRef} required />
                     <input type="text" name="valor" value={localData.valor} onChange={handleChange} placeholder="Valor" required />
                 </div>
-                
-                
+
+
                 <div className={styles.despesaNavContainer}>
                     <button type="button" onClick={handleAnterior} disabled={(localData.numeroDespesa - 1) === 0} >
                         <span className="botaoIcone">
@@ -100,7 +104,7 @@ export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima,
                         </span>
                     </button>
                     <button type="submit">
-                        {isUltimaDespesa ? 
+                        {isUltimaDespesa ?
                             <span className="botaoIcone">
                                 <img src="/icons/adicionarIcon.svg" alt="Adicionar despesa" />
                             </span> :
@@ -109,9 +113,17 @@ export default function DespesaInfo({ despesaDados, pessoaIndexDados, onProxima,
                             </span>}
                     </button>
                 </div>
-                <button className={styles.botaoFinalizar} type="button" disabled={!pessoaIndexDados.isLastPessoa} onClick={handleFinaliza}>
-                    Finalizar
-                </button>
+                <div className={styles.botoesCancelaFinalizaContainer}>
+                    <button className={styles.botaoCancelaFinaliza} type="button" onClick={handleCancela}>
+                        Cancelar
+                    </button>
+                    <button className={styles.botaoCancelaFinaliza} type="button" disabled={!pessoaIndexDados.isLastPessoa} onClick={handleFinaliza}>
+                        Finalizar
+                    </button>
+
+
+                </div>
+
             </Form>
             <div>
                 <Snackbar open={snackbar.open} message={snackbar.message} onClose={onFecharSnackbar} type={snackbar.type} />

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import html2canvas from "html2canvas";
 import {compartilharDespesasDetalhes} from '../utils/compartilharDespesas';
 
 export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
@@ -52,18 +51,18 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
     const exibirDespesasDetalhes = (idPessoa) => {
         //filtra as despesas da pessoa selecionada
         const despesasPessoa = despesasMesAnoSelecionado.filter(despesa => despesa.idPessoa === idPessoa);
-        const pessoaSelecionada = listaPessoas.pessoas.find(p => p.id === idPessoa);
+        const pessoaSelecionada = listaPessoas.find(p => p.id === idPessoa);
         setDespesasPessoaSelecionada({ despesas: despesasPessoa, pessoa: pessoaSelecionada });
         setEtapa(etapas[2]);
     }
 
     const calcularResumoDespesas = () => {
         const valorTotalDespesas = despesasMesAnoSelecionado.reduce((acumuladorSomaDespesas, despesa) => acumuladorSomaDespesas + despesa.value, 0);
-        const numPessoas = listaPessoas.pessoas.length;
+        const numPessoas = listaPessoas.length;
         const valorPagamentoPorPessoa = valorTotalDespesas / numPessoas;
 
 
-        return listaPessoas.pessoas.map(pessoa => {
+        return listaPessoas.map(pessoa => {
             const totalGastoPessoa = despesasMesAnoSelecionado.reduce(
                 (acumuladorSomaDespesas, despesa) =>
                     despesa.idPessoa === pessoa.id

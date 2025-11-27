@@ -39,16 +39,44 @@
 .pessoaNavContainer{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-bottom: 0.5rem;
+}
+
+
+.pessoaNavContainer > button {
+    flex: 0 0 44px; 
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.pessoaNavContainer > button img {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+
+.nomePessoaContainer{
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 0 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .formContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100%;
     width: 100%;
     padding-top: 1rem;
@@ -81,7 +109,7 @@
     margin-top: 1rem;
 }
 
-.botaoFinalizar{
+.botaoCancelaFinaliza{
     border-radius: 1.875rem;
     background: #2497F3;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -94,15 +122,23 @@
     margin-top: 0.5rem;
 }
 
-.botaoFinalizar:hover {
+.botaoCancelaFinaliza:hover {
     background: #1E7ACC;
     cursor: pointer;
 }
 
-.botaoFinalizar:disabled {
+.botaoCancelaFinaliza:disabled {
     background: #66B2FF; 
     box-shadow: none;
     cursor: default;
+}
+
+.botoesCancelaFinalizaContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1rem;
 }
 
 @media (min-width: 768px) {
@@ -112,9 +148,20 @@
     
     .somatorioContainer{
         width: 70%;
+        margin-top: 2rem;
+    }
+
+    .pessoaNavContainer{
+        width: 75%;
+    }
+
+    .botoesCancelaFinalizaContainer{
+        width: 75%;
     }
 
     
 }
+
+
 
 

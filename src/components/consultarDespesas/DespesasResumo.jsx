@@ -45,7 +45,7 @@ export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas
                         {existemDespesasCadastradas ? (
                             calcularResumoDespesas().map((pessoa, index) => (
                             <tr key={index}>
-                                <td onClick={() => handleExibirDetalhes(pessoa.pessoaId)}>{pessoa.nomePessoa}</td>
+                                <td className={styles.nomePessoaTabela} onClick={() => handleExibirDetalhes(pessoa.pessoaId)}>{pessoa.nomePessoa}</td>
                                 <td>{pessoa.paga ? pessoa.quantia.toFixed(2) : "0.00"}</td>
                                 <td>{pessoa.recebe ? pessoa.quantia.toFixed(2) : "0.00"}</td>
                                 <td>{pessoa.numDespesas}</td>

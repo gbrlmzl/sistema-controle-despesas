@@ -24,7 +24,13 @@ function ControleDespesas() {
 
 
     if (opcaoMenu === "menu") {
-        return <ControleDespesasMenu handleOpcaoMenu={handleOpcaoMenu} />
+        return (
+            <div className={styles.containerPrincipal}>
+                <h1>Cronos</h1>
+                <ControleDespesasMenu handleOpcaoMenu={handleOpcaoMenu} />
+            </div>
+        )
+         
     }
     if (opcaoMenu === "consultaDespesa") {
         return (

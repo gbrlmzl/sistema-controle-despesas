@@ -35,7 +35,7 @@ export default function FormatarSistema({ handleOpcaoMenu, atualizarDadosLocais 
         return (
             <Confirmacao
                 onRetornaAoMenu={retornarAoMenu}
-                onConfirmaFormatacao={confirmarFormatacao}
+                onConfirmaFormatacao={(textoConfirmacao) => confirmarFormatacao(textoConfirmacao)}
                 loading={loading}
 
             />

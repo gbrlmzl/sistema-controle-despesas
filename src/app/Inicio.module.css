@@ -22,10 +22,7 @@
 }
 
 
-.description p{
-    text-align: left;
-    
-}
+
 
 .contextContainer {
     display: flex;
@@ -58,12 +55,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 5rem;
-    gap: 3rem;
+    margin-top: 3rem;
+    gap: 1rem;
 }
 
 .desktopContextContainer img{
     border-radius: 10px;
+    width: 450px;
+    height: auto;
     
 }
 
@@ -75,8 +74,11 @@
     
 }
 
-.desktopContent .descriptionContainer .description{
-    gap: 2rem;
+.desktopContent .descriptionContainer{
+    
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     
 
 }

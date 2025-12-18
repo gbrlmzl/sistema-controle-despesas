@@ -1,0 +1,74 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    padding-top: 3rem;
+}
+
+
+
+.customInput {
+    display: flex;
+    width: 100%;
+    padding: 0.333rem 2rem;
+    font-family: var(--font-roboto-condensed);
+    font-size: 1.25rem;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    
+}
+
+.datepickerCalendar{
+    transform: scale(1.2);      /* 0.8 menor, 1.1 maior */
+    transform-origin: top; /* ajustar origem para posicionamento previsível */
+    font-family: var(--font-roboto-condensed);
+    
+    
+}
+
+.datepickerCalendar :global(.react-datepicker__month) {
+    padding: 0.25rem;
+
+}
+
+/* Aumenta área clicável dos meses (jan, fev, mar...) quando usando showMonthYearPicker */
+.datepickerCalendar :global(.react-datepicker__month-text) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /*width: 1rem;           /* largura das células de mês */
+    /*height: 56px;          /* altura das células de mês */
+    padding: 0.25rem 0.5rem;
+    margin: 0.25rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.datepickerCalendar :global(.react-datepicker__month-text):hover {
+    background: rgba(36,151,243,0.08);
+}
+
+
+/* Responsivo: reduzir tamanho das células em telas pequenas */
+@media (max-width: 480px) {
+    .datepickerCalendar :global(.react-datepicker__month-text) {
+        /*width: 68px;
+        height: 44px; */
+        padding: 0.4rem 1.5rem;
+        font-size: 0.95rem;
+        margin: 0.15rem;
+    }
+    .datepickerCalendar { transform: scale(1); }
+}
+
+
+

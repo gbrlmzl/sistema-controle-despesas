@@ -7,6 +7,7 @@ import SobrescreveDespesa from "./SobrescreveDespesa";
 import SeletorMes from "../shared/SeletorMes";
 import PessoasNaoCadastradas from "./PessoasNaoCadastradas";
 import ResultadoCadastro from "./ResultadoCadastro";
+import SeletorData from "../shared/SeletorData";
 export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaPessoas, atualizarDespesas}) {
     const { 
         etapa, 
@@ -46,8 +47,7 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
 
     if (etapa === "selecaoMes") {
         return (
-            <SeletorMes
-             titulo="Cadastrar Despesas"
+            <SeletorData
              onConfirmaEscolha={(mesSelecionado, anoSelecionado) => selecionarMesAno(mesSelecionado, anoSelecionado)}
              onCancela={retornarAoMenu}
              loading={loading}

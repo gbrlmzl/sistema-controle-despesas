@@ -5,6 +5,7 @@ import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";
 import SeletorMes from "../shared/SeletorMes";
 import Snackbar from "../ui/Snackbar";
 import { useEffect } from "react";
+import SeletorData from "../shared/SeletorData";
 
 export default function ConsultarDespesas({ listaPessoas, listaDespesas, handleOpcaoMenu, }) {
 
@@ -52,7 +53,7 @@ export default function ConsultarDespesas({ listaPessoas, listaDespesas, handleO
     
     if (etapa === "selecaoMes") {
         return (
-            <SeletorMes
+            <SeletorData
                 onConfirmaEscolha={(mesSelecionado, anoSelecionado) => buscarDespesasMesAno(mesSelecionado, anoSelecionado)}
                 onCancela={retornarAoMenu}
                 loading={loading}

@@ -13,8 +13,8 @@ export default async function registerAction(_prevState, formData) {
     
 
 
-    //Se não tiver email, nome ou senha, retorna erro
-    if (!data.email || !data.name || !data.password || !data.confirmPassword) {
+    // 1 -> Se não tiver email, nome ou senha, retorna erro
+    if (!data.email || !data.name || !data.password || !data.confirmPassword) {   
 
         return {
             message: 'Não pode haver campos vazios',
@@ -22,27 +22,29 @@ export default async function registerAction(_prevState, formData) {
         }
     }
 
-    //Valida os dados do formulário usando o schema do Zod
+    // 2 -> Valida os dados do formulário usando o schema do Zod
     const parseResult = registerSchema.safeParse(data);
     if (!parseResult.success) {
         const firstError = parseResult.error.issues[0];
-        console.log(firstError);
         return {
             message: firstError.message,
             success: false,
         }
     }
 
+    //3 -> O formato dos dados está válido, extrai os dados validados
     const payload = parseResult.data;
 
 
-    //se o usuário existe, retorna erro
+    //4 -> Consulta o usuário no banco de dados para verificar se já existe um usuário com o email informado
     const user = await db.usuario.findUnique({
         where: {
             email: payload.email,
         }
     });
 
+
+    // -> Se existir usuário com esse email, retorna erro
     if (user) {
         return {
             message: 'Este usuário já existe!',
@@ -51,9 +53,9 @@ export default async function registerAction(_prevState, formData) {
     }
 
 
-    //após a validação dos dados e verificado que não existe usuário cadastrado com esse email, cadastra o novo usuário
+    //5 -> Após a validação dos dados e a verificação de que não existe usuário cadastrado com esse email, cadastra o novo usuário
     try {
-        const senhaHash = await hash(payload.password, saltRounds) //Criptografa a senha do usuário
+        const senhaHash = await hash(payload.password, saltRounds) // 6-> Criptografa a senha do usuário
         await db.usuario.create({
             data: {
                 name: payload.name,
@@ -63,6 +65,7 @@ export default async function registerAction(_prevState, formData) {
             }
         })
 
+        // 7 -> Retorna sucesso após cadastrar o usuário
         return {
             success: true,
             message: 'Usuário cadastrado com sucesso!',
@@ -70,6 +73,7 @@ export default async function registerAction(_prevState, formData) {
 
     }
     catch (error) {
+        // 8 -> Retorna erro caso ocorra algum problema ao cadastrar o usuário
         return {
             message: 'Erro ao cadastrar usuário. Tente novamente mais tarde.',
             success: false,

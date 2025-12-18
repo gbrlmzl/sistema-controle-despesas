@@ -3,6 +3,7 @@ import { useResumoDespesas } from "@/hooks/useResumoDespesas"
 import DespesasInfoResumo from "./DespesasInfoResumo";
 import SeletorMes from "../shared/SeletorMes";
 import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";
+import SeletorData from "../shared/SeletorData";
 
 export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPessoas }) {
 
@@ -30,7 +31,6 @@ export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPe
     if(etapa === "selecionarMesAno" && existeDespesaCadastrada === false){
         return (
             <DespesasNaoCadastradas
-                titulo={"Resumo de Despesas"}
                 onRetornaSelecao={retornarSelecao}
                 mesAnoTexto={mesAnoTexto}
             />
@@ -39,8 +39,7 @@ export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPe
     }
     if(etapa === "selecionarMesAno"){
         return (
-                <SeletorMes
-                titulo={"Resumo de Despesas"}
+                <SeletorData
                 onConfirmaEscolha={(mesSelecionado, anoSelecionado) => selecionarMesAno(mesSelecionado, anoSelecionado)}
                 onCancela={retornarAoMenu}                
                 />

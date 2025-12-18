@@ -1,7 +1,6 @@
 import { useResumoDespesas } from "@/hooks/useResumoDespesas"
 
 import DespesasInfoResumo from "./DespesasInfoResumo";
-import SeletorMes from "../shared/SeletorMes";
 import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";
 import SeletorData from "../shared/SeletorData";
 

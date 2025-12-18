@@ -4,7 +4,6 @@ import DespesaInfo from "./DespesaInfo";
 import ConfirmaDespesa from "./ConfirmaDespesa";
 import ResumoPagamento from "./ResumoPagamento";
 import SobrescreveDespesa from "./SobrescreveDespesa";
-import SeletorMes from "../shared/SeletorMes";
 import PessoasNaoCadastradas from "./PessoasNaoCadastradas";
 import ResultadoCadastro from "./ResultadoCadastro";
 import SeletorData from "../shared/SeletorData";

@@ -2,7 +2,6 @@ import useConsultarDespesas from "../../hooks/useConsultarDespesas";
 import DespesasDetalhes from "./DespesasDetalhes";
 import DespesasResumo from "./DespesasResumo";
 import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";
-import SeletorMes from "../shared/SeletorMes";
 import Snackbar from "../ui/Snackbar";
 import { useEffect } from "react";
 import SeletorData from "../shared/SeletorData";

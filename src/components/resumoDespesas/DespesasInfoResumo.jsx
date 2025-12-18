@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import styles from './DespesasInfoResumo.module.css';
 
 export default function DespesasInfoResumo({ onRetornaAoMenu, mesAnoTexto, listaDespesasInfoFormatada, onCompartilhar, onAnteriorMes, onProximoMes, existeDespesaCadastrada }) {

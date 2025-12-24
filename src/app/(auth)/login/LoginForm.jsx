@@ -3,12 +3,14 @@
 import Form from "next/form";
 import loginAction from "./loginAction";
 import { useActionState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
 
 import styles from './LoginForm.module.css';
+import { sign } from "crypto";
+import { set } from "zod";
 
 export default function LoginForm() {
     const [state, formAction, isPending] = useActionState(loginAction);
@@ -17,6 +19,7 @@ export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
 
     useEffect(() => {
         if (state?.success) {
@@ -30,6 +33,27 @@ export default function LoginForm() {
     function togglePasswordVisibility() {
         setShowPassword(prev => !prev);
     }
+
+
+    async function handleGoogleSignIn() {
+        if (googleLoading) return;
+        setGoogleLoading(true);
+
+        await signIn('google');
+
+        setGoogleLoading(false);
+        // Abre uma nova janela vazia na mesma ação do clique (evita popup blocker)
+        /*const popup = window.open('/api/auth/signin?provider=google', '_blank', 'noopener,noreferrer');
+
+        // fallback de segurança (caso o popup feche)
+        const timer = setInterval(() => {
+            if (!popup || popup.closed) {
+                clearInterval(timer);
+                setGoogleLoading(false);
+            }
+        }, 500);*/
+    };
+
 
 
 
@@ -58,6 +82,20 @@ export default function LoginForm() {
                         </span>
                     </div>
                 </div>
+                <div className={styles.socialMediaLoginContainer}>
+                    <div className={styles.socialMediaLogin}>
+                        <button type="button" onClick={handleGoogleSignIn}
+                            disabled={googleLoading}
+                            aria-busy={googleLoading}
+                            aria-disabled={googleLoading}>
+                            <span>
+                                <img src="/icons/googleIcon.svg" alt="Login com Google" />
+                            </span>
+                        </button>
+                    </div>
+
+                </div>
+
                 <div className={styles.submitButtonContainer}>
                     <button type="submit" disabled={isPending || !dadosPreenchidos}>
                         <span>

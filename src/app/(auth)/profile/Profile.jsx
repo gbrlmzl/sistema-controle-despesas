@@ -11,7 +11,11 @@ export default function Profile({session}) {
             <div>
                 <div className={styles.profilePictureContainer}>
                     <div className={styles.profilePicture}>
-                        <img src="/icons/profileIcon.svg" alt="Profile Picture" />
+                        {session.user.image ? (
+                            <img src={session.user.image} alt="Profile Picture" />
+                        ) : (
+                            <img src="/icons/profileIcon.svg" alt="Profile Picture" />
+                        )}
                     </div>
                     <button className={styles.profilePictureEdit}>
                         <span className={styles.profilePictureEditIcon}>
@@ -32,9 +36,12 @@ export default function Profile({session}) {
 
                     </span>
                 </div>
-                <div className={styles.profileActions}>
-                    <Link href="/profile/settings/password" className={styles.changePasswordLinkButton}>Alterar senha</Link>
-                </div>
+                {session.user.provider === 'credentials' && (
+                    <div className={styles.profileActions}>
+                        <Link href="/profile/settings/password" className={styles.changePasswordLinkButton}>Alterar senha</Link>
+                    </div>)
+                }
+                
 
 
             </div>

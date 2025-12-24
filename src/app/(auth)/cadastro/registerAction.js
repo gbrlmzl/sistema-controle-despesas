@@ -37,7 +37,7 @@ export default async function registerAction(_prevState, formData) {
 
 
     //4 -> Consulta o usuário no banco de dados para verificar se já existe um usuário com o email informado
-    const user = await db.usuario.findUnique({
+    const usuario = await db.user.findUnique({
         where: {
             email: payload.email,
         }
@@ -45,7 +45,7 @@ export default async function registerAction(_prevState, formData) {
 
 
     // -> Se existir usuário com esse email, retorna erro
-    if (user) {
+    if (usuario) {
         return {
             message: 'Este usuário já existe!',
             success: false,
@@ -56,12 +56,21 @@ export default async function registerAction(_prevState, formData) {
     //5 -> Após a validação dos dados e a verificação de que não existe usuário cadastrado com esse email, cadastra o novo usuário
     try {
         const senhaHash = await hash(payload.password, saltRounds) // 6-> Criptografa a senha do usuário
-        await db.usuario.create({
+        await db.user.create({
             data: {
                 name: payload.name,
                 email: payload.email,
                 password: senhaHash, //salva a senha criptografada no banco de dados
+                profilePic: null,
 
+
+            }
+        })
+        await db.userAuthProvider.create({
+            data: {
+                userId: (await db.user.findUnique({ where: { email: payload.email } })).id,
+                provider: 'local',
+                providerId: payload.email,
             }
         })
 

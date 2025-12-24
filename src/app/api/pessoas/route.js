@@ -25,14 +25,13 @@ export async function POST(req) {
     //3 -> Valida os dados recebidos usando o schema do Zod
     const parseResult = pessoasPayloadSchema.safeParse(body.listaPessoasACadastrar);
     if (!parseResult.success) {
-        console.log("deu errado aqui", parseResult.error);
         return NextResponse.json({ success: false, message: "Dados inválidos" }, { status: 400 });
     }
 
     const payload = parseResult.data;
 
     //4 -> Consulta o usuário no banco de dados
-    const usuario = await db.usuario.findUnique({
+    const usuario = await db.user.findUnique({
         where: {
             email: session.user.email,
         },
@@ -78,7 +77,7 @@ export async function GET() {
     //Se não tiver sessão, retorna erro 401 - não autorizado
 
     try {
-        const usuario = await db.usuario.findUnique({
+        const usuario = await db.user.findUnique({
             select: { id: true },
             where: {
                 email: session.user.email,
@@ -89,9 +88,9 @@ export async function GET() {
             return NextResponse.json({ success: false, data: null, message: 'Erro de autenticação' }, { status: 401 });
         }
 
-        const pessoas = await db.pessoa.findMany({
+        const pessoas = await db.person.findMany({
             where: {
-                idUsuario: usuario.id
+                userId: usuario.id
             }
         })
 

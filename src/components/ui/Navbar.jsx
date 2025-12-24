@@ -75,7 +75,7 @@ export default function Navbar() {
 
           <div className={styles.userContainer}>
             <span>
-              <img src="/icons/profileIcon.svg" alt="Perfil" width={30} height={30} />
+              <img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil" width={30} height={30} />
             </span>
             <div className={styles.userOptionsContainer}>
               <div className={styles.userInfo}>
@@ -96,7 +96,7 @@ export default function Navbar() {
           <div className={styles.mobileUserContainer}>
             <button onClick={handleShowMobileUserOptions} aria-expanded={showMobileUserOptions} aria-controls="mobile-user-options">
               <span>
-                <img src="/icons/profileIcon.svg" alt="Perfil" width={30} height={30} />
+                <img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil" width={30} height={30} />
               </span>
             </button>
             {showMobileUserOptions && (

@@ -1,6 +1,6 @@
 'use server'
-import { auth } from "../../../../../auth";
-import db from "../../../../../lib/prisma";
+import { auth } from "@/auth";
+import db from "@/lib/prisma";
 import { hash, compare } from "bcrypt";
 
 export default async function settingsAction(_prevState, formData) {
@@ -46,7 +46,7 @@ export default async function settingsAction(_prevState, formData) {
                 success: false,
             }
         }
-        const usuario = await db.usuario.findUnique({
+        const usuario = await db.user.findUnique({
             where: {
                 email: session.user.email,
             }
@@ -69,7 +69,7 @@ export default async function settingsAction(_prevState, formData) {
         
         const newHashedPassword = await hash(data.newPassword, saltRounds);
         
-        await db.usuario.update({
+        await db.user.update({
             where: {
                 email: session.user.email,
             },
@@ -86,8 +86,6 @@ export default async function settingsAction(_prevState, formData) {
 
 
     } catch(e){
-        console.log(e);
-        console.log(e.message);  
         return {
             message: 'Erro na operação. Tente novamente mais tarde.',
             success: false,

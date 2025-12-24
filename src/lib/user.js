@@ -3,26 +3,23 @@ import db from "./prisma";
 
 
 export async function findUserByCredentials(email, password) {
-    const user = await db.usuario.findFirst({
+    const usuario = await db.user.findFirst({
         where: {
             email : email
         }
     });
 
-    if (!user){
+    if (!usuario){
         return null;
     }
-    const passwordMatch =  compareSync(password, user.password);
+    const passwordMatch =  compareSync(password, usuario.password);
 
     if(passwordMatch){
         return{
-            email : user.email,
-            name: user.name
+            email : usuario.email,
+            name: usuario.name
         };
     }
     
     return null;
-
-    
-
 }

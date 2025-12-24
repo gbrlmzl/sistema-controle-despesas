@@ -106,6 +106,10 @@
     flex-direction: column;
 }
 
+.userContainer img{
+    border-radius: 50%;
+}
+
 .userOptionsContainer:hover{
     display: flex;
 }
@@ -173,6 +177,10 @@
 
 .mobileToolbarOptionsContainer button{
     text-align: left;
+}
+
+.mobileUserContainer img{
+    border-radius: 50%;
 }
 
 .mobileUserOptionsContainer{

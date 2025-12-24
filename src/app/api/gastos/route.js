@@ -9,7 +9,7 @@ export async function GET(req) {
         return new NextResponse.json({ success: false, message: 'Usuário não autenticado' }, { status: 401 });
     }//Se não tiver sessão, retorna erro 401 - não autorizado
 
-    const usuario = await db.usuario.findUnique({
+    const usuario = await db.user.findUnique({
         where: {
             email: session.user.email,
         },
@@ -25,10 +25,10 @@ export async function GET(req) {
     if (mes && ano) {
         const mesInt = parseInt(mes);
         const anoInt = parseInt(ano);
-        gastos = await prisma.gasto.findMany({
+        gastos = await prisma.expense.findMany({
             where: {
-                pessoa: {
-                    idUsuario: usuario.id
+                person: {
+                    userId: usuario.id
                 },
                 month: mesInt,
                 year: anoInt
@@ -37,15 +37,15 @@ export async function GET(req) {
             select: {
                 name: true,
                 value: true,
-                idPessoa: true
+                personId: true
             }
         });
     } else {
         //buscar todos os gastos
-        gastos = await prisma.gasto.findMany({
+        gastos = await prisma.expense.findMany({
             where: {
-                pessoa: {
-                    idUsuario: usuario.id
+                person: {
+                    userId: usuario.id
                 }
             },
             select: {
@@ -53,7 +53,7 @@ export async function GET(req) {
                 value: true,
                 month: true,
                 year: true,
-                idPessoa: true
+                personId: true
             }
         })
 
@@ -95,7 +95,7 @@ export async function POST(req) {
     const despesaAno = payload.ano;
     
 
-    const usuario = await db.usuario.findUnique({
+    const usuario = await db.user.findUnique({
         where: {
             email: session.user.email,
         },
@@ -107,20 +107,20 @@ export async function POST(req) {
 
     try {
         //Verifica se existe despesas cadastradas para o mês e ano informados, exclui e cadastra as novas despesas
-        const listaIdPessoasObj = await db.pessoa.findMany({
+        const listaIdPessoasObj = await db.person.findMany({
             select: {
                 id: true
             },
             where: {
-                idUsuario: usuario.id
+                userId: usuario.id
             }
         })
         const idsPessoasArray = listaIdPessoasObj.map(pessoa => pessoa.id);
-        await db.gasto.deleteMany({
+        await db.expense.deleteMany({
             where: {
                 month: despesaMes,
                 year: despesaAno,
-                idPessoa: { in: idsPessoasArray }
+                personId: { in: idsPessoasArray }
             }
         })
 
@@ -129,13 +129,13 @@ export async function POST(req) {
             if (pessoa.despesas.length > 0) {
                 const idPessoa = pessoa.idPessoa;
                 for (const despesa of pessoa.despesas) {
-                    await db.gasto.create({
+                    await db.expense.create({
                         data: {
                             name: despesa.identificacao,
                             value: despesa.valor,
                             month: despesaMes,
                             year: despesaAno,
-                            idPessoa: idPessoa
+                            personId: idPessoa
                         }
                     })
                 }

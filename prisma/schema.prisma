@@ -6,41 +6,55 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../src/generated"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model Usuario {
+model User {
   id Int @id @default(autoincrement())
-  googleId String? @unique
   name String
-  email String @unique
-  password String
+  email String @unique 
+  password String?
+  profilePic String?
+  createdAt DateTime @default(now())
 
-  pessoas Pessoa[] 
+  persons Person[]
+  authProviders UserAuthProvider[] 
 }
 
-model Pessoa {
+model UserAuthProvider {
+  id Int @id @default(autoincrement())
+  userId Int
+  provider String
+  providerId String
+  createdAt DateTime @default(now())
+
+  @@unique([provider, providerId])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+}
+model Person {
   id Int @id @default(autoincrement())
   name String
   email String
-  idUsuario Int
+  userId Int
 
-  usuario Usuario @relation(fields: [idUsuario], references: [id])
-  gasto Gasto[]
+  user User @relation(fields: [userId], references: [id])
+  expense Expense[]
 }
 
-model Gasto {
+model Expense {
   id String @id @default(uuid())
   name String
   value Float
   month Int
   year Int
-  idPessoa Int
+  personId Int
 
-  pessoa Pessoa @relation(fields: [idPessoa], references: [id])
+
+  person Person @relation(fields: [personId], references: [id])
 
 }

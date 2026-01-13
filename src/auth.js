@@ -15,6 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         //procura usuarios com credenciais
         const user = await findUserByCredentials(credentials.email, credentials.password);
+        
 
         //se não autenticado, retorna null
         //se autenticado, retorna user
@@ -69,9 +70,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 }
               });
             }
+            //4. Verificar se o usuario possui uma foto de perfil
+            if(user.image && existingUser.profilePic === null){
+              existingUser = await db.user.update({
+                where: {email: user.email
+                },
+                data: {profilePic: user.image
+                }
+              })
+
+            }
+
           }
 
-          // 4. Prossegue com login - armazena o userId real no token
+        
+          //5. Prossegue com login - armazena o userId real no token
           user.dbId = existingUser.id;
           user.profilePic = existingUser.profilePic;
           user.provider = 'google';

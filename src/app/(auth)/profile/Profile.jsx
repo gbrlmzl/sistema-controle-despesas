@@ -11,11 +11,7 @@ export default function Profile({session}) {
             <div>
                 <div className={styles.profilePictureContainer}>
                     <div className={styles.profilePicture}>
-                        {session.user.image ? (
-                            <img src={session.user.image} alt="Profile Picture" />
-                        ) : (
-                            <img src="/icons/profileIcon.svg" alt="Profile Picture" />
-                        )}
+                        <img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil"/>
                     </div>
                     <button className={styles.profilePictureEdit}>
                         <span className={styles.profilePictureEditIcon}>

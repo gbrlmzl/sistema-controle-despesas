@@ -13,6 +13,7 @@ export default async function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <Inicio session={session}/>
+        {console.log(session)}
 
 
       </main>

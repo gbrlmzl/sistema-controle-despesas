@@ -17,7 +17,8 @@ export async function findUserByCredentials(email, password) {
     if(passwordMatch){
         return{
             email : usuario.email,
-            name: usuario.name
+            name: usuario.name,
+            profilePic: usuario.profilePic
         };
     }
     

@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.0",
-    "@prisma/client": "^7.0.0",
+    "@prisma/client": "^7.2.0",
     "@types/estree": "^1.0.8",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^24.10.1",
@@ -36,6 +36,6 @@
     "@eslint/eslintrc": "^3",
     "eslint": "^9",
     "eslint-config-next": "15.4.7",
-    "prisma": "^7.0.0"
+    "prisma": "^7.2.0"
   }
 }

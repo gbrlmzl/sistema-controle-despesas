@@ -19,7 +19,7 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
         snackbarMsg,
         loadingCadastro,
         pessoaAtualIndex,
-        handleFecharSnackbar,
+        fecharSnackbar,
         pessoaAnterior,
         handlePrevEtapa,
         handleNextEtapa,
@@ -66,7 +66,7 @@ export default function CadastraPessoa({ handleOpcaoMenu, atualizarPessoas, exis
                 pessoaAtualIndex={pessoaAtualIndex}
                 snackbarOpen={snackbarOpen}
                 snackbarMensagem={snackbarMsg}
-                snackBarOnClose={handleFecharSnackbar}
+                snackBarOnClose={fecharSnackbar}
                 handlePrevEtapa={pessoaAnterior}
                 onProximo={(FormData, etapa) => handleNextEtapa(FormData, etapa)}
             />

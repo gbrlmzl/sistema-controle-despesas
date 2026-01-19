@@ -57,7 +57,7 @@ export default function PessoaInfo({ pessoa, onSave, pessoaAtualIndex, snackbarO
                 </div>
             </Form>
             
-            <Snackbar open={snackbarOpen} message={snackbarMensagem} onClose={snackBarOnClose} type={"error"} ></Snackbar>
+            <Snackbar open={snackbarOpen} message={snackbarMensagem} onClose={snackBarOnClose} type={"error"} />
             
         </div>
 

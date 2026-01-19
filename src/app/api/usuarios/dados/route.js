@@ -1,7 +1,7 @@
 import db from "../../../../lib/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "../../../../auth";
-import { ca } from "zod/v4/locales";
+
 
 
 export async function DELETE(req) {

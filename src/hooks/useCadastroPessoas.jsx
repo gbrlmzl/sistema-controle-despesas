@@ -37,7 +37,7 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
         setSnackbarOpen(true);
     };
 
-    const handleFecharSnackbar = () => {
+    const fecharSnackbar = () => {
         setSnackbarOpen(false);
     }
 
@@ -136,7 +136,7 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
           loadingCadastro, 
           respostaCadastro,
           pessoaAtualIndex, 
-          handleFecharSnackbar, 
+          fecharSnackbar, 
           handleConfirmaNumeroPessoas,
           pessoaAnterior, 
           handlePrevEtapa, 

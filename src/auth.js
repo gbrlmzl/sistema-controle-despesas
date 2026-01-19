@@ -15,7 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         //procura usuarios com credenciais
         const user = await findUserByCredentials(credentials.email, credentials.password);
-        
+
 
         //se não autenticado, retorna null
         //se autenticado, retorna user
@@ -71,11 +71,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               });
             }
             //4. Verificar se o usuario possui uma foto de perfil
-            if(user.image && existingUser.profilePic === null){
+            if (user.image && existingUser.profilePic === null) {
               existingUser = await db.user.update({
-                where: {email: user.email
+                where: {
+                  email: user.email
                 },
-                data: {profilePic: user.image
+                data: {
+                  profilePic: user.image
                 }
               })
 
@@ -83,12 +85,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           }
 
-        
+
           //5. Prossegue com login - armazena o userId real no token
           user.dbId = existingUser.id;
           user.profilePic = existingUser.profilePic;
           user.provider = 'google';
-          
+
           return true;
         } catch (error) {
           console.error('Erro no signIn Google:', error);
@@ -97,7 +99,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return true;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      //atualiza token  quando update() é chamado
+      if (trigger === undefined) {
+        // Busca dados atualizados do banco
+        const updatedUser = await db.user.findUnique({
+          where: { id: token.dbId },
+          select: { profilePic: true }
+        });
+
+        if (updatedUser) {
+          token.profilePic = updatedUser.profilePic;
+        }
+
+        return token;
+      }
+
       // Armazena o ID do banco no token JWT
       if (user?.dbId) {
         token.dbId = user.dbId;
@@ -120,7 +137,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.profilePic = token.profilePic || null;
         session.user.provider = token.provider || null;
       }
-      
+
 
       return session;
     }

@@ -37,6 +37,7 @@ export const useControleDespesas = () => {
                 headers: { "Content-Type": "application/json" },
             });
             const resultadoBusca = await response.json();
+            console.log("Despesas recuperadas:", resultadoBusca);
             return resultadoBusca;
         } catch (err) {
             console.log(err);

@@ -51,7 +51,7 @@ export default function DespesasResumo({ despesasMesAnoSelecionado, listaPessoas
                                 <td>{pessoa.numDespesas}</td>
                             </tr>
                         ))) : (
-                            listaPessoas.pessoas.map((pessoa, index) => (
+                            listaPessoas.map((pessoa, index) => (
                                 <tr key={index}>
                                     <td>{pessoa.name}</td>
                                     <td>-</td>

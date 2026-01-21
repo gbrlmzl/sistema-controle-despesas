@@ -15,12 +15,10 @@ export default function Inicio({ session }) {
                         registrando cada despesa e determinando quanto cada residente paga e recebe. </p>
                     {session ? (
                         <div className={styles.contextContainer}>
-                            <p>Comece a utilizar!</p>
-                            <Link href="/app" className={styles.linkButton}>Começar</Link>
+                            <Link href="/app" className={styles.linkButton}>Começar a utilizar</Link>
                         </div>
                     ) : (
                         <div className={styles.contextContainer}>
-                            <p>Cadastre-se e comece a utilizar o Cronos!</p>
                             <Link href="/cadastro" className={styles.linkButton}>Criar conta</Link>
                         </div>
                     )}
@@ -29,26 +27,22 @@ export default function Inicio({ session }) {
             <div className={styles.desktopContextContainer}>
                 <h1>Bem-vindo ao Cronos!</h1>
                 <div className={styles.desktopContent}>
-                    <div className={styles.descriptionContainer}>
+
+                    <Image src="/assets/appImage.svg" alt="App imagem" width={450} height={450} />
+                                        <div className={styles.descriptionContainer}>
                         <div className={styles.description}>
                             <p>O Cronos te ajuda a organizar as despesas mensais da residência que você divide com seus colegas,
                                 registrando cada despesa e determinando quanto cada residente paga e recebe. </p>
                         </div>
-
                     </div>
-
-
-                    <Image src="/assets/appImage.svg" alt="App imagem" width={450} height={450} />
 
                 </div>
                 {session ? (
                     <div className={styles.contextContainer}>
-                        <p>Comece a utilizar!</p>
-                        <Link href="/app" className={styles.linkButton}>Começar</Link>
+                        <Link href="/app" className={styles.linkButton}>Começar a utilizar</Link>
                     </div>
                 ) : (
                     <div className={styles.contextContainer}>
-                        <p>Cadastre-se e comece a utilizar o Cronos!</p>
                         <Link href="/cadastro" className={styles.linkButton}>Criar conta</Link>
                     </div>
                 )}

@@ -2,7 +2,7 @@
 import registerAction from "./registerAction";
 import { useActionState, useEffect } from "react";
 import Form from "next/form"
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
@@ -18,7 +18,7 @@ export default function RegisterForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-
+    const [googleLoading, setGoogleLoading] = useState(false);
     const [atLeast8Chars, setAtLeast8Chars] = useState(false);
     const [hasNumberOrSymbol, setHasNumberOrSymbol] = useState(false);
     const [passwordsMatch, setPasswordsMatch] = useState(false);
@@ -45,6 +45,16 @@ export default function RegisterForm() {
         }
     }, [state?.success, router]);
 
+
+    async function handleGoogleSignIn() {
+        if (googleLoading) return;
+        setGoogleLoading(true);
+
+        await signIn('google');
+
+        setGoogleLoading(false);
+    };
+
     return (
         <div className={styles.container}>
             <h1>Crie sua conta</h1>
@@ -59,7 +69,7 @@ export default function RegisterForm() {
                     <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <div className={styles.passwordField}>
                         <input type={showPassword ? 'text' : 'password'} name="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
-                        
+
                         <span className={styles.passwordToggle} onClick={togglePasswordVisibility}>
                             {showPassword ? (
                                 <img src="/icons/olhoIcon.svg" alt="Mostrar/Ocultar senha" />
@@ -68,7 +78,7 @@ export default function RegisterForm() {
                             }
 
                         </span>
-                        
+
                     </div>
                     <input type={showPassword ? 'text' : 'password'} name="confirmPassword" placeholder="Confirmar Senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                 </div>
@@ -76,11 +86,11 @@ export default function RegisterForm() {
                     <div className={styles.passwordCondition}>
                         {atLeast8Chars ? (
                             <span>
-                                <img src="/icons/checkedIcon.svg" alt="Condição atendida"/>
+                                <img src="/icons/checkedIcon.svg" alt="Condição atendida" />
                             </span>
                         ) : (
                             <span>
-                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida"/>
+                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida" />
                             </span>
                         )}
                         <p>Ao menos 8 caracteres</p>
@@ -88,11 +98,11 @@ export default function RegisterForm() {
                     <div className={styles.passwordCondition}>
                         {hasNumberOrSymbol ? (
                             <span>
-                                <img src="/icons/checkedIcon.svg" alt="Condição atendida"/>
+                                <img src="/icons/checkedIcon.svg" alt="Condição atendida" />
                             </span>
                         ) : (
                             <span>
-                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida"/>
+                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida" />
                             </span>
                         )}
                         <p>Deve conter um número ou símbolo </p>
@@ -100,15 +110,29 @@ export default function RegisterForm() {
                     <div className={styles.passwordCondition}>
                         {passwordsMatch ? (
                             <span>
-                                <img src="/icons/checkedIcon.svg" alt="Condição atendida"/>
+                                <img src="/icons/checkedIcon.svg" alt="Condição atendida" />
                             </span>
                         ) : (
                             <span>
-                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida"/>
+                                <img src="/icons/uncheckedIcon.svg" alt="Condição não atendida" />
                             </span>
                         )}
                         <p>As senhas devem coincidir</p>
                     </div>
+                </div>
+                <div className={styles.socialMediaLoginContainer}>
+                    <p>Ou crie uma conta com</p>
+                    <div className={styles.socialMediaLogin}>
+                        <button type="button" onClick={handleGoogleSignIn}
+                            disabled={googleLoading}
+                            aria-busy={googleLoading}
+                            aria-disabled={googleLoading}>
+                            <span>
+                                <img src="/icons/googleIcon.svg" alt="Login com Google" />
+                            </span>
+                        </button>
+                    </div>
+
                 </div>
                 <div className={styles.submitButtonContainer}>
                     <button type="submit" disabled={isPending || !dadosPreenchidos}>
@@ -119,7 +143,7 @@ export default function RegisterForm() {
                 </div>
 
             </Form>
-            <Link href="/login">Já possuo uma conta</Link>
+            <Link href="/login" className={styles.loginLink}>Já possuo uma conta</Link>
         </div>
     )
 }

@@ -38,6 +38,10 @@
 
 }
 
+
+
+
+
 /* Aumenta área clicável dos meses (jan, fev, mar...) quando usando showMonthYearPicker */
 .datepickerCalendar :global(.react-datepicker__month-text) {
     display: inline-flex;
@@ -51,11 +55,35 @@
     border-radius: 8px;
     cursor: pointer;
     box-sizing: border-box;
+    color: rgba(0, 0, 0, 0.333);
+
+}
+
+.datepickerCalendar :global(.react-datepicker__month-text.hasExpense) {
+    color: rgb(0, 0, 0);
+    font-weight: 700;
+    border-radius: 6px;
+    
 }
 
 .datepickerCalendar :global(.react-datepicker__month-text):hover {
     background: rgba(36,151,243,0.08);
 }
+
+.datepickerCalendar :global(.react-datepicker__month-text.hasExpense):hover {
+    background: rgba(36,151,243,0.06);
+}
+
+.datepickerCalendar :global(.react-datepicker__month-text--keyboard-selected) {
+    background: transparent !important;
+}
+
+.datepickerCalendar :global(.react-datepicker__month-text--keyboard-selected):hover {
+    color: rgba(0, 0, 0, 0.333);
+    background: rgba(36,151,243,0.08) !important;
+}
+
+
 
 
 /* Responsivo: reduzir tamanho das células em telas pequenas */

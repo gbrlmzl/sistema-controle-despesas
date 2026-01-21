@@ -32,7 +32,6 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
             setMesAnoSelecionado({ mes: mesSelecionado, ano: anoSelecionado });
         }
     }
-
     const retornarSelecao = () => {
         setEtapa(etapas[0]);
         setDespesasMesAnoSelecionado([]);
@@ -50,7 +49,8 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
 
     const exibirDespesasDetalhes = (idPessoa) => {
         //filtra as despesas da pessoa selecionada
-        const despesasPessoa = despesasMesAnoSelecionado.filter(despesa => despesa.idPessoa === idPessoa);
+        const despesasPessoa = despesasMesAnoSelecionado.filter(despesa => despesa.personId === idPessoa);
+        console.log("Despesas da pessoa selecionada:", despesasPessoa);
         const pessoaSelecionada = listaPessoas.find(p => p.id === idPessoa);
         setDespesasPessoaSelecionada({ despesas: despesasPessoa, pessoa: pessoaSelecionada });
         setEtapa(etapas[2]);
@@ -65,7 +65,7 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
         return listaPessoas.map(pessoa => {
             const totalGastoPessoa = despesasMesAnoSelecionado.reduce(
                 (acumuladorSomaDespesas, despesa) =>
-                    despesa.idPessoa === pessoa.id
+                    despesa.personId === pessoa.id
                         ? acumuladorSomaDespesas + despesa.value
                         : acumuladorSomaDespesas,
                 0
@@ -76,7 +76,7 @@ export default function useConsultarDespesas({ listaPessoas, listaDespesas }) {
             const recebe = saldo < 0 ? true : false;
             const paga = saldo > 0 ? true : false;
             const quantia = Math.abs(saldo);
-            const numDespesas = despesasMesAnoSelecionado.filter(despesa => despesa.idPessoa === pessoa.id).length;
+            const numDespesas = despesasMesAnoSelecionado.filter(despesa => despesa.personId === pessoa.id).length;
             const pessoaId = pessoa.id;
 
             return {

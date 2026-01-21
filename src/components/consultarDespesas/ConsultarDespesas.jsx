@@ -56,6 +56,7 @@ export default function ConsultarDespesas({ listaPessoas, listaDespesas, handleO
                 onConfirmaEscolha={(mesSelecionado, anoSelecionado) => buscarDespesasMesAno(mesSelecionado, anoSelecionado)}
                 onCancela={retornarAoMenu}
                 loading={loading}
+                listaDespesas={listaDespesas}
             />
         )
     } else if (etapa === "despesasResumo") {

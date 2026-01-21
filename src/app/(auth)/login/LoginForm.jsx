@@ -9,8 +9,6 @@ import { useRouter } from "next/navigation";
 import Link from 'next/link';
 
 import styles from './LoginForm.module.css';
-import { sign } from "crypto";
-import { set } from "zod";
 
 export default function LoginForm() {
     const [state, formAction, isPending] = useActionState(loginAction);
@@ -42,16 +40,6 @@ export default function LoginForm() {
         await signIn('google');
 
         setGoogleLoading(false);
-        // Abre uma nova janela vazia na mesma ação do clique (evita popup blocker)
-        /*const popup = window.open('/api/auth/signin?provider=google', '_blank', 'noopener,noreferrer');
-
-        // fallback de segurança (caso o popup feche)
-        const timer = setInterval(() => {
-            if (!popup || popup.closed) {
-                clearInterval(timer);
-                setGoogleLoading(false);
-            }
-        }, 500);*/
     };
 
 

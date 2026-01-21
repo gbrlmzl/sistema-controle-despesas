@@ -40,7 +40,8 @@ export default function ResumoDespesas({ handleOpcaoMenu, listaDespesas, listaPe
         return (
                 <SeletorData
                 onConfirmaEscolha={(mesSelecionado, anoSelecionado) => selecionarMesAno(mesSelecionado, anoSelecionado)}
-                onCancela={retornarAoMenu}                
+                onCancela={retornarAoMenu}
+                listaDespesas={listaDespesas}                
                 />
 
        )

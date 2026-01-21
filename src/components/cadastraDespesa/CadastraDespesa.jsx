@@ -7,7 +7,7 @@ import SobrescreveDespesa from "./SobrescreveDespesa";
 import PessoasNaoCadastradas from "./PessoasNaoCadastradas";
 import ResultadoCadastro from "./ResultadoCadastro";
 import SeletorData from "../shared/SeletorData";
-export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaPessoas, atualizarDespesas}) {
+export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaPessoas, listaDespesas, atualizarDespesas}) {
     const { 
         etapa, 
         mesAnoTexto,
@@ -50,6 +50,7 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
              onConfirmaEscolha={(mesSelecionado, anoSelecionado) => selecionarMesAno(mesSelecionado, anoSelecionado)}
              onCancela={retornarAoMenu}
              loading={loading}
+             listaDespesas={listaDespesas}
               />
 
         )

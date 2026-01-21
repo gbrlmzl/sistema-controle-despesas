@@ -44,15 +44,14 @@ export async function POST(req) {
     try {
         for (const pessoa of payload) {
             //5 -> Se os dados forem válidos, cadastra a pessoa no banco de dados
-            await db.pessoa.create({
+            await db.person.create({
                 data: {
                     name: pessoa.nome,
                     email: pessoa.email,
-                    idUsuario: usuario.id //Associa a pessoa ao usuário autenticado
+                    userId: usuario.id //Associa a pessoa ao usuário autenticado
                 },
             });
         }
-
 
     } catch (error) {
         return NextResponse.json({ success: false, message: "Erro ao cadastrar pessoas" }, { status: 500 });

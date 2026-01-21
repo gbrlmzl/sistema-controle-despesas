@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import html2canvas from "html2canvas";
 import { compartilharDespesasResumo } from "../utils/compartilharDespesas";
 
 export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
@@ -21,7 +20,7 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
         return listaPessoas.map(pessoa => {
             const totalGastoPessoa = listaDespesasMesAnoSelecionado.reduce(
                 (acumuladorSomaDespesas, despesa) =>
-                    despesa.idPessoa === pessoa.id
+                    despesa.personId === pessoa.id
                         ? acumuladorSomaDespesas + despesa.value
                         : acumuladorSomaDespesas,
                 0
@@ -32,7 +31,8 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
             const recebe = saldo < 0 ? true : false;
             const paga = saldo > 0 ? true : false;
             const quantia = Math.abs(saldo);
-            const numDespesas = listaDespesasMesAnoSelecionado.filter(despesa => despesa.idPessoa === pessoa.id).length;
+            const numDespesas = listaDespesasMesAnoSelecionado.filter(despesa => despesa.personId === pessoa.id).length;
+            
 
             return {
                 nomePessoa: nomePessoa,
@@ -136,7 +136,6 @@ export const useResumoDespesas = ({ listaDespesas, listaPessoas }) => {
         onAnteriorMes,
         onProximoMes,
         retornarSelecao
-
     })
 
 }

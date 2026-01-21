@@ -51,6 +51,7 @@ function ControleDespesas() {
                     retornarAoMenu={retornarAoMenu}
                     handleOpcaoMenu={handleOpcaoMenu}
                     listaPessoas={listaPessoas}
+                    listaDespesas={listaDespesas}
                     atualizarDespesas={atualizarDespesas} />
 
             </div>

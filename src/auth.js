@@ -97,19 +97,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return false; // bloqueia login se houver erro
         }
       }
+
+
       return true;
     },
     async jwt({ token, user, account, trigger, session }) {
       //atualiza token  quando update() é chamado
-      if (trigger === undefined) {
-        // Busca dados atualizados do banco
-        const updatedUser = await db.user.findUnique({
-          where: { id: token.dbId },
-          select: { profilePic: true }
-        });
 
-        if (updatedUser) {
-          token.profilePic = updatedUser.profilePic;
+      if (trigger === "update") {
+        // Busca dados atualizados do banco
+        if (session.updateType === "profilePicture") { // Atualização da foto de perfil
+          const updatedUser = await db.user.findUnique({
+            where: { email: token.email },
+            select: { profilePic: true }
+          });
+
+          if (updatedUser) {
+            token.profilePic = updatedUser.profilePic;
+          }
+
         }
 
         return token;

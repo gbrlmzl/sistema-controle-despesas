@@ -88,10 +88,9 @@ export const useProfile = ({ update }) => {
                     body: updateFormData
                 });
 
-                const updateData = await updateResponse.json();
                 if (updateResponse.ok) {
                     showSnackbar("Foto de perfil atualizada com sucesso!", "success");
-                    await update();
+                    await update({ updateType: "profilePicture" });
                     cancelChangeProfilePicture();
 
                     return true;

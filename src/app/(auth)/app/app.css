@@ -4,8 +4,6 @@
   align-items: center;
   height: 100vh;
   max-width: 100vw;
-
-  /*background: linear-gradient(180deg, #ffffff, rgb(48, 255, 245), #108600);*/
 }
 
 
@@ -55,7 +53,6 @@
 }
 
 button {
-  /* Desativar efeitos padrão do button*/
   background: none;
   border: none;
   padding: 0;
@@ -159,9 +156,9 @@ button:disabled .botaoIcone {
     height: 80%;
 }
 
-/* quando o botão pai estiver desabilitado, altere o fundo do ícone e o cursor */
+
 .botoesContainer button:disabled .botaoIcone {
-    background-color: #66B2FF; /* cinza claro */
+    background-color: #66B2FF;
     cursor: auto;
     opacity: 0.9;
 }

@@ -12,13 +12,9 @@ export default async function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Inicio session={session}/>
-
-
-
+        <Inicio session={session} />
       </main>
       <footer className={styles.footer}>
-        
       </footer>
     </div>
   );

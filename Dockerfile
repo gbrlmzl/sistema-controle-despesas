@@ -3,7 +3,7 @@ WORKDIR /app-node
 
 COPY package*.json ./
 RUN npm install
-
+EXPOSE 3000
 COPY . .
 # Gera o build de produção
 RUN npm run build

@@ -21,7 +21,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: sistema-controle-despesas-app
     depends_on:
       db:
@@ -36,7 +36,7 @@ services:
       - .:/app-node
       - /app-node/node_modules
     entrypoint: ["sh", "-c"]
-    command: "npm install && npx prisma generate && npm run dev"
+    command: ["npm install && npx prisma generate && npm run dev"]
     networks:
       - sistema-despesas-net
 

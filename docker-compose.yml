@@ -36,7 +36,7 @@ services:
       - .:/app-node
       - /app-node/node_modules
     entrypoint: ["sh", "-c"]
-    command: ["npm install && npx prisma generate && npm run dev"]
+    command: ["npm install && npx prisma generate && npx prisma migrate deploy && npm run dev"]
     networks:
       - sistema-despesas-net
 

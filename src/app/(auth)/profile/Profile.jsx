@@ -10,27 +10,23 @@ import Snackbar from '@/components/ui/Snackbar';
 
 export default function Profile() {
 
-    const {data: session,  update } = useSession();
+    const { data: session, update } = useSession();
     const {
-        changeProfilePicture,
-        profilePicturePreview,
-        fileInputRef,
-        handleFileSelect,
+        avatars,
+        galleryOpen,
+        selectedAvatar,
+        loadingChangeProfilePicture,
+        openGallery,
+        closeGallery,
+        selectAvatar,
         confirmChangeProfilePicture,
-        cancelChangeProfilePicture,
         snackbarOpen,
         snackbarMsg,
         closeSnackbar,
         snackbarType
-    } = useProfile({ update});
+    } = useProfile({ update });
 
 
-    
-    
-
-    const handleChangeProfilePicture = () => {
-        changeProfilePicture();
-    }
 
     return (
         <div className={styles.container}>
@@ -38,18 +34,13 @@ export default function Profile() {
             <div>
                 <div className={styles.profilePictureContainer}>
                     <div className={styles.profilePicture}>
-                        {profilePicturePreview ? (
-                            <img src={profilePicturePreview} alt="Perfil" />
-                        ) : (<img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil" />)}
-
+                        <img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil" />
                     </div>
-                    <button className={styles.profilePictureEdit} onClick={handleChangeProfilePicture}>
+                    <button className={styles.profilePictureEdit} onClick={openGallery}>
                         <span className={styles.profilePictureEditIcon}>
                             <img src="/icons/penEditIcon.svg" alt="Editar foto" />
                         </span>
                     </button>
-                    <input ref={fileInputRef} type="file" accept="image/jpeg, image/png" onChange={handleFileSelect} style={{ display: 'none' }} />
-
                 </div>
 
 
@@ -68,20 +59,40 @@ export default function Profile() {
                         <Link href="/profile/settings/password" className={styles.changePasswordLinkButton}>Alterar senha</Link>
                     </div>)
                 }
-                {profilePicturePreview && (
-                    <div className={styles.profilePictureChangeActionsContainer}>
-                        <button className={styles.profilePictureChangeButton} onClick={cancelChangeProfilePicture}>
-                            <span className={styles.profilePictureChangeButtonIcon}>
-                                <img src="/icons/uncheckedIcon.svg" alt="Cancelar alteração da foto de perfil" />
-                            </span>
-                        </button>
-                        <button className={styles.profilePictureChangeButton} onClick={() => confirmChangeProfilePicture(session.user.name, session.user.email)}>
-                            <span className={styles.profilePictureChangeButtonIcon}>
-                                <img src="/icons/checkedIcon.svg" alt="Confirmar nova foto de perfil" />
-                            </span>
-                        </button>
+
+                {galleryOpen && (
+                    <div className={styles.galleryOverlay} role="dialog" aria-modal="true" aria-label="Escolher foto de perfil">
+                        <div className={styles.galleryModal}>
+                            <h2 className={styles.galleryTitle}>Escolha uma foto de perfil</h2>
+                            <div className={styles.galleryGrid}>
+                                {avatars.map((avatar) => (
+                                    <button
+                                        key={avatar}
+                                        type="button"
+                                        className={`${styles.avatarOption} ${selectedAvatar === avatar ? styles.avatarOptionSelected : ''}`}
+                                        onClick={() => selectAvatar(avatar)}
+                                        aria-pressed={selectedAvatar === avatar}
+                                    >
+                                        <img src={avatar} alt="Avatar" />
+                                    </button>
+                                ))}
+                            </div>
+                            <div className={styles.galleryActions}>
+                                <button className={styles.profilePictureChangeButton} onClick={closeGallery} disabled={loadingChangeProfilePicture}>
+                                    <span className={styles.profilePictureChangeButtonIcon}>
+                                        <img src="/icons/uncheckedIcon.svg" alt="Cancelar" />
+                                    </span>
+                                </button>
+                                <button className={styles.profilePictureChangeButton} onClick={confirmChangeProfilePicture} disabled={!selectedAvatar || loadingChangeProfilePicture}>
+                                    <span className={styles.profilePictureChangeButtonIcon}>
+                                        <img src="/icons/checkedIcon.svg" alt="Confirmar" />
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
+
                 <Snackbar open={snackbarOpen} message={snackbarMsg} onClose={closeSnackbar} type={snackbarType} />
 
 

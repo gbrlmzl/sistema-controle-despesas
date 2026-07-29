@@ -41,6 +41,7 @@ export type PersonMinAggregateOutputType = {
   name: string | null
   email: string | null
   userId: number | null
+  deletedAt: Date | null
 }
 
 export type PersonMaxAggregateOutputType = {
@@ -48,6 +49,7 @@ export type PersonMaxAggregateOutputType = {
   name: string | null
   email: string | null
   userId: number | null
+  deletedAt: Date | null
 }
 
 export type PersonCountAggregateOutputType = {
@@ -55,6 +57,7 @@ export type PersonCountAggregateOutputType = {
   name: number
   email: number
   userId: number
+  deletedAt: number
   _all: number
 }
 
@@ -74,6 +77,7 @@ export type PersonMinAggregateInputType = {
   name?: true
   email?: true
   userId?: true
+  deletedAt?: true
 }
 
 export type PersonMaxAggregateInputType = {
@@ -81,6 +85,7 @@ export type PersonMaxAggregateInputType = {
   name?: true
   email?: true
   userId?: true
+  deletedAt?: true
 }
 
 export type PersonCountAggregateInputType = {
@@ -88,6 +93,7 @@ export type PersonCountAggregateInputType = {
   name?: true
   email?: true
   userId?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -182,6 +188,7 @@ export type PersonGroupByOutputType = {
   name: string
   email: string
   userId: number
+  deletedAt: Date | null
   _count: PersonCountAggregateOutputType | null
   _avg: PersonAvgAggregateOutputType | null
   _sum: PersonSumAggregateOutputType | null
@@ -212,6 +219,7 @@ export type PersonWhereInput = {
   name?: Prisma.StringFilter<"Person"> | string
   email?: Prisma.StringFilter<"Person"> | string
   userId?: Prisma.IntFilter<"Person"> | number
+  deletedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   expense?: Prisma.ExpenseListRelationFilter
 }
@@ -221,6 +229,7 @@ export type PersonOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   expense?: Prisma.ExpenseOrderByRelationAggregateInput
 }
@@ -233,6 +242,7 @@ export type PersonWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Person"> | string
   email?: Prisma.StringFilter<"Person"> | string
   userId?: Prisma.IntFilter<"Person"> | number
+  deletedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   expense?: Prisma.ExpenseListRelationFilter
 }, "id">
@@ -242,6 +252,7 @@ export type PersonOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PersonCountOrderByAggregateInput
   _avg?: Prisma.PersonAvgOrderByAggregateInput
   _max?: Prisma.PersonMaxOrderByAggregateInput
@@ -257,11 +268,13 @@ export type PersonScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Person"> | string
   email?: Prisma.StringWithAggregatesFilter<"Person"> | string
   userId?: Prisma.IntWithAggregatesFilter<"Person"> | number
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Person"> | Date | string | null
 }
 
 export type PersonCreateInput = {
   name: string
   email: string
+  deletedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutPersonsInput
   expense?: Prisma.ExpenseCreateNestedManyWithoutPersonInput
 }
@@ -271,12 +284,14 @@ export type PersonUncheckedCreateInput = {
   name: string
   email: string
   userId: number
+  deletedAt?: Date | string | null
   expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutPersonInput
 }
 
 export type PersonUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutPersonsNestedInput
   expense?: Prisma.ExpenseUpdateManyWithoutPersonNestedInput
 }
@@ -286,6 +301,7 @@ export type PersonUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expense?: Prisma.ExpenseUncheckedUpdateManyWithoutPersonNestedInput
 }
 
@@ -294,11 +310,13 @@ export type PersonCreateManyInput = {
   name: string
   email: string
   userId: number
+  deletedAt?: Date | string | null
 }
 
 export type PersonUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PersonUncheckedUpdateManyInput = {
@@ -306,6 +324,7 @@ export type PersonUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PersonListRelationFilter = {
@@ -323,6 +342,7 @@ export type PersonCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type PersonAvgOrderByAggregateInput = {
@@ -335,6 +355,7 @@ export type PersonMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type PersonMinOrderByAggregateInput = {
@@ -342,6 +363,7 @@ export type PersonMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type PersonSumOrderByAggregateInput = {
@@ -396,6 +418,10 @@ export type PersonUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.PersonScalarWhereInput | Prisma.PersonScalarWhereInput[]
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type PersonCreateNestedOneWithoutExpenseInput = {
   create?: Prisma.XOR<Prisma.PersonCreateWithoutExpenseInput, Prisma.PersonUncheckedCreateWithoutExpenseInput>
   connectOrCreate?: Prisma.PersonCreateOrConnectWithoutExpenseInput
@@ -413,6 +439,7 @@ export type PersonUpdateOneRequiredWithoutExpenseNestedInput = {
 export type PersonCreateWithoutUserInput = {
   name: string
   email: string
+  deletedAt?: Date | string | null
   expense?: Prisma.ExpenseCreateNestedManyWithoutPersonInput
 }
 
@@ -420,6 +447,7 @@ export type PersonUncheckedCreateWithoutUserInput = {
   id?: number
   name: string
   email: string
+  deletedAt?: Date | string | null
   expense?: Prisma.ExpenseUncheckedCreateNestedManyWithoutPersonInput
 }
 
@@ -457,11 +485,13 @@ export type PersonScalarWhereInput = {
   name?: Prisma.StringFilter<"Person"> | string
   email?: Prisma.StringFilter<"Person"> | string
   userId?: Prisma.IntFilter<"Person"> | number
+  deletedAt?: Prisma.DateTimeNullableFilter<"Person"> | Date | string | null
 }
 
 export type PersonCreateWithoutExpenseInput = {
   name: string
   email: string
+  deletedAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutPersonsInput
 }
 
@@ -470,6 +500,7 @@ export type PersonUncheckedCreateWithoutExpenseInput = {
   name: string
   email: string
   userId: number
+  deletedAt?: Date | string | null
 }
 
 export type PersonCreateOrConnectWithoutExpenseInput = {
@@ -491,6 +522,7 @@ export type PersonUpdateToOneWithWhereWithoutExpenseInput = {
 export type PersonUpdateWithoutExpenseInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutPersonsNestedInput
 }
 
@@ -499,17 +531,20 @@ export type PersonUncheckedUpdateWithoutExpenseInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type PersonCreateManyUserInput = {
   id?: number
   name: string
   email: string
+  deletedAt?: Date | string | null
 }
 
 export type PersonUpdateWithoutUserInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expense?: Prisma.ExpenseUpdateManyWithoutPersonNestedInput
 }
 
@@ -517,6 +552,7 @@ export type PersonUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   expense?: Prisma.ExpenseUncheckedUpdateManyWithoutPersonNestedInput
 }
 
@@ -524,6 +560,7 @@ export type PersonUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -562,6 +599,7 @@ export type PersonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name?: boolean
   email?: boolean
   userId?: boolean
+  deletedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   expense?: boolean | Prisma.Person$expenseArgs<ExtArgs>
   _count?: boolean | Prisma.PersonCountOutputTypeDefaultArgs<ExtArgs>
@@ -572,6 +610,7 @@ export type PersonSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   email?: boolean
   userId?: boolean
+  deletedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["person"]>
 
@@ -580,6 +619,7 @@ export type PersonSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   name?: boolean
   email?: boolean
   userId?: boolean
+  deletedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["person"]>
 
@@ -588,9 +628,10 @@ export type PersonSelectScalar = {
   name?: boolean
   email?: boolean
   userId?: boolean
+  deletedAt?: boolean
 }
 
-export type PersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "userId", ExtArgs["result"]["person"]>
+export type PersonOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "userId" | "deletedAt", ExtArgs["result"]["person"]>
 export type PersonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   expense?: boolean | Prisma.Person$expenseArgs<ExtArgs>
@@ -614,6 +655,7 @@ export type $PersonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     name: string
     email: string
     userId: number
+    deletedAt: Date | null
   }, ExtArgs["result"]["person"]>
   composites: {}
 }
@@ -1043,6 +1085,7 @@ export interface PersonFieldRefs {
   readonly name: Prisma.FieldRef<"Person", 'String'>
   readonly email: Prisma.FieldRef<"Person", 'String'>
   readonly userId: Prisma.FieldRef<"Person", 'Int'>
+  readonly deletedAt: Prisma.FieldRef<"Person", 'DateTime'>
 }
     
 

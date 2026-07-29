@@ -17,10 +17,10 @@ import type * as Prisma from "./prismaNamespace.js"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.2.0",
-  "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
+  "clientVersion": "7.0.0",
+  "engineVersion": "0c19ccc313cf9911a90d99d2ac2eb0280c76c513",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id         Int      @id @default(autoincrement())\n  name       String\n  email      String   @unique\n  password   String?\n  profilePic String?\n  createdAt  DateTime @default(now())\n\n  persons       Person[]\n  authProviders UserAuthProvider[]\n}\n\nmodel UserAuthProvider {\n  id         Int      @id @default(autoincrement())\n  userId     Int\n  provider   String\n  providerId String\n  createdAt  DateTime @default(now())\n  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerId])\n}\n\nmodel Person {\n  id     Int    @id @default(autoincrement())\n  name   String\n  email  String\n  userId Int\n\n  user    User      @relation(fields: [userId], references: [id])\n  expense Expense[]\n}\n\nmodel Expense {\n  id       String @id @default(uuid())\n  name     String\n  value    Float\n  month    Int\n  year     Int\n  personId Int\n\n  person Person @relation(fields: [personId], references: [id])\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id         Int      @id @default(autoincrement())\n  name       String\n  email      String   @unique\n  password   String?\n  profilePic String?\n  createdAt  DateTime @default(now())\n\n  persons       Person[]\n  authProviders UserAuthProvider[]\n}\n\nmodel UserAuthProvider {\n  id         Int      @id @default(autoincrement())\n  userId     Int\n  provider   String\n  providerId String\n  createdAt  DateTime @default(now())\n  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerId])\n}\n\nmodel Person {\n  id        Int       @id @default(autoincrement())\n  name      String\n  email     String\n  userId    Int\n  deletedAt DateTime?\n\n  user    User      @relation(fields: [userId], references: [id])\n  expense Expense[]\n}\n\nmodel Expense {\n  id        String    @id @default(uuid())\n  name      String\n  value     Float\n  month     Int\n  year      Int\n  personId  Int\n  deletedAt DateTime?\n\n  person Person @relation(fields: [personId], references: [id])\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePic\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"persons\",\"kind\":\"object\",\"type\":\"Person\",\"relationName\":\"PersonToUser\"},{\"name\":\"authProviders\",\"kind\":\"object\",\"type\":\"UserAuthProvider\",\"relationName\":\"UserToUserAuthProvider\"}],\"dbName\":null},\"UserAuthProvider\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"provider\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserAuthProvider\"}],\"dbName\":null},\"Person\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PersonToUser\"},{\"name\":\"expense\",\"kind\":\"object\",\"type\":\"Expense\",\"relationName\":\"ExpenseToPerson\"}],\"dbName\":null},\"Expense\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"month\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"personId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"person\",\"kind\":\"object\",\"type\":\"Person\",\"relationName\":\"ExpenseToPerson\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"profilePic\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"persons\",\"kind\":\"object\",\"type\":\"Person\",\"relationName\":\"PersonToUser\"},{\"name\":\"authProviders\",\"kind\":\"object\",\"type\":\"UserAuthProvider\",\"relationName\":\"UserToUserAuthProvider\"}],\"dbName\":null},\"UserAuthProvider\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"provider\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserAuthProvider\"}],\"dbName\":null},\"Person\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"deletedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PersonToUser\"},{\"name\":\"expense\",\"kind\":\"object\",\"type\":\"Expense\",\"relationName\":\"ExpenseToPerson\"}],\"dbName\":null},\"Expense\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"value\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"month\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"personId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"deletedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"person\",\"kind\":\"object\",\"type\":\"Person\",\"relationName\":\"ExpenseToPerson\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -62,7 +62,7 @@ export interface PrismaClientConstructor {
    * const users = await prisma.user.findMany()
    * ```
    * 
-   * Read more in our [docs](https://pris.ly/d/client).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
    */
 
   new <
@@ -84,7 +84,7 @@ export interface PrismaClientConstructor {
  * const users = await prisma.user.findMany()
  * ```
  * 
- * Read more in our [docs](https://pris.ly/d/client).
+ * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
  */
 
 export interface PrismaClient<
@@ -113,7 +113,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -125,7 +125,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -136,7 +136,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -148,7 +148,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
 

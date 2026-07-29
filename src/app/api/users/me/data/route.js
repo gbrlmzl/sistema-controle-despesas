@@ -1,9 +1,9 @@
-import db from "../../../../lib/prisma";
+import db from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { auth } from "../../../../auth";
+import { auth } from "@/auth";
 
-
-
+// "Formatar Sistema": reseta os dados da própria conta (pessoas e gastos).
+// Usa soft delete (deletedAt) para preservar o histórico e permitir auditoria posterior.
 export async function DELETE(req) {
     const session = await auth()
     if (!session) {
@@ -26,7 +26,7 @@ export async function DELETE(req) {
 
 
     try {
-        const usuario = await db.usuario.findUnique({
+        const usuario = await db.user.findUnique({
             where: {
                 email: session.user.email,
             },
@@ -35,29 +35,32 @@ export async function DELETE(req) {
             return NextResponse.json({ success: false, message: 'Erro de autenticação', data: { gastosDeletados: 0, pessoasDeletadas: 0 } }, { status: 401 });
         }
 
-        const idsPessoasCadastradas = await db.pessoa.findMany({
+        //Considera apenas os registros ainda ativos (deletedAt === null)
+        const idsPessoasCadastradas = await db.person.findMany({
             select: { id: true },
-            where: { idUsuario: usuario.id }
+            where: { userId: usuario.id, deletedAt: null }
         })
         const idsMapeados = idsPessoasCadastradas.map(pessoa => pessoa.id);
 
-        const gastosDeletados = await db.gasto.deleteMany({
-            where: { idPessoa: { in: idsMapeados } }
+        const now = new Date();
+
+        //Soft delete dos gastos das pessoas do usuário
+        const gastosDeletados = await db.expense.updateMany({
+            where: { personId: { in: idsMapeados }, deletedAt: null },
+            data: { deletedAt: now }
         })
 
-        const pessoasDeletadas = await db.pessoa.deleteMany({
-            where: { id: { in: idsMapeados } }
+        //Soft delete das pessoas do usuário
+        const pessoasDeletadas = await db.person.updateMany({
+            where: { id: { in: idsMapeados }, deletedAt: null },
+            data: { deletedAt: now }
         })
 
-        return new Response(JSON.stringify({ success: true, message: "Sucesso na formatação", data: { gastosDeletados: gastosDeletados.count, pessoasDeletadas: pessoasDeletadas.count } }), { status: 200 });
+        return NextResponse.json({ success: true, message: "Sucesso na formatação", data: { gastosDeletados: gastosDeletados.count, pessoasDeletadas: pessoasDeletadas.count } }, { status: 200 });
 
 
     } catch (error) {
         return NextResponse.json({ success: false, message: "Erro ao formatar o sistema", data: { gastosDeletados: 0, pessoasDeletadas: 0 } }, { status: 500 });
     }
-
-
-
-
 
 }

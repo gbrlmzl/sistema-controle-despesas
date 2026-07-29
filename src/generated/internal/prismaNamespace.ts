@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.2.0
- * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+ * Prisma Client JS version: 7.0.0
+ * Query Engine version: 0c19ccc313cf9911a90d99d2ac2eb0280c76c513
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.2.0",
-  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
+  client: "7.0.0",
+  engine: "0c19ccc313cf9911a90d99d2ac2eb0280c76c513"
 }
 
 /**
@@ -769,7 +769,8 @@ export const PersonScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  userId: 'userId'
+  userId: 'userId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type PersonScalarFieldEnum = (typeof PersonScalarFieldEnum)[keyof typeof PersonScalarFieldEnum]
@@ -781,7 +782,8 @@ export const ExpenseScalarFieldEnum = {
   value: 'value',
   month: 'month',
   year: 'year',
-  personId: 'personId'
+  personId: 'personId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
@@ -921,7 +923,7 @@ export type PrismaClientOptions = ({
    *  { emit: 'stdout', level: 'error' }
    * 
    * ```
-   * Read more in our [docs](https://pris.ly/d/logging).
+   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
    */
   log?: (LogLevel | LogDefinition)[]
   /**
@@ -949,22 +951,6 @@ export type PrismaClientOptions = ({
    * ```
    */
   omit?: GlobalOmitConfig
-  /**
-   * SQL commenter plugins that add metadata to SQL queries as comments.
-   * Comments follow the sqlcommenter format: https://google.github.io/sqlcommenter/
-   * 
-   * @example
-   * ```
-   * const prisma = new PrismaClient({
-   *   adapter,
-   *   comments: [
-   *     traceContext(),
-   *     queryInsights(),
-   *   ],
-   * })
-   * ```
-   */
-  comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit

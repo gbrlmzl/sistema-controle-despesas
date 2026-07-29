@@ -1,12 +1,12 @@
-import db from "../../../lib/prisma";
-import { auth } from "../../../auth";
+import db from "@/lib/prisma";
+import { auth } from "@/auth";
 import { NextResponse } from 'next/server';
 import { gastosPayloadSchema } from "@/schemas/gastos";
 
 export async function GET(req) {
     const session = await auth()
     if (!session) {
-        return new NextResponse.json({ success: false, message: 'Usuário não autenticado' }, { status: 401 });
+        return NextResponse.json({ success: false, message: 'Usuário não autenticado', data: null }, { status: 401 });
     }//Se não tiver sessão, retorna erro 401 - não autorizado
 
     const usuario = await db.user.findUnique({
@@ -14,6 +14,10 @@ export async function GET(req) {
             email: session.user.email,
         },
     });
+
+    if (!usuario) {
+        return NextResponse.json({ success: false, message: 'Erro de autenticação', data: null }, { status: 401 });
+    }
 
     const { searchParams } = new URL(req.url);
     const mes = searchParams.get("mes")
@@ -25,10 +29,13 @@ export async function GET(req) {
     if (mes && ano) {
         const mesInt = parseInt(mes);
         const anoInt = parseInt(ano);
-        gastos = await prisma.expense.findMany({
+        //Apenas gastos ativos (soft delete) de pessoas ativas
+        gastos = await db.expense.findMany({
             where: {
+                deletedAt: null,
                 person: {
-                    userId: usuario.id
+                    userId: usuario.id,
+                    deletedAt: null
                 },
                 month: mesInt,
                 year: anoInt
@@ -37,15 +44,19 @@ export async function GET(req) {
             select: {
                 name: true,
                 value: true,
+                month: true,
+                year: true,
                 personId: true
             }
         });
     } else {
-        //buscar todos os gastos
-        gastos = await prisma.expense.findMany({
+        //buscar todos os gastos ativos
+        gastos = await db.expense.findMany({
             where: {
+                deletedAt: null,
                 person: {
-                    userId: usuario.id
+                    userId: usuario.id,
+                    deletedAt: null
                 }
             },
             select: {
@@ -59,10 +70,7 @@ export async function GET(req) {
 
     }
 
-    return new Response(
-        JSON.stringify({ gastos }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
-    );
+    return NextResponse.json({ success: true, message: 'Gastos buscados com sucesso!', data: gastos }, { status: 200 });
 
 }
 
@@ -93,7 +101,7 @@ export async function POST(req) {
     const listaDespesasDeCadaPessoa = payload.lista;
     const despesaMes = payload.mes;
     const despesaAno = payload.ano;
-    
+
 
     const usuario = await db.user.findUnique({
         where: {
@@ -106,21 +114,27 @@ export async function POST(req) {
     }
 
     try {
-        //Verifica se existe despesas cadastradas para o mês e ano informados, exclui e cadastra as novas despesas
+        //Ao sobrescrever um mês/ano, os gastos anteriores são marcados como deletados
+        //(soft delete) em vez de removidos, preservando o histórico para auditoria.
         const listaIdPessoasObj = await db.person.findMany({
             select: {
                 id: true
             },
             where: {
-                userId: usuario.id
+                userId: usuario.id,
+                deletedAt: null
             }
         })
         const idsPessoasArray = listaIdPessoasObj.map(pessoa => pessoa.id);
-        await db.expense.deleteMany({
+        await db.expense.updateMany({
             where: {
                 month: despesaMes,
                 year: despesaAno,
-                personId: { in: idsPessoasArray }
+                personId: { in: idsPessoasArray },
+                deletedAt: null
+            },
+            data: {
+                deletedAt: new Date()
             }
         })
 
@@ -147,12 +161,5 @@ export async function POST(req) {
     } catch (error) {
         return NextResponse.json({ success: false, message: 'Erro ao cadastrar despesas, tente novamente mais tarde.' }, { status: 500 });
     }
-
-
-
-
-
-
-
 
 }

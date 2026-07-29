@@ -1,4 +1,4 @@
-import db from "../../../lib/prisma";
+import db from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { pessoasPayloadSchema } from "@/schemas/pessoas";
@@ -11,7 +11,7 @@ export async function POST(req) {
     if (!session) {
         return NextResponse.json({ success: false, message: "Usuário não autenticado" }, { status: 401 });
     }
-    
+
     //2 -> Verifica o corpo da requisição
     let body;
     try {
@@ -64,10 +64,6 @@ export async function POST(req) {
 
 
 
-
-
-
-
 export async function GET() {
     const session = await auth()
     if (!session) {
@@ -87,9 +83,11 @@ export async function GET() {
             return NextResponse.json({ success: false, data: null, message: 'Erro de autenticação' }, { status: 401 });
         }
 
+        //Retorna apenas pessoas ativas (soft delete: deletedAt === null)
         const pessoas = await db.person.findMany({
             where: {
-                userId: usuario.id
+                userId: usuario.id,
+                deletedAt: null
             }
         })
 
@@ -99,7 +97,4 @@ export async function GET() {
         return NextResponse.json({ success: false, message: "Erro ao buscar pessoas" }, { status: 500 });
     }
 
-
-
 }
-

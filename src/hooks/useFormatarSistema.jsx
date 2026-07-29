@@ -21,7 +21,7 @@ export const useFormatarSistema = (handleOpcaoMenu, atualizarDadosLocais) => {
         if (loading) return; //se já estiver carregando, não faz nada
         setLoading(true); //indica que está carregando
         try {
-            const response = await fetch("/api/usuarios/dados", {
+            const response = await fetch("/api/users/me/data", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 

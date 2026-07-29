@@ -41,6 +41,7 @@ model Person {
   name String
   email String
   userId Int
+  deletedAt DateTime?
 
   user User @relation(fields: [userId], references: [id])
   expense Expense[]
@@ -53,6 +54,7 @@ model Expense {
   month Int
   year Int
   personId Int
+  deletedAt DateTime?
 
 
   person Person @relation(fields: [personId], references: [id])

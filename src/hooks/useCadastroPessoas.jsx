@@ -98,7 +98,7 @@ export const useCadastroPessoas = ({atualizarPessoas}) => {
         setLoadingCadastro(true);
 
         try {
-            const response = await fetch("/api/pessoas", {
+            const response = await fetch("/api/persons", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

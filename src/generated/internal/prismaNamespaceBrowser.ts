@@ -100,7 +100,8 @@ export const PersonScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
-  userId: 'userId'
+  userId: 'userId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type PersonScalarFieldEnum = (typeof PersonScalarFieldEnum)[keyof typeof PersonScalarFieldEnum]
@@ -112,7 +113,8 @@ export const ExpenseScalarFieldEnum = {
   value: 'value',
   month: 'month',
   year: 'year',
-  personId: 'personId'
+  personId: 'personId',
+  deletedAt: 'deletedAt'
 } as const
 
 export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]

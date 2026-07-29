@@ -47,6 +47,7 @@ export type ExpenseMinAggregateOutputType = {
   month: number | null
   year: number | null
   personId: number | null
+  deletedAt: Date | null
 }
 
 export type ExpenseMaxAggregateOutputType = {
@@ -56,6 +57,7 @@ export type ExpenseMaxAggregateOutputType = {
   month: number | null
   year: number | null
   personId: number | null
+  deletedAt: Date | null
 }
 
 export type ExpenseCountAggregateOutputType = {
@@ -65,6 +67,7 @@ export type ExpenseCountAggregateOutputType = {
   month: number
   year: number
   personId: number
+  deletedAt: number
   _all: number
 }
 
@@ -90,6 +93,7 @@ export type ExpenseMinAggregateInputType = {
   month?: true
   year?: true
   personId?: true
+  deletedAt?: true
 }
 
 export type ExpenseMaxAggregateInputType = {
@@ -99,6 +103,7 @@ export type ExpenseMaxAggregateInputType = {
   month?: true
   year?: true
   personId?: true
+  deletedAt?: true
 }
 
 export type ExpenseCountAggregateInputType = {
@@ -108,6 +113,7 @@ export type ExpenseCountAggregateInputType = {
   month?: true
   year?: true
   personId?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -204,6 +210,7 @@ export type ExpenseGroupByOutputType = {
   month: number
   year: number
   personId: number
+  deletedAt: Date | null
   _count: ExpenseCountAggregateOutputType | null
   _avg: ExpenseAvgAggregateOutputType | null
   _sum: ExpenseSumAggregateOutputType | null
@@ -236,6 +243,7 @@ export type ExpenseWhereInput = {
   month?: Prisma.IntFilter<"Expense"> | number
   year?: Prisma.IntFilter<"Expense"> | number
   personId?: Prisma.IntFilter<"Expense"> | number
+  deletedAt?: Prisma.DateTimeNullableFilter<"Expense"> | Date | string | null
   person?: Prisma.XOR<Prisma.PersonScalarRelationFilter, Prisma.PersonWhereInput>
 }
 
@@ -246,6 +254,7 @@ export type ExpenseOrderByWithRelationInput = {
   month?: Prisma.SortOrder
   year?: Prisma.SortOrder
   personId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   person?: Prisma.PersonOrderByWithRelationInput
 }
 
@@ -259,6 +268,7 @@ export type ExpenseWhereUniqueInput = Prisma.AtLeast<{
   month?: Prisma.IntFilter<"Expense"> | number
   year?: Prisma.IntFilter<"Expense"> | number
   personId?: Prisma.IntFilter<"Expense"> | number
+  deletedAt?: Prisma.DateTimeNullableFilter<"Expense"> | Date | string | null
   person?: Prisma.XOR<Prisma.PersonScalarRelationFilter, Prisma.PersonWhereInput>
 }, "id">
 
@@ -269,6 +279,7 @@ export type ExpenseOrderByWithAggregationInput = {
   month?: Prisma.SortOrder
   year?: Prisma.SortOrder
   personId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ExpenseCountOrderByAggregateInput
   _avg?: Prisma.ExpenseAvgOrderByAggregateInput
   _max?: Prisma.ExpenseMaxOrderByAggregateInput
@@ -286,6 +297,7 @@ export type ExpenseScalarWhereWithAggregatesInput = {
   month?: Prisma.IntWithAggregatesFilter<"Expense"> | number
   year?: Prisma.IntWithAggregatesFilter<"Expense"> | number
   personId?: Prisma.IntWithAggregatesFilter<"Expense"> | number
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Expense"> | Date | string | null
 }
 
 export type ExpenseCreateInput = {
@@ -294,6 +306,7 @@ export type ExpenseCreateInput = {
   value: number
   month: number
   year: number
+  deletedAt?: Date | string | null
   person: Prisma.PersonCreateNestedOneWithoutExpenseInput
 }
 
@@ -304,6 +317,7 @@ export type ExpenseUncheckedCreateInput = {
   month: number
   year: number
   personId: number
+  deletedAt?: Date | string | null
 }
 
 export type ExpenseUpdateInput = {
@@ -312,6 +326,7 @@ export type ExpenseUpdateInput = {
   value?: Prisma.FloatFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   person?: Prisma.PersonUpdateOneRequiredWithoutExpenseNestedInput
 }
 
@@ -322,6 +337,7 @@ export type ExpenseUncheckedUpdateInput = {
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   personId?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ExpenseCreateManyInput = {
@@ -331,6 +347,7 @@ export type ExpenseCreateManyInput = {
   month: number
   year: number
   personId: number
+  deletedAt?: Date | string | null
 }
 
 export type ExpenseUpdateManyMutationInput = {
@@ -339,6 +356,7 @@ export type ExpenseUpdateManyMutationInput = {
   value?: Prisma.FloatFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ExpenseUncheckedUpdateManyInput = {
@@ -348,6 +366,7 @@ export type ExpenseUncheckedUpdateManyInput = {
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
   personId?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ExpenseListRelationFilter = {
@@ -367,6 +386,7 @@ export type ExpenseCountOrderByAggregateInput = {
   month?: Prisma.SortOrder
   year?: Prisma.SortOrder
   personId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type ExpenseAvgOrderByAggregateInput = {
@@ -383,6 +403,7 @@ export type ExpenseMaxOrderByAggregateInput = {
   month?: Prisma.SortOrder
   year?: Prisma.SortOrder
   personId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type ExpenseMinOrderByAggregateInput = {
@@ -392,6 +413,7 @@ export type ExpenseMinOrderByAggregateInput = {
   month?: Prisma.SortOrder
   year?: Prisma.SortOrder
   personId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type ExpenseSumOrderByAggregateInput = {
@@ -457,6 +479,7 @@ export type ExpenseCreateWithoutPersonInput = {
   value: number
   month: number
   year: number
+  deletedAt?: Date | string | null
 }
 
 export type ExpenseUncheckedCreateWithoutPersonInput = {
@@ -465,6 +488,7 @@ export type ExpenseUncheckedCreateWithoutPersonInput = {
   value: number
   month: number
   year: number
+  deletedAt?: Date | string | null
 }
 
 export type ExpenseCreateOrConnectWithoutPersonInput = {
@@ -503,6 +527,7 @@ export type ExpenseScalarWhereInput = {
   month?: Prisma.IntFilter<"Expense"> | number
   year?: Prisma.IntFilter<"Expense"> | number
   personId?: Prisma.IntFilter<"Expense"> | number
+  deletedAt?: Prisma.DateTimeNullableFilter<"Expense"> | Date | string | null
 }
 
 export type ExpenseCreateManyPersonInput = {
@@ -511,6 +536,7 @@ export type ExpenseCreateManyPersonInput = {
   value: number
   month: number
   year: number
+  deletedAt?: Date | string | null
 }
 
 export type ExpenseUpdateWithoutPersonInput = {
@@ -519,6 +545,7 @@ export type ExpenseUpdateWithoutPersonInput = {
   value?: Prisma.FloatFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ExpenseUncheckedUpdateWithoutPersonInput = {
@@ -527,6 +554,7 @@ export type ExpenseUncheckedUpdateWithoutPersonInput = {
   value?: Prisma.FloatFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ExpenseUncheckedUpdateManyWithoutPersonInput = {
@@ -535,6 +563,7 @@ export type ExpenseUncheckedUpdateManyWithoutPersonInput = {
   value?: Prisma.FloatFieldUpdateOperationsInput | number
   month?: Prisma.IntFieldUpdateOperationsInput | number
   year?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -546,6 +575,7 @@ export type ExpenseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   month?: boolean
   year?: boolean
   personId?: boolean
+  deletedAt?: boolean
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["expense"]>
 
@@ -556,6 +586,7 @@ export type ExpenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   month?: boolean
   year?: boolean
   personId?: boolean
+  deletedAt?: boolean
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["expense"]>
 
@@ -566,6 +597,7 @@ export type ExpenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   month?: boolean
   year?: boolean
   personId?: boolean
+  deletedAt?: boolean
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["expense"]>
 
@@ -576,9 +608,10 @@ export type ExpenseSelectScalar = {
   month?: boolean
   year?: boolean
   personId?: boolean
+  deletedAt?: boolean
 }
 
-export type ExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "value" | "month" | "year" | "personId", ExtArgs["result"]["expense"]>
+export type ExpenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "value" | "month" | "year" | "personId" | "deletedAt", ExtArgs["result"]["expense"]>
 export type ExpenseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   person?: boolean | Prisma.PersonDefaultArgs<ExtArgs>
 }
@@ -601,6 +634,7 @@ export type $ExpensePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     month: number
     year: number
     personId: number
+    deletedAt: Date | null
   }, ExtArgs["result"]["expense"]>
   composites: {}
 }
@@ -1031,6 +1065,7 @@ export interface ExpenseFieldRefs {
   readonly month: Prisma.FieldRef<"Expense", 'Int'>
   readonly year: Prisma.FieldRef<"Expense", 'Int'>
   readonly personId: Prisma.FieldRef<"Expense", 'Int'>
+  readonly deletedAt: Prisma.FieldRef<"Expense", 'DateTime'>
 }
     
 

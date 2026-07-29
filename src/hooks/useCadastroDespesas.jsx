@@ -65,7 +65,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
 
     const recuperaDespesasDoMes = async (mesAno) => {
         try {
-            const response = await fetch(`/api/gastos?mes=${mesAno.mes}&ano=${mesAno.ano}`, {
+            const response = await fetch(`/api/expenses?mes=${mesAno.mes}&ano=${mesAno.ano}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -86,7 +86,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
         //Quando confirmar o mês e ano, verificar se já existem despesas cadastradas no banco de dados correspondente a esse mês e ano. se existir, perguntar se quer substituir ou cancelar a operação
         const response = await recuperaDespesasDoMes({ mes: mesSelecionado, ano: anoSelecionado });
 
-        const despesasExistentes = response.gastos;
+        const despesasExistentes = response.data || [];
 
 
 
@@ -202,7 +202,7 @@ export const useCadastroDespesas = ({ listaPessoas, atualizarDespesas }) => {
         setLoading(true); //indica que está carregando
 
         try {
-            const response = await fetch("/api/gastos", {
+            const response = await fetch("/api/expenses", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

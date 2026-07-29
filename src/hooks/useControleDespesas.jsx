@@ -19,7 +19,7 @@ export const useControleDespesas = () => {
 
     const recuperaListaPessoas = async () => {
         try {
-            const response = await fetch("/api/pessoas", {
+            const response = await fetch("/api/persons", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -32,7 +32,7 @@ export const useControleDespesas = () => {
 
     const recuperaListaDespesas = async () => {
         try {
-            const response = await fetch("/api/gastos", {
+            const response = await fetch("/api/expenses", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -51,7 +51,7 @@ export const useControleDespesas = () => {
 
     const atualizarDespesas = async () => {
         const despesasBrutasObject = await recuperaListaDespesas();
-        const despesasBrutas = despesasBrutasObject.gastos;
+        const despesasBrutas = despesasBrutasObject.data || [];
 
         if (despesasBrutas.length > 0) {
             // Agrupa por mês/ano

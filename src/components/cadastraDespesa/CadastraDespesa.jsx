@@ -107,14 +107,7 @@ export default function CadastraDespesa({retornarAoMenu, handleOpcaoMenu, listaP
             dadosPagamento={dadosPagamento}
             onRetornaAoMenu={retornarAoMenu}
             onCompartilhar={onCompartilharResumo}
-
             />
-
         )
     }
-
-
-
-
-
 }

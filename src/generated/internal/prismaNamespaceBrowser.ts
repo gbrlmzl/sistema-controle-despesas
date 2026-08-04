@@ -54,6 +54,12 @@ export const ModelName = {
   User: 'User',
   UserAuthProvider: 'UserAuthProvider',
   Person: 'Person',
+  Residence: 'Residence',
+  Membership: 'Membership',
+  Invite: 'Invite',
+  JoinRequest: 'JoinRequest',
+  Notification: 'Notification',
+  JoinAttempt: 'JoinAttempt',
   Expense: 'Expense'
 } as const
 
@@ -77,6 +83,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
   email: 'email',
+  username: 'username',
   password: 'password',
   profilePic: 'profilePic',
   createdAt: 'createdAt'
@@ -105,6 +112,78 @@ export const PersonScalarFieldEnum = {
 } as const
 
 export type PersonScalarFieldEnum = (typeof PersonScalarFieldEnum)[keyof typeof PersonScalarFieldEnum]
+
+
+export const ResidenceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  ownerId: 'ownerId',
+  createdAt: 'createdAt',
+  archivedAt: 'archivedAt'
+} as const
+
+export type ResidenceScalarFieldEnum = (typeof ResidenceScalarFieldEnum)[keyof typeof ResidenceScalarFieldEnum]
+
+
+export const MembershipScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  residenceId: 'residenceId',
+  role: 'role',
+  joinedAt: 'joinedAt'
+} as const
+
+export type MembershipScalarFieldEnum = (typeof MembershipScalarFieldEnum)[keyof typeof MembershipScalarFieldEnum]
+
+
+export const InviteScalarFieldEnum = {
+  id: 'id',
+  residenceId: 'residenceId',
+  invitedUserId: 'invitedUserId',
+  invitedById: 'invitedById',
+  status: 'status',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  respondedAt: 'respondedAt'
+} as const
+
+export type InviteScalarFieldEnum = (typeof InviteScalarFieldEnum)[keyof typeof InviteScalarFieldEnum]
+
+
+export const JoinRequestScalarFieldEnum = {
+  id: 'id',
+  residenceId: 'residenceId',
+  requesterId: 'requesterId',
+  status: 'status',
+  createdAt: 'createdAt',
+  respondedAt: 'respondedAt'
+} as const
+
+export type JoinRequestScalarFieldEnum = (typeof JoinRequestScalarFieldEnum)[keyof typeof JoinRequestScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  linkTo: 'linkTo',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const JoinAttemptScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type JoinAttemptScalarFieldEnum = (typeof JoinAttemptScalarFieldEnum)[keyof typeof JoinAttemptScalarFieldEnum]
 
 
 export const ExpenseScalarFieldEnum = {

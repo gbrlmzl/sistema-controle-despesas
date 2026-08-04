@@ -1,10 +1,10 @@
-import ControleDespesas from "@/components/ControleDespesas"
+import ResidenciasMenu from "@/components/residencias/ResidenciasMenu"
 
 
 export default function Home() {
     return (
         <div className="primaryCard">
-            <ControleDespesas />
+            <ResidenciasMenu />
         </div>
     )
 

@@ -1,5 +1,6 @@
 "use client";
 import styles from "./Navbar.module.css"
+import SinoNotificacoes from "./SinoNotificacoes";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -73,47 +74,54 @@ export default function Navbar() {
             <Link href="/app">Aplicativo</Link>
           </div>
 
-          <div className={styles.userContainer}>
-            <span>
-              <img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil" width={30} height={30} />
-            </span>
-            <div className={styles.userOptionsContainer}>
-              <div className={styles.userInfo}>
-                <p>{session.user.name}</p>
-              </div>
-              <div className={styles.userActions}>
+          {/* CA-9 da US-016 -> o sino só existe dentro do ramo de usuário autenticado.
+              Fica agrupado com o avatar: como só um dos dois containers de usuário
+              aparece por vez, o sino acompanha o que estiver visível. */}
+          <div className={styles.areaUsuario}>
+            <SinoNotificacoes />
 
-                <Link href="/profile" className={styles.userActionButton}>
-                  Minha conta
-                </Link>
-                <button onClick={() => signOut({ redirectTo: '/' })} className={styles.userActionButton}>
-                  Sair
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.mobileUserContainer}>
-            <button onClick={handleShowMobileUserOptions} aria-expanded={showMobileUserOptions} aria-controls="mobile-user-options">
+            <div className={styles.userContainer}>
               <span>
                 <img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil" width={30} height={30} />
               </span>
-            </button>
-            {showMobileUserOptions && (
-              <div className={styles.mobileUserOptionsContainer}>
+              <div className={styles.userOptionsContainer}>
                 <div className={styles.userInfo}>
                   <p>{session.user.name}</p>
                 </div>
                 <div className={styles.userActions}>
-                  <Link href="/profile" className={styles.userActionButton} onClick={hideMobileToolbars}>
+
+                  <Link href="/profile" className={styles.userActionButton}>
                     Minha conta
                   </Link>
-                  <button onClick={() => { hideMobileToolbars(); signOut({ redirectTo: '/' }); }} className={styles.userActionButton}>
+                  <button onClick={() => signOut({ redirectTo: '/' })} className={styles.userActionButton}>
                     Sair
                   </button>
                 </div>
               </div>
-            )}
+            </div>
+
+            <div className={styles.mobileUserContainer}>
+              <button onClick={handleShowMobileUserOptions} aria-expanded={showMobileUserOptions} aria-controls="mobile-user-options">
+                <span>
+                  <img src={session.user.profilePic || "/icons/profileIcon.svg"} alt="Perfil" width={30} height={30} />
+                </span>
+              </button>
+              {showMobileUserOptions && (
+                <div className={styles.mobileUserOptionsContainer}>
+                  <div className={styles.userInfo}>
+                    <p>{session.user.name}</p>
+                  </div>
+                  <div className={styles.userActions}>
+                    <Link href="/profile" className={styles.userActionButton} onClick={hideMobileToolbars}>
+                      Minha conta
+                    </Link>
+                    <button onClick={() => { hideMobileToolbars(); signOut({ redirectTo: '/' }); }} className={styles.userActionButton}>
+                      Sair
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

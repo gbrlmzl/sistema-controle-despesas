@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { findUserByCredentials } from "./lib/user";
 import db from "@/lib/prisma";
+import { gerarUsernameDisponivel } from "@/lib/username";
 
 import GoogleProvider from "next-auth/providers/google";
 
@@ -40,9 +41,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (!existingUser) {
             // 2. Se não existe, cria novo usuário
+            //No login social o usuário não escolhe um nome de usuário, então o
+            //sistema gera um a partir do email para não deixar a conta sem identificador público.
             existingUser = await db.user.create({
               data: {
                 name: user.name,
+                username: await gerarUsernameDisponivel(user.email.split('@')[0]),
                 email: user.email,
                 password: null,
                 profilePic: user.image,
@@ -83,10 +87,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
             }
 
+            //5. Contas criadas antes da adoção do nome de usuário ficam sem identificador
+            //público. Gera um na primeira vez que o usuário voltar a entrar.
+            if (existingUser.username === null) {
+              existingUser = await db.user.update({
+                where: {
+                  email: user.email
+                },
+                data: {
+                  username: await gerarUsernameDisponivel(user.email.split('@')[0])
+                }
+              })
+            }
+
           }
 
 
-          //5. Prossegue com login - armazena o userId real no token
+          //6. Prossegue com login - armazena o userId real no token
           user.dbId = existingUser.id;
           user.profilePic = existingUser.profilePic;
           user.provider = 'google';

@@ -1,4 +1,4 @@
-import RegisterForm from "@/app/(auth)/cadastro/registerForm";
+import RegisterForm from "@/app/(auth)/cadastro/RegisterForm";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 

@@ -97,6 +97,16 @@
     text-align: left;
 }
 
+/* Agrupa o sino e o avatar como um bloco só, à direita da navbar.
+   Sem position relative de propósito: os menus suspensos do avatar são
+   posicionados em relação à viewport e continuariam presos aqui. */
+.areaUsuario{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.85rem;
+}
+
 .userContainer{
     display: none;
     padding: 10px 0px;

@@ -33,6 +33,36 @@ export type UserAuthProvider = Prisma.UserAuthProviderModel
  */
 export type Person = Prisma.PersonModel
 /**
+ * Model Residence
+ * 
+ */
+export type Residence = Prisma.ResidenceModel
+/**
+ * Model Membership
+ * 
+ */
+export type Membership = Prisma.MembershipModel
+/**
+ * Model Invite
+ * 
+ */
+export type Invite = Prisma.InviteModel
+/**
+ * Model JoinRequest
+ * 
+ */
+export type JoinRequest = Prisma.JoinRequestModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model JoinAttempt
+ * 
+ */
+export type JoinAttempt = Prisma.JoinAttemptModel
+/**
  * Model Expense
  * 
  */

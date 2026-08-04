@@ -21,7 +21,7 @@ export default function Snackbar({ open, message, onClose, type }) {
       <div className={styles.botaoFecharContainer}>
         <button className={styles.botaoFechar} onClick={onClose}>
           <span>
-            <img src="./icons/xIcon.svg" alt="Fechar" />
+            <img src="/icons/xIcon.svg" alt="Fechar" />
           </span>
         </button>
 

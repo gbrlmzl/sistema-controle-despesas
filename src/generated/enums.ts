@@ -9,7 +9,33 @@
 * 🟢 You can import this file directly.
 */
 
+export const MembershipRole = {
+  OWNER: 'OWNER',
+  MEMBER: 'MEMBER'
+} as const
+
+export type MembershipRole = (typeof MembershipRole)[keyof typeof MembershipRole]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const AccessStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
+  CANCELLED: 'CANCELLED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type AccessStatus = (typeof AccessStatus)[keyof typeof AccessStatus]
+
+
+export const NotificationType = {
+  INVITE_RECEIVED: 'INVITE_RECEIVED',
+  JOIN_REQUEST_RECEIVED: 'JOIN_REQUEST_RECEIVED',
+  JOIN_REQUEST_ACCEPTED: 'JOIN_REQUEST_ACCEPTED',
+  JOIN_REQUEST_DECLINED: 'JOIN_REQUEST_DECLINED',
+  MEMBER_REMOVED: 'MEMBER_REMOVED',
+  OWNERSHIP_TRANSFERRED: 'OWNERSHIP_TRANSFERRED',
+  MONTH_CLOSED: 'MONTH_CLOSED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

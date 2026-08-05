@@ -11,19 +11,20 @@ import styles from "./ListaAlertas.module.css";
 export default function ListaAlertas() {
     const { notificacoes, pagina, totalPaginas, naoLidas, loading, erro, marcarTodasComoLidas, irParaPagina } = useAlertas();
 
-    const barraSuperior = (
-        <div className={styles.barraSuperior}>
+    const cabecalho = (
+        <div className={styles.cabecalho}>
             <Link href="/app" className={styles.botaoCanto} aria-label="Retornar ao menu" title="Retornar ao menu">
                 <img src="/icons/voltarIcon.svg" alt="Retornar ao menu" width={22} height={22} />
             </Link>
+            <h2>Notificações</h2>
+            <span className={styles.espacoCanto} />
         </div>
     );
 
     if (loading) {
         return (
             <div className={styles.container}>
-                {barraSuperior}
-                <h2>Notificações</h2>
+                {cabecalho}
                 <Loading />
             </div>
         )
@@ -31,8 +32,7 @@ export default function ListaAlertas() {
 
     return (
         <div className={styles.container}>
-            {barraSuperior}
-            <h2>Notificações</h2>
+            {cabecalho}
 
             {erro && (
                 <div className={styles.errorMessage}>

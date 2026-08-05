@@ -28,11 +28,6 @@ export type User = Prisma.UserModel
  */
 export type UserAuthProvider = Prisma.UserAuthProviderModel
 /**
- * Model Person
- * 
- */
-export type Person = Prisma.PersonModel
-/**
  * Model Residence
  * 
  */
@@ -67,3 +62,8 @@ export type JoinAttempt = Prisma.JoinAttemptModel
  * 
  */
 export type Expense = Prisma.ExpenseModel
+/**
+ * Model MonthClosure
+ * 
+ */
+export type MonthClosure = Prisma.MonthClosureModel

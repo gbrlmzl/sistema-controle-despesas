@@ -53,14 +53,14 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   UserAuthProvider: 'UserAuthProvider',
-  Person: 'Person',
   Residence: 'Residence',
   Membership: 'Membership',
   Invite: 'Invite',
   JoinRequest: 'JoinRequest',
   Notification: 'Notification',
   JoinAttempt: 'JoinAttempt',
-  Expense: 'Expense'
+  Expense: 'Expense',
+  MonthClosure: 'MonthClosure'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -101,17 +101,6 @@ export const UserAuthProviderScalarFieldEnum = {
 } as const
 
 export type UserAuthProviderScalarFieldEnum = (typeof UserAuthProviderScalarFieldEnum)[keyof typeof UserAuthProviderScalarFieldEnum]
-
-
-export const PersonScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  userId: 'userId',
-  deletedAt: 'deletedAt'
-} as const
-
-export type PersonScalarFieldEnum = (typeof PersonScalarFieldEnum)[keyof typeof PersonScalarFieldEnum]
 
 
 export const ResidenceScalarFieldEnum = {
@@ -189,14 +178,30 @@ export type JoinAttemptScalarFieldEnum = (typeof JoinAttemptScalarFieldEnum)[key
 export const ExpenseScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  value: 'value',
+  valueInCents: 'valueInCents',
+  category: 'category',
   month: 'month',
   year: 'year',
-  personId: 'personId',
+  residenceId: 'residenceId',
+  createdById: 'createdById',
+  isRecurring: 'isRecurring',
+  createdAt: 'createdAt',
   deletedAt: 'deletedAt'
 } as const
 
 export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
+
+
+export const MonthClosureScalarFieldEnum = {
+  id: 'id',
+  residenceId: 'residenceId',
+  month: 'month',
+  year: 'year',
+  closedById: 'closedById',
+  closedAt: 'closedAt'
+} as const
+
+export type MonthClosureScalarFieldEnum = (typeof MonthClosureScalarFieldEnum)[keyof typeof MonthClosureScalarFieldEnum]
 
 
 export const SortOrder = {

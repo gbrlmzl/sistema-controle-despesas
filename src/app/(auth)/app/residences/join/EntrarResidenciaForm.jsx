@@ -22,13 +22,13 @@ export default function EntrarResidenciaForm() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.barraSuperior}>
+            <div className={styles.cabecalho}>
                 <Link href="/app" className={styles.botaoCanto} aria-label="Retornar ao menu" title="Retornar ao menu">
                     <img src="/icons/voltarIcon.svg" alt="Retornar ao menu" width={22} height={22} />
                 </Link>
+                <h2>Entrar em residência</h2>
+                <span className={styles.espacoCanto} />
             </div>
-
-            <h2>Entrar em residência</h2>
 
             {state?.success === false && (
                 <div className={styles.errorMessage}>

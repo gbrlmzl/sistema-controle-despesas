@@ -386,14 +386,14 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   UserAuthProvider: 'UserAuthProvider',
-  Person: 'Person',
   Residence: 'Residence',
   Membership: 'Membership',
   Invite: 'Invite',
   JoinRequest: 'JoinRequest',
   Notification: 'Notification',
   JoinAttempt: 'JoinAttempt',
-  Expense: 'Expense'
+  Expense: 'Expense',
+  MonthClosure: 'MonthClosure'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userAuthProvider" | "person" | "residence" | "membership" | "invite" | "joinRequest" | "notification" | "joinAttempt" | "expense"
+    modelProps: "user" | "userAuthProvider" | "residence" | "membership" | "invite" | "joinRequest" | "notification" | "joinAttempt" | "expense" | "monthClosure"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -558,80 +558,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserAuthProviderCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserAuthProviderCountAggregateOutputType> | number
-        }
-      }
-    }
-    Person: {
-      payload: Prisma.$PersonPayload<ExtArgs>
-      fields: Prisma.PersonFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.PersonFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.PersonFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>
-        }
-        findFirst: {
-          args: Prisma.PersonFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.PersonFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>
-        }
-        findMany: {
-          args: Prisma.PersonFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>[]
-        }
-        create: {
-          args: Prisma.PersonCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>
-        }
-        createMany: {
-          args: Prisma.PersonCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.PersonCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>[]
-        }
-        delete: {
-          args: Prisma.PersonDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>
-        }
-        update: {
-          args: Prisma.PersonUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>
-        }
-        deleteMany: {
-          args: Prisma.PersonDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.PersonUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.PersonUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>[]
-        }
-        upsert: {
-          args: Prisma.PersonUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$PersonPayload>
-        }
-        aggregate: {
-          args: Prisma.PersonAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePerson>
-        }
-        groupBy: {
-          args: Prisma.PersonGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PersonGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.PersonCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.PersonCountAggregateOutputType> | number
         }
       }
     }
@@ -1153,6 +1079,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MonthClosure: {
+      payload: Prisma.$MonthClosurePayload<ExtArgs>
+      fields: Prisma.MonthClosureFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MonthClosureFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MonthClosureFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>
+        }
+        findFirst: {
+          args: Prisma.MonthClosureFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MonthClosureFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>
+        }
+        findMany: {
+          args: Prisma.MonthClosureFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>[]
+        }
+        create: {
+          args: Prisma.MonthClosureCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>
+        }
+        createMany: {
+          args: Prisma.MonthClosureCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MonthClosureCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>[]
+        }
+        delete: {
+          args: Prisma.MonthClosureDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>
+        }
+        update: {
+          args: Prisma.MonthClosureUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>
+        }
+        deleteMany: {
+          args: Prisma.MonthClosureDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MonthClosureUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MonthClosureUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>[]
+        }
+        upsert: {
+          args: Prisma.MonthClosureUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonthClosurePayload>
+        }
+        aggregate: {
+          args: Prisma.MonthClosureAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMonthClosure>
+        }
+        groupBy: {
+          args: Prisma.MonthClosureGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MonthClosureGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MonthClosureCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MonthClosureCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1214,17 +1214,6 @@ export const UserAuthProviderScalarFieldEnum = {
 } as const
 
 export type UserAuthProviderScalarFieldEnum = (typeof UserAuthProviderScalarFieldEnum)[keyof typeof UserAuthProviderScalarFieldEnum]
-
-
-export const PersonScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  userId: 'userId',
-  deletedAt: 'deletedAt'
-} as const
-
-export type PersonScalarFieldEnum = (typeof PersonScalarFieldEnum)[keyof typeof PersonScalarFieldEnum]
 
 
 export const ResidenceScalarFieldEnum = {
@@ -1302,14 +1291,30 @@ export type JoinAttemptScalarFieldEnum = (typeof JoinAttemptScalarFieldEnum)[key
 export const ExpenseScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  value: 'value',
+  valueInCents: 'valueInCents',
+  category: 'category',
   month: 'month',
   year: 'year',
-  personId: 'personId',
+  residenceId: 'residenceId',
+  createdById: 'createdById',
+  isRecurring: 'isRecurring',
+  createdAt: 'createdAt',
   deletedAt: 'deletedAt'
 } as const
 
 export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
+
+
+export const MonthClosureScalarFieldEnum = {
+  id: 'id',
+  residenceId: 'residenceId',
+  month: 'month',
+  year: 'year',
+  closedById: 'closedById',
+  closedAt: 'closedAt'
+} as const
+
+export type MonthClosureScalarFieldEnum = (typeof MonthClosureScalarFieldEnum)[keyof typeof MonthClosureScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1427,6 +1432,27 @@ export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'ExpenseCategory'
+ */
+export type EnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'ExpenseCategory[]'
+ */
+export type ListEnumExpenseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ExpenseCategory[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1520,7 +1546,6 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   userAuthProvider?: Prisma.UserAuthProviderOmit
-  person?: Prisma.PersonOmit
   residence?: Prisma.ResidenceOmit
   membership?: Prisma.MembershipOmit
   invite?: Prisma.InviteOmit
@@ -1528,6 +1553,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   joinAttempt?: Prisma.JoinAttemptOmit
   expense?: Prisma.ExpenseOmit
+  monthClosure?: Prisma.MonthClosureOmit
 }
 
 /* Types for Logging */

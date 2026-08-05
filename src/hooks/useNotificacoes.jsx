@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 
 //RN-035 -> o painel do sino mostra apenas as 5 mais recentes
 const LIMITE_PAINEL = 5;
+//O servidor não empurra eventos para o navegador, então o contador é verificado
+//periodicamente. 30s mantém o sino perceptivelmente "vivo" sem gerar tráfego relevante.
+const INTERVALO_VERIFICACAO = 30000;
 
 export default function useNotificacoes() {
     const [notificacoes, setNotificacoes] = useState([]);
@@ -31,6 +34,22 @@ export default function useNotificacoes() {
 
     useEffect(() => {
         buscarNotificacoes();
+
+        //Só verifica com a aba visível: em segundo plano o usuário não veria o sino mudar
+        const intervalo = setInterval(() => {
+            if (document.visibilityState === "visible") {
+                buscarNotificacoes();
+            }
+        }, INTERVALO_VERIFICACAO);
+
+        //Voltar para a aba é justamente quando o número desatualizado mais incomoda
+        const aoVoltarParaAba = () => buscarNotificacoes();
+        window.addEventListener("focus", aoVoltarParaAba);
+
+        return () => {
+            clearInterval(intervalo);
+            window.removeEventListener("focus", aoVoltarParaAba);
+        };
     }, [buscarNotificacoes]);
 
 

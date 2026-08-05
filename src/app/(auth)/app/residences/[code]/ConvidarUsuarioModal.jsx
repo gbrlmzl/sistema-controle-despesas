@@ -22,12 +22,17 @@ export default function ConvidarUsuarioModal({ residencia, onFechar }) {
 
     //O modal continua aberto após um envio bem-sucedido, para que o owner
     //consiga convidar várias pessoas seguidas sem reabrir a tela.
+    //A dependência é o objeto `state` inteiro: como ele permanece `success === true`
+    //entre dois convites seguidos, depender de `state.success` faria o efeito rodar
+    //só na primeira vez e o campo não seria limpo nas seguintes.
     useEffect(() => {
-        if (state?.success) {
-            setUsername('');
-            router.refresh();
+        if (!state?.success) {
+            return;
         }
-    }, [state?.success, router]);
+
+        setUsername('');
+        router.refresh();
+    }, [state, router]);
 
     return (
         <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="tituloConvidar">

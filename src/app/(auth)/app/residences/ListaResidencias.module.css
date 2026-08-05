@@ -45,6 +45,13 @@
     border-radius: 0.75rem;
     background: #E5E5E5;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.residenciaContainer:hover,
+.residenciaContainer:focus-visible {
+    background: #D9D9D9;
 }
 
 .residenciaInfo {
@@ -130,14 +137,21 @@
     text-align: center;
 }
 
-/* Navegação de volta no canto superior esquerdo */
-.barraSuperior {
+/* Seta, título e canto direito na mesma linha, com o título centralizado */
+.cabecalho {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
     width: 100%;
     min-height: 2.25rem;
+}
+
+.cabecalho h2 {
+    flex: 1;
+    text-align: center;
+    overflow-wrap: anywhere;
 }
 
 .botaoCanto {
@@ -146,10 +160,17 @@
     justify-content: center;
     width: 2.25rem;
     height: 2.25rem;
+    flex-shrink: 0;
     border-radius: 50%;
 }
 
 .botaoCanto:hover {
     background: #E5E5E5;
     cursor: pointer;
+}
+
+/* Ocupa o mesmo espaço da seta do lado oposto, mantendo o título no centro */
+.espacoCanto {
+    width: 2.25rem;
+    flex-shrink: 0;
 }

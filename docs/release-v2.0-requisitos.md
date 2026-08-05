@@ -92,10 +92,10 @@ User (login) ──N:M (via Membership)──\> Residence ──1:N──\> Expe
 | \# | Dependência | Impacto | Origem |
 | :---- | :---- | :---- | :---- |
 | D-01 | ~~Não existe campo `username` no modelo `User` atual.~~ **Resolvida:** o campo `username` foi criado na FEAT-003 e o convite será feito por ele. | Bloqueava FEAT-014 | 💡 |
-| D-02 | `Expense` hoje aponta para `Person`, não para `User`/`Residence`. Será necessária migração de modelo e decisão sobre os dados existentes. | Bloqueia EP-04 | 💡 |
-| D-03 | Definir o destino do modelo `Person` na V2.0: é descontinuado, ou continua existindo para representar participante sem login dentro de uma residência? | Afeta EP-04 | ⬜ |
+| D-02 | ~~`Expense` aponta para `Person`.~~ **Resolvida:** `Expense` passou a apontar para `Residence` e `User`, com categoria e valor em centavos. | Bloqueava EP-04 | 💡 |
+| D-03 | ~~Definir o destino do modelo `Person`.~~ **Resolvida:** o model foi removido — cada usuário lança as próprias despesas. | Afetava EP-04 | ⬜ |
 
-> ⬜ **Decisão pendente (D-03):** manter `Person` permite registrar quem não usa o app (ex.: um filho, um agregado). Removê-lo simplifica o modelo. **Recomendação 💡:** manter, pois cobre o caso de uso original da V1 sem perdas.
+> ✅ **Decisão tomada (D-03):** o `Person` foi removido. Com cada usuário lançando as próprias despesas, ele deixou de ter função. As rotas de API da V1 que dependiam dele (`/api/persons`, `/api/expenses` e `/api/users/me/data`) foram removidas junto.
 
 ---
 
@@ -142,11 +142,11 @@ User (login) ──N:M (via Membership)──\> Residence ──1:N──\> Expe
 
 | ID | Funcionalidade | Descrição | Prior. | Status | Origem |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| FEAT-021 | Cadastrar despesa própria | Membro lança suas despesas na residência, de forma incremental, a qualquer momento do mês. | Must | Não iniciado | 📄 |
-| FEAT-022 | Consultar despesas da residência | Visualização das despesas da residência. **Comportamento ainda em definição.** | Must | ⬜ A definir | 📄 |
-| FEAT-023 | Editar / excluir despesa própria | Membro corrige ou remove um lançamento que fez (exclusão lógica via `deletedAt`). | Should | Não iniciado | 💡 |
-| FEAT-024 | Categoria da despesa | Campo de categoria selecionado no cadastro (Contas domésticas, Alimentação, Assinaturas, etc.). Pré-requisito dos relatórios. | Should | Não iniciado | 💡 (citado como intenção futura) |
-| FEAT-025 | Despesa recorrente | Lançamento que se repete automaticamente nos meses seguintes (ex.: aluguel, assinatura). | Could | Não iniciado | 💡 |
+| FEAT-021 | Cadastrar despesa própria | Membro lança suas despesas na residência, de forma incremental, a qualquer momento do mês. | Must | Concluído | 📄 |
+| FEAT-022 | Consultar despesas da residência | Consulta por competência, agrupada por membro, com total por membro e total geral. Inclui o fechamento do mês pelo owner. | Must | Concluído | 📄 |
+| FEAT-023 | Editar / excluir despesa própria | Membro corrige ou remove um lançamento que fez (exclusão lógica via `deletedAt`). | Should | Concluído | 💡 |
+| FEAT-024 | Categoria da despesa | Categoria obrigatória no cadastro, com cinco valores fixos: Alimentação, Contas domésticas, Assinaturas, Lazer e Outros. Pré-requisito dos relatórios. | Should | Concluído | 💡 (citado como intenção futura) |
+| FEAT-025 | Despesa recorrente | Lançamento marcado como recorrente, recriado na competência seguinte quando o owner fecha o mês. | Could | Concluído | 💡 |
 
 ## EP-05 — Relatórios e Análise
 
@@ -350,6 +350,31 @@ Cenários BDD relacionados: CEN-0XX.1, CEN-0XX.2
 
 ---
 
+### ⬜ Proposta: o que exibir no painel da residência
+
+> **Aguardando aprovação.** Com a lista de membros movida para `/app/residences/{code}/members`, o painel ficou com espaço livre. As opções abaixo são sugestões minhas 💡 — nenhuma foi implementada.
+
+O painel é a primeira tela que alguém abre ao entrar na casa, então ele deveria responder *"como estamos este mês?"* sem exigir mais um clique.
+
+| # | Proposta | O que mostraria | Dados necessários | Esforço |
+| :---- | :---- | :---- | :---- | :---- |
+| P-1 | **Resumo da competência aberta** | Total gasto no mês, quantidade de lançamentos e quanto cada membro já lançou, em barras proporcionais | Nenhum dado novo — já existe em `Expense` | Baixo |
+| P-2 | **Atividade recente** | "Marina lançou Conta de luz (R$ 180,50) há 2 horas", com os últimos 5 eventos | `Expense.createdAt` + `createdBy` já existem | Baixo |
+| P-3 | **Comparativo com o mês anterior** | Uma linha: "R$ 1.240 neste mês, 12% acima de julho" | Nenhum dado novo | Baixo |
+| P-4 | **Situação do fechamento** | Há quanto tempo o mês está aberto e, para o owner, um aviso quando o mês do calendário já virou e ele ainda não fechou | `MonthClosure` já existe | Baixo |
+| P-5 | **Gráfico por categoria** | Rosca ou barras com a divisão de gastos da competência aberta | Nenhum dado novo, mas exige biblioteca de gráficos | Médio |
+| P-6 | **Saldo entre membros** | Quanto cada um deve ou tem a receber para equilibrar as contas | Depende da regra de rateio (FEAT-029) | Alto |
+
+**Minha recomendação 💡:** começar por **P-1 e P-2**. Juntas elas ocupam bem o espaço, respondem à pergunta principal de quem abre o painel e **não exigem nenhum dado novo no banco** — é só leitura do que o EP-04 já grava. P-3 e P-4 são de uma linha cada e cabem no mesmo bloco.
+
+**Um limite importante da P-2:** hoje só as **despesas** têm registro de autoria e data. Entradas e saídas de membros, mudanças de nome e fechamentos não deixam rastro consultável — isso é a trilha de auditoria da **FEAT-031**, que está fora do escopo da V2.0. Então a "atividade recente" nasceria cobrindo só lançamentos de despesa. Se você quiser um histórico completo de ações, a FEAT-031 precisa vir antes.
+
+**P-5** eu deixaria para depois: ela é essencialmente a FEAT-026 (relatório por categoria) antecipada, e faz mais sentido nascer já na tela de relatórios, com o comparativo entre meses junto.
+
+**P-6** depende da FEAT-029, que ainda não tem regra de rateio definida — não dá para estimar antes disso.
+
+---
+
 ### US-013 — Sair de uma residência
 
 **Vinculada a:** FEAT-009 | **Prioridade:** Should | **Status:** Concluído | **Origem:** 💡
@@ -358,7 +383,7 @@ Cenários BDD relacionados: CEN-0XX.1, CEN-0XX.2
 
 **Critérios de aceitação**
 
-- [ ] CA-1: O membro encontra a opção de sair no painel da residência.  
+- [ ] CA-1: O membro encontra a opção de sair nas configurações da residência.  
 - [ ] CA-2: A saída exige uma confirmação explícita antes de ser efetivada.  
 - [ ] CA-3: Após sair, a residência deixa de aparecer na lista do usuário.  
 - [ ] CA-4: Após sair, o usuário perde o acesso à rota da residência.  
@@ -779,7 +804,7 @@ Cenários BDD relacionados: CEN-0XX.1, CEN-0XX.2
 
 ### US-010 — Cadastrar minhas despesas na residência
 
-**Vinculada a:** FEAT-021 | **Prioridade:** Must | **Status:** Não iniciado | **Origem:** 📄
+**Vinculada a:** FEAT-021 | **Prioridade:** Must | **Status:** Concluído | **Origem:** 📄
 
 > Como **membro**, quero **cadastrar minhas próprias despesas quando eu quiser**, para que **eu não dependa de outra pessoa lançar tudo de uma vez**.
 
@@ -808,11 +833,11 @@ Cenários BDD relacionados: CEN-0XX.1, CEN-0XX.2
 
 ### US-011 — Consultar as despesas da residência
 
-**Vinculada a:** FEAT-022 | **Prioridade:** Must | **Status:** ⬜ **A definir** | **Origem:** 📄
+**Vinculada a:** FEAT-022 | **Prioridade:** Must | **Status:** Concluído | **Origem:** 📄
 
 > Como **membro**, quero **consultar as despesas da residência**, para que **eu acompanhe quanto a casa está gastando**.  
 >   
-> ⬜ **Comportamento ainda não definido no esboço** — 
+> ✅ **Comportamento definido.** As perguntas Q-1 a Q-6 foram respondidas seguindo as sugestões, e os critérios abaixo refletem o que foi implementado.
 
 **Perguntas a responder antes de implementar:**
 
@@ -825,9 +850,28 @@ Cenários BDD relacionados: CEN-0XX.1, CEN-0XX.2
 | Q-5 | Alguém pode editar/excluir despesa alheia? | Não — só o autor edita a própria (ver FEAT-023). |
 | Q-6 | Existe estado vazio? | Sim: "Nenhuma despesa cadastrada nesta competência." |
 
-**Critérios de aceitação:** ⬜ *Preencher após responder as perguntas acima.*
+**Critérios de aceitação**
 
-**Cenários BDD relacionados:** CEN-011.1 *(rascunho — ver seção 3.6)*
+- [ ] CA-1: A consulta é filtrada por competência, com a competência aberta pré-selecionada (Q-2).
+- [ ] CA-2: O membro vê as despesas de todos os membros da residência (Q-1).
+- [ ] CA-3: As despesas aparecem agrupadas por membro (Q-3).
+- [ ] CA-4: Cada grupo exibe o total do membro, e a tela exibe o total da residência em destaque (Q-4).
+- [ ] CA-5: Cada despesa exibe nome, categoria e valor.
+- [ ] CA-6: Despesas recorrentes são identificadas visualmente.
+- [ ] CA-7: Sem despesas na competência, é exibida a mensagem "Nenhuma despesa cadastrada nesta competência" (Q-6).
+- [ ] CA-8: As ações de editar e excluir aparecem apenas nas despesas do próprio membro (Q-5).
+- [ ] CA-9: Numa competência fechada, nenhuma despesa pode ser editada ou excluída.
+- [ ] CA-10: Numa residência arquivada, a consulta funciona mas nada pode ser alterado.
+- [ ] CA-11: O seletor de competência lista os meses com movimento e sempre inclui a competência aberta.
+
+**Regras de negócio**
+
+- **RN-053 💡:** Fechar o mês é ação do owner. Ao fechar, a competência vira somente leitura e os novos lançamentos passam para a competência seguinte.
+- **RN-054 💡:** Um mês fechado pode ser reaberto pelo owner, mas **apenas o fechamento mais recente**. Reabrir um mês do meio deixaria buracos na sequência e quebraria a ideia de "conta acertada até tal mês".
+- **RN-055 💡:** Reabrir uma competência passada a destrava para edição, mas **não muda onde os novos lançamentos caem** — eles seguem na competência aberta.
+- **RN-056 💡:** O fechamento notifica todos os membros com `MONTH_CLOSED` e dispara a geração das despesas recorrentes (FEAT-025) na competência seguinte.
+
+**Cenários BDD relacionados:** CEN-011.1 *(rascunho — ver seção 3.10)*
 
 ---
 
@@ -2133,11 +2177,11 @@ Então uma solicitação de entrada é enviada para a residência "Casa da Praia
 - [x] **RN-005** — Definir se há limite de residências por usuário.  
 - [x] **RN-013** — Definir o intervalo mínimo para refazer solicitação recusada.  
 - [x] **RN-015** — Definir se o convite expira e em quanto tempo.  
-- [ ] **RN-019** — Definir se um membro pode lançar despesa em nome de outro.  
-- [ ] **RN-020** — Definir se competências passadas/futuras são permitidas.  
+- [x] **RN-019** — Definir se um membro pode lançar despesa em nome de outro.  
+- [x] **RN-020** — Definir se competências passadas/futuras são permitidas.  
 - [x] **D-01** — Decidir entre criar `username` ou convidar por e-mail. *(Resolvido: `username` criado na FEAT-003.)*  
-- [ ] **D-03** — Decidir o destino do modelo `Person` na V2.0.  
-- [ ] **Q-1 a Q-6** — Definir o comportamento da consulta de despesas (FEAT-022).  
+- [x] **D-03** — Decidir o destino do modelo `Person` na V2.0. *(Removido.)*  
+- [x] **Q-1 a Q-6** — Definir o comportamento da consulta de despesas (FEAT-022).  
 - [x] **RN-022** — Definir o destino das despesas de quem sai ou é removido da residência. *(Decidido; falta aplicar no código — depende do EP-04.)*  
 - [x] **RN-025** — Definir se um membro removido pode solicitar entrada novamente.  
 - [x] **RN-028** — Definir se a transferência de propriedade exige aceite do destinatário.  

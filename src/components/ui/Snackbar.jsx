@@ -1,8 +1,35 @@
-import React from "react";
+'use client'
+
+import React, { useEffect, useState } from "react";
 import styles from './Snackbar.module.css';
 
 export default function Snackbar({ open, message, onClose, type }) {
-  if (!open) return null;
+  //Enquanto o fade-out acontece o elemento precisa continuar montado,
+  //senão ele sumiria de uma vez e a transição nunca seria vista.
+  const [renderizar, setRenderizar] = useState(open);
+  const [saindo, setSaindo] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setRenderizar(true);
+      setSaindo(false);
+      return;
+    }
+
+    if (!renderizar) {
+      return;
+    }
+
+    setSaindo(true);
+    const temporizador = setTimeout(() => {
+      setRenderizar(false);
+      setSaindo(false);
+    }, 300);
+
+    return () => clearTimeout(temporizador);
+  }, [open, renderizar]);
+
+  if (!renderizar) return null;
 
   const backgroundColors = {
     success: "#4caf50",
@@ -14,7 +41,7 @@ export default function Snackbar({ open, message, onClose, type }) {
 
 
   return (
-    <div className={styles.container} style={{ backgroundColor: backgroundColors[type] || "#333", opacity: open ? 1: 0, transition: "opacity 3s ease-in-out", }}>
+    <div className={`${styles.container} ${saindo ? styles.saindo : ''}`} style={{ backgroundColor: backgroundColors[type] || "#333" }}>
       <div className={styles.mensagemContainer}>
         {message}
       </div>

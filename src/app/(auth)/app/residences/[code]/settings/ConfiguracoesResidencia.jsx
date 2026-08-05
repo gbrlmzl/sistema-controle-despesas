@@ -9,9 +9,9 @@ import ConvidarUsuarioModal from "../ConvidarUsuarioModal";
 import Snackbar from "@/components/ui/Snackbar";
 import styles from "./ConfiguracoesResidencia.module.css";
 
-//Tela de administração da residência, acessível pela engrenagem do painel.
-//Reúne as ações que antes ficavam soltas no painel: convidar (FEAT-014),
-//renomear (FEAT-012), gerar novo código (FEAT-019) e arquivar (FEAT-012).
+//Tela de configurações da residência, acessível pela engrenagem do painel.
+//O owner encontra aqui a administração completa; o membro comum, apenas ver os
+//membros e sair da residência.
 export default function ConfiguracoesResidencia({ residencia, abrirConviteInicial }) {
     const {
         confirmacao,
@@ -23,33 +23,35 @@ export default function ConfiguracoesResidencia({ residencia, abrirConviteInicia
         convidando,
         abrirConvidar,
         fecharConvidar,
+        confirmarSaida,
         confirmarArquivamento,
         confirmarRegeneracao,
         snackbar,
         fecharSnackbar,
     } = useAcoesResidencia(residencia, abrirConviteInicial);
 
-    //RN-032 -> enquanto arquivada, a única ação de escrita permitida é desarquivar
+    //RN-032 -> enquanto arquivada, a única ação de escrita do owner é desarquivar
     const somenteLeitura = residencia.isArchived;
 
     return (
         <div className={styles.container}>
-            <div className={styles.barraSuperior}>
+            <div className={styles.cabecalho}>
                 <Link href={`/app/residences/${residencia.code}`} className={styles.botaoCanto}
                     aria-label="Retornar à residência" title="Retornar à residência">
                     <img src="/icons/voltarIcon.svg" alt="Retornar à residência" width={22} height={22} />
                 </Link>
+                <h2>Configurações</h2>
+                <span className={styles.espacoCanto} />
             </div>
 
             <div className={styles.tituloContainer}>
-                <h2>Configurações</h2>
                 <p className={styles.nomeResidencia}>{residencia.name}</p>
                 {somenteLeitura && (
                     <span className={styles.seloArquivada}>Arquivada · somente leitura</span>
                 )}
             </div>
 
-            {somenteLeitura && (
+            {somenteLeitura && residencia.isOwner && (
                 <p className={styles.avisoArquivada}>
                     Enquanto a residência estiver arquivada, as demais configurações ficam indisponíveis.
                     Desarquive-a para voltar a administrá-la.
@@ -57,18 +59,34 @@ export default function ConfiguracoesResidencia({ residencia, abrirConviteInicia
             )}
 
             <div className={styles.opcoesContainer}>
-                <button type="button" className={styles.botaoOpcao} onClick={abrirConvidar} disabled={somenteLeitura}>
-                    Convidar usuário
-                </button>
-                <button type="button" className={styles.botaoOpcao} onClick={abrirRenomear} disabled={somenteLeitura}>
-                    Renomear residência
-                </button>
-                <button type="button" className={styles.botaoOpcao} onClick={confirmarRegeneracao} disabled={somenteLeitura}>
-                    Gerar novo código
-                </button>
-                <button type="button" className={styles.botaoOpcao} onClick={confirmarArquivamento}>
-                    {residencia.isArchived ? "Desarquivar residência" : "Arquivar residência"}
-                </button>
+                <Link href={`/app/residences/${residencia.code}/members`} className={styles.botaoOpcao}>
+                    Gerenciar membros
+                </Link>
+
+                {residencia.isOwner && (
+                    <>
+                        <button type="button" className={styles.botaoOpcao} onClick={abrirConvidar} disabled={somenteLeitura}>
+                            Convidar usuário
+                        </button>
+                        <button type="button" className={styles.botaoOpcao} onClick={abrirRenomear} disabled={somenteLeitura}>
+                            Renomear residência
+                        </button>
+                        <button type="button" className={styles.botaoOpcao} onClick={confirmarRegeneracao} disabled={somenteLeitura}>
+                            Gerar novo código
+                        </button>
+                        <button type="button" className={styles.botaoOpcao} onClick={confirmarArquivamento}>
+                            {residencia.isArchived ? "Desarquivar residência" : "Arquivar residência"}
+                        </button>
+                    </>
+                )}
+
+                {/* RN-021 -> o owner não pode sair; para isso precisa antes transferir a propriedade.
+                    CA-11 da US-020 -> sair continua permitido mesmo com a residência arquivada. */}
+                {!residencia.isOwner && (
+                    <button type="button" className={styles.botaoPerigo} onClick={confirmarSaida}>
+                        Sair da residência
+                    </button>
+                )}
             </div>
 
             {confirmacao && (
@@ -81,11 +99,11 @@ export default function ConfiguracoesResidencia({ residencia, abrirConviteInicia
                     onCancelar={fecharConfirmacao} />
             )}
 
-            {renomeando && (
+            {renomeando && residencia.isOwner && (
                 <RenomearResidenciaModal residencia={residencia} onFechar={fecharRenomear} />
             )}
 
-            {convidando && (
+            {convidando && residencia.isOwner && (
                 <ConvidarUsuarioModal residencia={residencia} onFechar={fecharConvidar} />
             )}
 

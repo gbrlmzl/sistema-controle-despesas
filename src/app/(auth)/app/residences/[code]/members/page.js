@@ -3,12 +3,11 @@ import { auth } from "@/auth";
 import db from "@/lib/prisma";
 import { buscarResidenciaDoMembro } from "@/lib/residence";
 
-import ConfiguracoesResidencia from "./ConfiguracoesResidencia";
+import GerenciarMembros from "./GerenciarMembros";
 
 
-export default async function ConfiguracoesDaResidencia({ params, searchParams }) {
+export default async function Membros({ params }) {
     const { code } = await params;
-    const { convidar } = await searchParams;
 
     const session = await auth();
     if (!session) {
@@ -26,7 +25,8 @@ export default async function ConfiguracoesDaResidencia({ params, searchParams }
         notFound();
     }
 
-    //RN-010 -> quem não é membro recebe o mesmo resultado de um código inexistente
+    //RN-010 -> quem não é membro recebe o mesmo resultado de código inexistente.
+    //Qualquer membro pode ver quem mora na casa; só o owner enxerga as ações de gestão.
     const residenciaCompleta = await buscarResidenciaDoMembro(code, usuario.id);
 
     if (!residenciaCompleta) {
@@ -35,15 +35,9 @@ export default async function ConfiguracoesDaResidencia({ params, searchParams }
 
     const { id: _residenciaId, ...residencia } = residenciaCompleta;
 
-    //Qualquer membro entra aqui: o owner encontra a administração completa e o
-    //membro comum encontra ver membros e sair da residência. Quem decide o que
-    //aparece é o próprio componente, a partir do papel.
-
     return (
         <div className="primaryCard">
-            <ConfiguracoesResidencia
-                residencia={residencia}
-                abrirConviteInicial={convidar === '1' && !residencia.isArchived} />
+            <GerenciarMembros residencia={residencia} />
         </div>
     )
 

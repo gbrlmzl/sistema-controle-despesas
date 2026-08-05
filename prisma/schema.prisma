@@ -22,7 +22,6 @@ model User {
   profilePic String?
   createdAt DateTime @default(now())
 
-  persons Person[]
   authProviders UserAuthProvider[]
   memberships Membership[]
   ownedResidences Residence[] @relation("ResidenceOwner")
@@ -31,6 +30,8 @@ model User {
   joinRequests JoinRequest[]
   notifications Notification[]
   joinAttempts JoinAttempt[]
+  expenses Expense[]
+  monthClosures MonthClosure[]
 }
 
 model UserAuthProvider {
@@ -44,17 +45,6 @@ model UserAuthProvider {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   
 }
-model Person {
-  id Int @id @default(autoincrement())
-  name String
-  email String
-  userId Int
-  deletedAt DateTime?
-
-  user User @relation(fields: [userId], references: [id])
-  expense Expense[]
-}
-
 model Residence {
   id Int @id @default(autoincrement())
   name String
@@ -67,6 +57,8 @@ model Residence {
   members Membership[]
   invites Invite[]
   joinRequests JoinRequest[]
+  expenses Expense[]
+  monthClosures MonthClosure[]
 }
 
 model Membership {
@@ -161,16 +153,46 @@ model JoinAttempt {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+//Despesa lançada por um membro dentro de uma residência, numa competência (mês/ano).
+//valueInCents guarda o valor em centavos: dinheiro em ponto flutuante acumula erro
+//de arredondamento na soma, e o rateio futuro (FEAT-029) depende de totais exatos.
 model Expense {
   id String @id @default(uuid())
   name String
-  value Float
+  valueInCents Int
+  category ExpenseCategory
   month Int
   year Int
-  personId Int
+  residenceId Int
+  createdById Int
+  isRecurring Boolean @default(false) //FEAT-025: repetida na competência seguinte ao fechar o mês
+  createdAt DateTime @default(now())
   deletedAt DateTime?
 
+  @@index([residenceId, year, month])
+  residence Residence @relation(fields: [residenceId], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id])
+}
 
-  person Person @relation(fields: [personId], references: [id])
+enum ExpenseCategory {
+  ALIMENTACAO
+  DOMESTICAS
+  ASSINATURAS
+  LAZER
+  OUTROS
+}
 
+//Fechamento da conta do mês, feito pelo owner. Uma competência fechada fica
+//somente leitura, e a competência aberta passa a ser a seguinte (RN-020).
+model MonthClosure {
+  id Int @id @default(autoincrement())
+  residenceId Int
+  month Int
+  year Int
+  closedById Int
+  closedAt DateTime @default(now())
+
+  @@unique([residenceId, year, month])
+  residence Residence @relation(fields: [residenceId], references: [id], onDelete: Cascade)
+  closedBy User @relation(fields: [closedById], references: [id])
 }

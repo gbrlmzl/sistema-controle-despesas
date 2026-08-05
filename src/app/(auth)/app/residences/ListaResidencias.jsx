@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import useResidencias from "@/hooks/useResidencias";
 import Loading from "@/components/ui/Loading";
@@ -23,6 +24,13 @@ export default function ListaResidencias() {
         mostrarSnackbar,
         fecharSnackbar,
     } = useResidencias();
+    //Q-7 -> as arquivadas aparecem em uma seção própria, recolhida por padrão.
+    //Escondê-las por completo passaria a impressão de que os dados foram perdidos.
+    const [mostrarArquivadas, setMostrarArquivadas] = useState(false);
+    const router = useRouter();
+
+    const residenciasAtivas = residencias.filter(residencia => !residencia.isArchived);
+    const residenciasArquivadas = residencias.filter(residencia => residencia.isArchived);
 
     //Traduz a resposta de uma ação de pendência em feedback visual
     const exibirRespostaDaAcao = (resposta) => {
@@ -32,15 +40,34 @@ export default function ListaResidencias() {
             time: 4000,
         });
     }
-    //Q-7 -> as arquivadas aparecem em uma seção própria, recolhida por padrão.
-    //Escondê-las por completo passaria a impressão de que os dados foram perdidos.
-    const [mostrarArquivadas, setMostrarArquivadas] = useState(false);
 
-    const residenciasAtivas = residencias.filter(residencia => !residencia.isArchived);
-    const residenciasArquivadas = residencias.filter(residencia => residencia.isArchived);
+    const abrirResidencia = (code) => {
+        router.push(`/app/residences/${code}`);
+    }
 
+    const cabecalho = (
+        <div className={styles.cabecalho}>
+            <Link href="/app" className={styles.botaoCanto} aria-label="Retornar ao menu" title="Retornar ao menu">
+                <img src="/icons/voltarIcon.svg" alt="Retornar ao menu" width={22} height={22} />
+            </Link>
+            <h2>Residências</h2>
+            <span className={styles.espacoCanto} />
+        </div>
+    );
+
+    //O container inteiro navega para a residência. O botão de copiar interrompe a
+    //propagação para não arrastar o usuário para outra tela, e o link da seta é mantido
+    //para preservar abrir em nova aba pelo menu do navegador.
     const itemResidencia = (residencia) => (
-        <li key={residencia.code} className={styles.residenciaContainer}>
+        <li key={residencia.code} className={styles.residenciaContainer}
+            role="link" tabIndex={0}
+            onClick={() => abrirResidencia(residencia.code)}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    abrirResidencia(residencia.code);
+                }
+            }}>
             <div className={styles.residenciaInfo}>
                 <h3>{residencia.name}</h3>
                 <div className={styles.criadorContainer}>
@@ -49,12 +76,14 @@ export default function ListaResidencias() {
                 </div>
             </div>
             <div className={styles.residenciaAcoes}>
-                <button type="button" onClick={() => copiarCodigo(residencia.code)} title="Copiar código da residência">
+                <button type="button" title="Copiar código da residência"
+                    onClick={(e) => { e.stopPropagation(); copiarCodigo(residencia.code); }}>
                     <span className={styles.botaoAcao}>
                         <img src="/icons/copiarIcon.svg" alt="Copiar código da residência" />
                     </span>
                 </button>
-                <Link href={`/app/residences/${residencia.code}`} title="Ver residência">
+                <Link href={`/app/residences/${residencia.code}`} title="Ver residência"
+                    onClick={(e) => e.stopPropagation()}>
                     <span className={styles.botaoAcao}>
                         <img src="/icons/avancarIcon.svg" alt="Ver residência" />
                     </span>
@@ -63,19 +92,10 @@ export default function ListaResidencias() {
         </li>
     );
 
-    const barraSuperior = (
-        <div className={styles.barraSuperior}>
-            <Link href="/app" className={styles.botaoCanto} aria-label="Retornar ao menu" title="Retornar ao menu">
-                <img src="/icons/voltarIcon.svg" alt="Retornar ao menu" width={22} height={22} />
-            </Link>
-        </div>
-    );
-
     if (loading) {
         return (
             <div className={styles.container}>
-                {barraSuperior}
-                <h2>Residências</h2>
+                {cabecalho}
                 <Loading />
             </div>
         )
@@ -83,8 +103,7 @@ export default function ListaResidencias() {
 
     return (
         <div className={styles.container}>
-            {barraSuperior}
-            <h2>Residências</h2>
+            {cabecalho}
 
             {erro && (
                 <div className={styles.errorMessage}>

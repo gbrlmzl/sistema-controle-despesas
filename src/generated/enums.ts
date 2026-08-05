@@ -39,3 +39,14 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const ExpenseCategory = {
+  ALIMENTACAO: 'ALIMENTACAO',
+  DOMESTICAS: 'DOMESTICAS',
+  ASSINATURAS: 'ASSINATURAS',
+  LAZER: 'LAZER',
+  OUTROS: 'OUTROS'
+} as const
+
+export type ExpenseCategory = (typeof ExpenseCategory)[keyof typeof ExpenseCategory]

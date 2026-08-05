@@ -232,7 +232,6 @@ export type UserWhereInput = {
   password?: Prisma.StringNullableFilter<"User"> | string | null
   profilePic?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  persons?: Prisma.PersonListRelationFilter
   authProviders?: Prisma.UserAuthProviderListRelationFilter
   memberships?: Prisma.MembershipListRelationFilter
   ownedResidences?: Prisma.ResidenceListRelationFilter
@@ -241,6 +240,8 @@ export type UserWhereInput = {
   joinRequests?: Prisma.JoinRequestListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   joinAttempts?: Prisma.JoinAttemptListRelationFilter
+  expenses?: Prisma.ExpenseListRelationFilter
+  monthClosures?: Prisma.MonthClosureListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -251,7 +252,6 @@ export type UserOrderByWithRelationInput = {
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   profilePic?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  persons?: Prisma.PersonOrderByRelationAggregateInput
   authProviders?: Prisma.UserAuthProviderOrderByRelationAggregateInput
   memberships?: Prisma.MembershipOrderByRelationAggregateInput
   ownedResidences?: Prisma.ResidenceOrderByRelationAggregateInput
@@ -260,6 +260,8 @@ export type UserOrderByWithRelationInput = {
   joinRequests?: Prisma.JoinRequestOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   joinAttempts?: Prisma.JoinAttemptOrderByRelationAggregateInput
+  expenses?: Prisma.ExpenseOrderByRelationAggregateInput
+  monthClosures?: Prisma.MonthClosureOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -273,7 +275,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   password?: Prisma.StringNullableFilter<"User"> | string | null
   profilePic?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  persons?: Prisma.PersonListRelationFilter
   authProviders?: Prisma.UserAuthProviderListRelationFilter
   memberships?: Prisma.MembershipListRelationFilter
   ownedResidences?: Prisma.ResidenceListRelationFilter
@@ -282,6 +283,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   joinRequests?: Prisma.JoinRequestListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   joinAttempts?: Prisma.JoinAttemptListRelationFilter
+  expenses?: Prisma.ExpenseListRelationFilter
+  monthClosures?: Prisma.MonthClosureListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -319,7 +322,6 @@ export type UserCreateInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
@@ -328,6 +330,8 @@ export type UserCreateInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -338,7 +342,6 @@ export type UserUncheckedCreateInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
@@ -347,6 +350,8 @@ export type UserUncheckedCreateInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUpdateInput = {
@@ -356,7 +361,6 @@ export type UserUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
@@ -365,6 +369,8 @@ export type UserUpdateInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -375,7 +381,6 @@ export type UserUncheckedUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
@@ -384,6 +389,8 @@ export type UserUncheckedUpdateInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -492,20 +499,6 @@ export type UserUpdateOneRequiredWithoutAuthProvidersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthProvidersInput, Prisma.UserUpdateWithoutAuthProvidersInput>, Prisma.UserUncheckedUpdateWithoutAuthProvidersInput>
 }
 
-export type UserCreateNestedOneWithoutPersonsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPersonsInput, Prisma.UserUncheckedCreateWithoutPersonsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPersonsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutPersonsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPersonsInput, Prisma.UserUncheckedCreateWithoutPersonsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPersonsInput
-  upsert?: Prisma.UserUpsertWithoutPersonsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPersonsInput, Prisma.UserUpdateWithoutPersonsInput>, Prisma.UserUncheckedUpdateWithoutPersonsInput>
-}
-
 export type UserCreateNestedOneWithoutOwnedResidencesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedResidencesInput, Prisma.UserUncheckedCreateWithoutOwnedResidencesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedResidencesInput
@@ -604,6 +597,34 @@ export type UserUpdateOneRequiredWithoutJoinAttemptsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutJoinAttemptsInput, Prisma.UserUpdateWithoutJoinAttemptsInput>, Prisma.UserUncheckedUpdateWithoutJoinAttemptsInput>
 }
 
+export type UserCreateNestedOneWithoutExpensesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExpensesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExpensesInput
+  upsert?: Prisma.UserUpsertWithoutExpensesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutExpensesInput, Prisma.UserUpdateWithoutExpensesInput>, Prisma.UserUncheckedUpdateWithoutExpensesInput>
+}
+
+export type UserCreateNestedOneWithoutMonthClosuresInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMonthClosuresInput, Prisma.UserUncheckedCreateWithoutMonthClosuresInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMonthClosuresInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMonthClosuresNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMonthClosuresInput, Prisma.UserUncheckedCreateWithoutMonthClosuresInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMonthClosuresInput
+  upsert?: Prisma.UserUpsertWithoutMonthClosuresInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMonthClosuresInput, Prisma.UserUpdateWithoutMonthClosuresInput>, Prisma.UserUncheckedUpdateWithoutMonthClosuresInput>
+}
+
 export type UserCreateWithoutAuthProvidersInput = {
   name: string
   email: string
@@ -611,7 +632,6 @@ export type UserCreateWithoutAuthProvidersInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
   invitesReceived?: Prisma.InviteCreateNestedManyWithoutInvitedUserInput
@@ -619,6 +639,8 @@ export type UserCreateWithoutAuthProvidersInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutAuthProvidersInput = {
@@ -629,7 +651,6 @@ export type UserUncheckedCreateWithoutAuthProvidersInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
   invitesReceived?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedUserInput
@@ -637,6 +658,8 @@ export type UserUncheckedCreateWithoutAuthProvidersInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutAuthProvidersInput = {
@@ -662,7 +685,6 @@ export type UserUpdateWithoutAuthProvidersInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
   invitesReceived?: Prisma.InviteUpdateManyWithoutInvitedUserNestedInput
@@ -670,6 +692,8 @@ export type UserUpdateWithoutAuthProvidersInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthProvidersInput = {
@@ -680,7 +704,6 @@ export type UserUncheckedUpdateWithoutAuthProvidersInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
   invitesReceived?: Prisma.InviteUncheckedUpdateManyWithoutInvitedUserNestedInput
@@ -688,92 +711,8 @@ export type UserUncheckedUpdateWithoutAuthProvidersInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutPersonsInput = {
-  name: string
-  email: string
-  username?: string | null
-  password?: string | null
-  profilePic?: string | null
-  createdAt?: Date | string
-  authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
-  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
-  ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
-  invitesReceived?: Prisma.InviteCreateNestedManyWithoutInvitedUserInput
-  invitesSent?: Prisma.InviteCreateNestedManyWithoutInvitedByInput
-  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutPersonsInput = {
-  id?: number
-  name: string
-  email: string
-  username?: string | null
-  password?: string | null
-  profilePic?: string | null
-  createdAt?: Date | string
-  authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
-  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
-  ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
-  invitesReceived?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedUserInput
-  invitesSent?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedByInput
-  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutPersonsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPersonsInput, Prisma.UserUncheckedCreateWithoutPersonsInput>
-}
-
-export type UserUpsertWithoutPersonsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPersonsInput, Prisma.UserUncheckedUpdateWithoutPersonsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPersonsInput, Prisma.UserUncheckedCreateWithoutPersonsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutPersonsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPersonsInput, Prisma.UserUncheckedUpdateWithoutPersonsInput>
-}
-
-export type UserUpdateWithoutPersonsInput = {
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
-  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
-  ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
-  invitesReceived?: Prisma.InviteUpdateManyWithoutInvitedUserNestedInput
-  invitesSent?: Prisma.InviteUpdateManyWithoutInvitedByNestedInput
-  joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutPersonsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
-  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
-  ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
-  invitesReceived?: Prisma.InviteUncheckedUpdateManyWithoutInvitedUserNestedInput
-  invitesSent?: Prisma.InviteUncheckedUpdateManyWithoutInvitedByNestedInput
-  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserCreateWithoutOwnedResidencesInput = {
@@ -783,7 +722,6 @@ export type UserCreateWithoutOwnedResidencesInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   invitesReceived?: Prisma.InviteCreateNestedManyWithoutInvitedUserInput
@@ -791,6 +729,8 @@ export type UserCreateWithoutOwnedResidencesInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutOwnedResidencesInput = {
@@ -801,7 +741,6 @@ export type UserUncheckedCreateWithoutOwnedResidencesInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   invitesReceived?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedUserInput
@@ -809,6 +748,8 @@ export type UserUncheckedCreateWithoutOwnedResidencesInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutOwnedResidencesInput = {
@@ -834,7 +775,6 @@ export type UserUpdateWithoutOwnedResidencesInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   invitesReceived?: Prisma.InviteUpdateManyWithoutInvitedUserNestedInput
@@ -842,6 +782,8 @@ export type UserUpdateWithoutOwnedResidencesInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedResidencesInput = {
@@ -852,7 +794,6 @@ export type UserUncheckedUpdateWithoutOwnedResidencesInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   invitesReceived?: Prisma.InviteUncheckedUpdateManyWithoutInvitedUserNestedInput
@@ -860,6 +801,8 @@ export type UserUncheckedUpdateWithoutOwnedResidencesInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserCreateWithoutMembershipsInput = {
@@ -869,7 +812,6 @@ export type UserCreateWithoutMembershipsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
   invitesReceived?: Prisma.InviteCreateNestedManyWithoutInvitedUserInput
@@ -877,6 +819,8 @@ export type UserCreateWithoutMembershipsInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -887,7 +831,6 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
   invitesReceived?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedUserInput
@@ -895,6 +838,8 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -920,7 +865,6 @@ export type UserUpdateWithoutMembershipsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
   invitesReceived?: Prisma.InviteUpdateManyWithoutInvitedUserNestedInput
@@ -928,6 +872,8 @@ export type UserUpdateWithoutMembershipsInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -938,7 +884,6 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
   invitesReceived?: Prisma.InviteUncheckedUpdateManyWithoutInvitedUserNestedInput
@@ -946,6 +891,8 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserCreateWithoutInvitesReceivedInput = {
@@ -955,7 +902,6 @@ export type UserCreateWithoutInvitesReceivedInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
@@ -963,6 +909,8 @@ export type UserCreateWithoutInvitesReceivedInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutInvitesReceivedInput = {
@@ -973,7 +921,6 @@ export type UserUncheckedCreateWithoutInvitesReceivedInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
@@ -981,6 +928,8 @@ export type UserUncheckedCreateWithoutInvitesReceivedInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutInvitesReceivedInput = {
@@ -995,7 +944,6 @@ export type UserCreateWithoutInvitesSentInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
@@ -1003,6 +951,8 @@ export type UserCreateWithoutInvitesSentInput = {
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutInvitesSentInput = {
@@ -1013,7 +963,6 @@ export type UserUncheckedCreateWithoutInvitesSentInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
@@ -1021,6 +970,8 @@ export type UserUncheckedCreateWithoutInvitesSentInput = {
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutInvitesSentInput = {
@@ -1046,7 +997,6 @@ export type UserUpdateWithoutInvitesReceivedInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
@@ -1054,6 +1004,8 @@ export type UserUpdateWithoutInvitesReceivedInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvitesReceivedInput = {
@@ -1064,7 +1016,6 @@ export type UserUncheckedUpdateWithoutInvitesReceivedInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
@@ -1072,6 +1023,8 @@ export type UserUncheckedUpdateWithoutInvitesReceivedInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUpsertWithoutInvitesSentInput = {
@@ -1092,7 +1045,6 @@ export type UserUpdateWithoutInvitesSentInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
@@ -1100,6 +1052,8 @@ export type UserUpdateWithoutInvitesSentInput = {
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInvitesSentInput = {
@@ -1110,7 +1064,6 @@ export type UserUncheckedUpdateWithoutInvitesSentInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
@@ -1118,6 +1071,8 @@ export type UserUncheckedUpdateWithoutInvitesSentInput = {
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserCreateWithoutJoinRequestsInput = {
@@ -1127,7 +1082,6 @@ export type UserCreateWithoutJoinRequestsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
@@ -1135,6 +1089,8 @@ export type UserCreateWithoutJoinRequestsInput = {
   invitesSent?: Prisma.InviteCreateNestedManyWithoutInvitedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutJoinRequestsInput = {
@@ -1145,7 +1101,6 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
@@ -1153,6 +1108,8 @@ export type UserUncheckedCreateWithoutJoinRequestsInput = {
   invitesSent?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutJoinRequestsInput = {
@@ -1178,7 +1135,6 @@ export type UserUpdateWithoutJoinRequestsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
@@ -1186,6 +1142,8 @@ export type UserUpdateWithoutJoinRequestsInput = {
   invitesSent?: Prisma.InviteUpdateManyWithoutInvitedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutJoinRequestsInput = {
@@ -1196,7 +1154,6 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
@@ -1204,6 +1161,8 @@ export type UserUncheckedUpdateWithoutJoinRequestsInput = {
   invitesSent?: Prisma.InviteUncheckedUpdateManyWithoutInvitedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1213,7 +1172,6 @@ export type UserCreateWithoutNotificationsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
@@ -1221,6 +1179,8 @@ export type UserCreateWithoutNotificationsInput = {
   invitesSent?: Prisma.InviteCreateNestedManyWithoutInvitedByInput
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1231,7 +1191,6 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
@@ -1239,6 +1198,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   invitesSent?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedByInput
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1264,7 +1225,6 @@ export type UserUpdateWithoutNotificationsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
@@ -1272,6 +1232,8 @@ export type UserUpdateWithoutNotificationsInput = {
   invitesSent?: Prisma.InviteUpdateManyWithoutInvitedByNestedInput
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1282,7 +1244,6 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
@@ -1290,6 +1251,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   invitesSent?: Prisma.InviteUncheckedUpdateManyWithoutInvitedByNestedInput
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserCreateWithoutJoinAttemptsInput = {
@@ -1299,7 +1262,6 @@ export type UserCreateWithoutJoinAttemptsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
@@ -1307,6 +1269,8 @@ export type UserCreateWithoutJoinAttemptsInput = {
   invitesSent?: Prisma.InviteCreateNestedManyWithoutInvitedByInput
   joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
 }
 
 export type UserUncheckedCreateWithoutJoinAttemptsInput = {
@@ -1317,7 +1281,6 @@ export type UserUncheckedCreateWithoutJoinAttemptsInput = {
   password?: string | null
   profilePic?: string | null
   createdAt?: Date | string
-  persons?: Prisma.PersonUncheckedCreateNestedManyWithoutUserInput
   authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
   ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
@@ -1325,6 +1288,8 @@ export type UserUncheckedCreateWithoutJoinAttemptsInput = {
   invitesSent?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedByInput
   joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
 }
 
 export type UserCreateOrConnectWithoutJoinAttemptsInput = {
@@ -1350,7 +1315,6 @@ export type UserUpdateWithoutJoinAttemptsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
@@ -1358,6 +1322,8 @@ export type UserUpdateWithoutJoinAttemptsInput = {
   invitesSent?: Prisma.InviteUpdateManyWithoutInvitedByNestedInput
   joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutJoinAttemptsInput = {
@@ -1368,7 +1334,6 @@ export type UserUncheckedUpdateWithoutJoinAttemptsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  persons?: Prisma.PersonUncheckedUpdateManyWithoutUserNestedInput
   authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
   ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
@@ -1376,6 +1341,188 @@ export type UserUncheckedUpdateWithoutJoinAttemptsInput = {
   invitesSent?: Prisma.InviteUncheckedUpdateManyWithoutInvitedByNestedInput
   joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
+}
+
+export type UserCreateWithoutExpensesInput = {
+  name: string
+  email: string
+  username?: string | null
+  password?: string | null
+  profilePic?: string | null
+  createdAt?: Date | string
+  authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
+  invitesReceived?: Prisma.InviteCreateNestedManyWithoutInvitedUserInput
+  invitesSent?: Prisma.InviteCreateNestedManyWithoutInvitedByInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  monthClosures?: Prisma.MonthClosureCreateNestedManyWithoutClosedByInput
+}
+
+export type UserUncheckedCreateWithoutExpensesInput = {
+  id?: number
+  name: string
+  email: string
+  username?: string | null
+  password?: string | null
+  profilePic?: string | null
+  createdAt?: Date | string
+  authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
+  invitesReceived?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedUserInput
+  invitesSent?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedByInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  monthClosures?: Prisma.MonthClosureUncheckedCreateNestedManyWithoutClosedByInput
+}
+
+export type UserCreateOrConnectWithoutExpensesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+}
+
+export type UserUpsertWithoutExpensesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutExpensesInput, Prisma.UserUncheckedUpdateWithoutExpensesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutExpensesInput, Prisma.UserUncheckedCreateWithoutExpensesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutExpensesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutExpensesInput, Prisma.UserUncheckedUpdateWithoutExpensesInput>
+}
+
+export type UserUpdateWithoutExpensesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
+  invitesReceived?: Prisma.InviteUpdateManyWithoutInvitedUserNestedInput
+  invitesSent?: Prisma.InviteUpdateManyWithoutInvitedByNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  monthClosures?: Prisma.MonthClosureUpdateManyWithoutClosedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutExpensesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
+  invitesReceived?: Prisma.InviteUncheckedUpdateManyWithoutInvitedUserNestedInput
+  invitesSent?: Prisma.InviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  monthClosures?: Prisma.MonthClosureUncheckedUpdateManyWithoutClosedByNestedInput
+}
+
+export type UserCreateWithoutMonthClosuresInput = {
+  name: string
+  email: string
+  username?: string | null
+  password?: string | null
+  profilePic?: string | null
+  createdAt?: Date | string
+  authProviders?: Prisma.UserAuthProviderCreateNestedManyWithoutUserInput
+  memberships?: Prisma.MembershipCreateNestedManyWithoutUserInput
+  ownedResidences?: Prisma.ResidenceCreateNestedManyWithoutOwnerInput
+  invitesReceived?: Prisma.InviteCreateNestedManyWithoutInvitedUserInput
+  invitesSent?: Prisma.InviteCreateNestedManyWithoutInvitedByInput
+  joinRequests?: Prisma.JoinRequestCreateNestedManyWithoutRequesterInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  joinAttempts?: Prisma.JoinAttemptCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutMonthClosuresInput = {
+  id?: number
+  name: string
+  email: string
+  username?: string | null
+  password?: string | null
+  profilePic?: string | null
+  createdAt?: Date | string
+  authProviders?: Prisma.UserAuthProviderUncheckedCreateNestedManyWithoutUserInput
+  memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutUserInput
+  ownedResidences?: Prisma.ResidenceUncheckedCreateNestedManyWithoutOwnerInput
+  invitesReceived?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedUserInput
+  invitesSent?: Prisma.InviteUncheckedCreateNestedManyWithoutInvitedByInput
+  joinRequests?: Prisma.JoinRequestUncheckedCreateNestedManyWithoutRequesterInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  joinAttempts?: Prisma.JoinAttemptUncheckedCreateNestedManyWithoutUserInput
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutMonthClosuresInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMonthClosuresInput, Prisma.UserUncheckedCreateWithoutMonthClosuresInput>
+}
+
+export type UserUpsertWithoutMonthClosuresInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMonthClosuresInput, Prisma.UserUncheckedUpdateWithoutMonthClosuresInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMonthClosuresInput, Prisma.UserUncheckedCreateWithoutMonthClosuresInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMonthClosuresInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMonthClosuresInput, Prisma.UserUncheckedUpdateWithoutMonthClosuresInput>
+}
+
+export type UserUpdateWithoutMonthClosuresInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authProviders?: Prisma.UserAuthProviderUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.MembershipUpdateManyWithoutUserNestedInput
+  ownedResidences?: Prisma.ResidenceUpdateManyWithoutOwnerNestedInput
+  invitesReceived?: Prisma.InviteUpdateManyWithoutInvitedUserNestedInput
+  invitesSent?: Prisma.InviteUpdateManyWithoutInvitedByNestedInput
+  joinRequests?: Prisma.JoinRequestUpdateManyWithoutRequesterNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  joinAttempts?: Prisma.JoinAttemptUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMonthClosuresInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  authProviders?: Prisma.UserAuthProviderUncheckedUpdateManyWithoutUserNestedInput
+  memberships?: Prisma.MembershipUncheckedUpdateManyWithoutUserNestedInput
+  ownedResidences?: Prisma.ResidenceUncheckedUpdateManyWithoutOwnerNestedInput
+  invitesReceived?: Prisma.InviteUncheckedUpdateManyWithoutInvitedUserNestedInput
+  invitesSent?: Prisma.InviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  joinRequests?: Prisma.JoinRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  joinAttempts?: Prisma.JoinAttemptUncheckedUpdateManyWithoutUserNestedInput
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 
@@ -1384,7 +1531,6 @@ export type UserUncheckedUpdateWithoutJoinAttemptsInput = {
  */
 
 export type UserCountOutputType = {
-  persons: number
   authProviders: number
   memberships: number
   ownedResidences: number
@@ -1393,10 +1539,11 @@ export type UserCountOutputType = {
   joinRequests: number
   notifications: number
   joinAttempts: number
+  expenses: number
+  monthClosures: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  persons?: boolean | UserCountOutputTypeCountPersonsArgs
   authProviders?: boolean | UserCountOutputTypeCountAuthProvidersArgs
   memberships?: boolean | UserCountOutputTypeCountMembershipsArgs
   ownedResidences?: boolean | UserCountOutputTypeCountOwnedResidencesArgs
@@ -1405,6 +1552,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   joinRequests?: boolean | UserCountOutputTypeCountJoinRequestsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   joinAttempts?: boolean | UserCountOutputTypeCountJoinAttemptsArgs
+  expenses?: boolean | UserCountOutputTypeCountExpensesArgs
+  monthClosures?: boolean | UserCountOutputTypeCountMonthClosuresArgs
 }
 
 /**
@@ -1415,13 +1564,6 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPersonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PersonWhereInput
 }
 
 /**
@@ -1480,6 +1622,20 @@ export type UserCountOutputTypeCountJoinAttemptsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.JoinAttemptWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExpenseWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMonthClosuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MonthClosureWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1489,7 +1645,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   password?: boolean
   profilePic?: boolean
   createdAt?: boolean
-  persons?: boolean | Prisma.User$personsArgs<ExtArgs>
   authProviders?: boolean | Prisma.User$authProvidersArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   ownedResidences?: boolean | Prisma.User$ownedResidencesArgs<ExtArgs>
@@ -1498,6 +1653,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   joinRequests?: boolean | Prisma.User$joinRequestsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   joinAttempts?: boolean | Prisma.User$joinAttemptsArgs<ExtArgs>
+  expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
+  monthClosures?: boolean | Prisma.User$monthClosuresArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1533,7 +1690,6 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "username" | "password" | "profilePic" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  persons?: boolean | Prisma.User$personsArgs<ExtArgs>
   authProviders?: boolean | Prisma.User$authProvidersArgs<ExtArgs>
   memberships?: boolean | Prisma.User$membershipsArgs<ExtArgs>
   ownedResidences?: boolean | Prisma.User$ownedResidencesArgs<ExtArgs>
@@ -1542,6 +1698,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   joinRequests?: boolean | Prisma.User$joinRequestsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   joinAttempts?: boolean | Prisma.User$joinAttemptsArgs<ExtArgs>
+  expenses?: boolean | Prisma.User$expensesArgs<ExtArgs>
+  monthClosures?: boolean | Prisma.User$monthClosuresArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1550,7 +1708,6 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    persons: Prisma.$PersonPayload<ExtArgs>[]
     authProviders: Prisma.$UserAuthProviderPayload<ExtArgs>[]
     memberships: Prisma.$MembershipPayload<ExtArgs>[]
     ownedResidences: Prisma.$ResidencePayload<ExtArgs>[]
@@ -1559,6 +1716,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     joinRequests: Prisma.$JoinRequestPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     joinAttempts: Prisma.$JoinAttemptPayload<ExtArgs>[]
+    expenses: Prisma.$ExpensePayload<ExtArgs>[]
+    monthClosures: Prisma.$MonthClosurePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1962,7 +2121,6 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  persons<T extends Prisma.User$personsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$personsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PersonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authProviders<T extends Prisma.User$authProvidersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authProvidersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAuthProviderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   memberships<T extends Prisma.User$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownedResidences<T extends Prisma.User$ownedResidencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedResidencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResidencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1971,6 +2129,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   joinRequests<T extends Prisma.User$joinRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$joinRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   joinAttempts<T extends Prisma.User$joinAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$joinAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JoinAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  expenses<T extends Prisma.User$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  monthClosures<T extends Prisma.User$monthClosuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$monthClosuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MonthClosurePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2395,30 +2555,6 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.persons
- */
-export type User$personsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Person
-   */
-  select?: Prisma.PersonSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Person
-   */
-  omit?: Prisma.PersonOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PersonInclude<ExtArgs> | null
-  where?: Prisma.PersonWhereInput
-  orderBy?: Prisma.PersonOrderByWithRelationInput | Prisma.PersonOrderByWithRelationInput[]
-  cursor?: Prisma.PersonWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PersonScalarFieldEnum | Prisma.PersonScalarFieldEnum[]
-}
-
-/**
  * User.authProviders
  */
 export type User$authProvidersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2608,6 +2744,54 @@ export type User$joinAttemptsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.JoinAttemptScalarFieldEnum | Prisma.JoinAttemptScalarFieldEnum[]
+}
+
+/**
+ * User.expenses
+ */
+export type User$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Expense
+   */
+  select?: Prisma.ExpenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Expense
+   */
+  omit?: Prisma.ExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExpenseInclude<ExtArgs> | null
+  where?: Prisma.ExpenseWhereInput
+  orderBy?: Prisma.ExpenseOrderByWithRelationInput | Prisma.ExpenseOrderByWithRelationInput[]
+  cursor?: Prisma.ExpenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExpenseScalarFieldEnum | Prisma.ExpenseScalarFieldEnum[]
+}
+
+/**
+ * User.monthClosures
+ */
+export type User$monthClosuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MonthClosure
+   */
+  select?: Prisma.MonthClosureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MonthClosure
+   */
+  omit?: Prisma.MonthClosureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MonthClosureInclude<ExtArgs> | null
+  where?: Prisma.MonthClosureWhereInput
+  orderBy?: Prisma.MonthClosureOrderByWithRelationInput | Prisma.MonthClosureOrderByWithRelationInput[]
+  cursor?: Prisma.MonthClosureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MonthClosureScalarFieldEnum | Prisma.MonthClosureScalarFieldEnum[]
 }
 
 /**

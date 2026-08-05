@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace.js"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.0.0",
-  "engineVersion": "0c19ccc313cf9911a90d99d2ac2eb0280c76c513",
+  "clientVersion": "7.2.0",
+  "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
   "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id         Int      @id @default(autoincrement())\n  name       String\n  email      String   @unique\n  username   String?  @unique //identificador público, usado para convidar o usuário para uma residência\n  password   String?\n  profilePic String?\n  createdAt  DateTime @default(now())\n\n  authProviders   UserAuthProvider[]\n  memberships     Membership[]\n  ownedResidences Residence[]        @relation(\"ResidenceOwner\")\n  invitesReceived Invite[]           @relation(\"InviteRecipient\")\n  invitesSent     Invite[]           @relation(\"InviteSender\")\n  joinRequests    JoinRequest[]\n  notifications   Notification[]\n  joinAttempts    JoinAttempt[]\n  expenses        Expense[]\n  monthClosures   MonthClosure[]\n}\n\nmodel UserAuthProvider {\n  id         Int      @id @default(autoincrement())\n  userId     Int\n  provider   String\n  providerId String\n  createdAt  DateTime @default(now())\n  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerId])\n}\n\nmodel Residence {\n  id         Int       @id @default(autoincrement())\n  name       String\n  code       String    @unique //código curto e público, usado para solicitar entrada na residência\n  ownerId    Int\n  createdAt  DateTime  @default(now())\n  archivedAt DateTime? //residência arquivada fica somente leitura (RN-032)\n\n  owner         User           @relation(\"ResidenceOwner\", fields: [ownerId], references: [id])\n  members       Membership[]\n  invites       Invite[]\n  joinRequests  JoinRequest[]\n  expenses      Expense[]\n  monthClosures MonthClosure[]\n}\n\nmodel Membership {\n  id          Int            @id @default(autoincrement())\n  userId      Int\n  residenceId Int\n  role        MembershipRole @default(MEMBER)\n  joinedAt    DateTime       @default(now())\n  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)\n  residence   Residence      @relation(fields: [residenceId], references: [id], onDelete: Cascade)\n\n  @@unique([userId, residenceId])\n}\n\nenum MembershipRole {\n  OWNER\n  MEMBER\n}\n\n//Convite enviado pelo owner para um usuário entrar na residência (fluxo de dentro para fora)\nmodel Invite {\n  id            Int          @id @default(autoincrement())\n  residenceId   Int\n  invitedUserId Int\n  invitedById   Int\n  status        AccessStatus @default(PENDING)\n  createdAt     DateTime     @default(now())\n  expiresAt     DateTime //RN-015: convite expira em 7 dias\n  respondedAt   DateTime?\n\n  residence   Residence @relation(fields: [residenceId], references: [id], onDelete: Cascade)\n  invitedUser User      @relation(\"InviteRecipient\", fields: [invitedUserId], references: [id], onDelete: Cascade)\n  invitedBy   User      @relation(\"InviteSender\", fields: [invitedById], references: [id], onDelete: Cascade)\n}\n\n//Solicitação enviada por um usuário que digitou o código (fluxo de fora para dentro)\nmodel JoinRequest {\n  id          Int          @id @default(autoincrement())\n  residenceId Int\n  requesterId Int\n  status      AccessStatus @default(PENDING)\n  createdAt   DateTime     @default(now())\n  respondedAt DateTime?\n\n  residence Residence @relation(fields: [residenceId], references: [id], onDelete: Cascade)\n  requester User      @relation(fields: [requesterId], references: [id], onDelete: Cascade)\n}\n\nenum AccessStatus {\n  PENDING\n  ACCEPTED\n  DECLINED\n  CANCELLED\n  EXPIRED\n}\n\n//RN-037 -> Notificação genérica: qualquer área do sistema publica aqui.\n//title, message e linkTo são resolvidos por quem cria, para que a leitura não\n//precise conhecer as regras de cada tipo.\nmodel Notification {\n  id        Int              @id @default(autoincrement())\n  userId    Int\n  type      NotificationType\n  title     String\n  message   String\n  linkTo    String?\n  readAt    DateTime?\n  createdAt DateTime         @default(now())\n  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId, createdAt])\n}\n\nenum NotificationType {\n  INVITE_RECEIVED\n  JOIN_REQUEST_RECEIVED\n  JOIN_REQUEST_ACCEPTED\n  JOIN_REQUEST_DECLINED\n  MEMBER_REMOVED\n  OWNERSHIP_TRANSFERRED\n  MONTH_CLOSED\n}\n\n//RN-052 -> Contador de tentativas de entrada por código, guardado no banco para\n//sobreviver a reinício do processo e funcionar com mais de uma instância da aplicação.\nmodel JoinAttempt {\n  id        Int      @id @default(autoincrement())\n  userId    Int\n  createdAt DateTime @default(now())\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId, createdAt])\n}\n\n//Despesa lançada por um membro dentro de uma residência, numa competência (mês/ano).\n//valueInCents guarda o valor em centavos: dinheiro em ponto flutuante acumula erro\n//de arredondamento na soma, e o rateio futuro (FEAT-029) depende de totais exatos.\nmodel Expense {\n  id           String          @id @default(uuid())\n  name         String\n  valueInCents Int\n  category     ExpenseCategory\n  month        Int\n  year         Int\n  residenceId  Int\n  createdById  Int\n  isRecurring  Boolean         @default(false) //FEAT-025: repetida na competência seguinte ao fechar o mês\n  createdAt    DateTime        @default(now())\n  deletedAt    DateTime?\n  residence    Residence       @relation(fields: [residenceId], references: [id], onDelete: Cascade)\n  createdBy    User            @relation(fields: [createdById], references: [id])\n\n  @@index([residenceId, year, month])\n}\n\nenum ExpenseCategory {\n  ALIMENTACAO\n  DOMESTICAS\n  ASSINATURAS\n  LAZER\n  OUTROS\n}\n\n//Fechamento da conta do mês, feito pelo owner. Uma competência fechada fica\n//somente leitura, e a competência aberta passa a ser a seguinte (RN-020).\nmodel MonthClosure {\n  id          Int       @id @default(autoincrement())\n  residenceId Int\n  month       Int\n  year        Int\n  closedById  Int\n  closedAt    DateTime  @default(now())\n  residence   Residence @relation(fields: [residenceId], references: [id], onDelete: Cascade)\n  closedBy    User      @relation(fields: [closedById], references: [id])\n\n  @@unique([residenceId, year, month])\n}\n",
   "runtimeDataModel": {
@@ -62,7 +62,7 @@ export interface PrismaClientConstructor {
    * const users = await prisma.user.findMany()
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+   * Read more in our [docs](https://pris.ly/d/client).
    */
 
   new <
@@ -84,7 +84,7 @@ export interface PrismaClientConstructor {
  * const users = await prisma.user.findMany()
  * ```
  * 
- * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client).
+ * Read more in our [docs](https://pris.ly/d/client).
  */
 
 export interface PrismaClient<
@@ -113,7 +113,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -125,7 +125,7 @@ export interface PrismaClient<
    * const result = await prisma.$executeRawUnsafe('UPDATE User SET cool = $1 WHERE email = $2 ;', true, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $executeRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<number>;
 
@@ -136,7 +136,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<T>;
 
@@ -148,7 +148,7 @@ export interface PrismaClient<
    * const result = await prisma.$queryRawUnsafe('SELECT * FROM User WHERE id = $1 OR email = $2;', 1, 'user@email.com')
    * ```
    *
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/raw-database-access).
+   * Read more in our [docs](https://pris.ly/d/raw-queries).
    */
   $queryRawUnsafe<T = unknown>(query: string, ...values: any[]): Prisma.PrismaPromise<T>;
 

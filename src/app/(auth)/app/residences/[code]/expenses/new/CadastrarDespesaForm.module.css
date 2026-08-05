@@ -38,6 +38,23 @@
     flex-shrink: 0;
 }
 
+.botaoPrincipal {
+    width: 100%;
+    text-align: center;
+    background: #007BFF;
+    padding: 0.75rem 1.25rem;
+    border-radius: 2.5rem;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    font-size: 1rem;
+    color: white;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.botaoPrincipal:hover {
+    background: #0069D9;
+    cursor: pointer;
+}
+
 .botaoCanto {
     display: flex;
     align-items: center;
@@ -83,23 +100,21 @@
     font-size: 1rem;
 }
 
-.recorrente {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    align-self: flex-start;
-    font-size: 0.9rem;
+.botaoRecorrentes {
+    margin-top: 1rem;
+    width: 66%;
+    text-align: center;
+    background: #007BFF;
+    padding: 0.5rem 1rem;
+    border-radius: 2.5rem;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    font-size: 1rem;
+    color: white;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
-.recorrente input {
-    width: auto;
-}
-
-.fieldHint {
-    align-self: flex-start;
-    font-size: 0.7rem;
-    color: #5A5A5A;
+.botaoRecorrentes:hover {
+    background: #0069D9;
 }
 
 .submitButtonContainer {
@@ -110,14 +125,25 @@
 }
 
 .submitButtonContainer button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #2497F3;
-    padding: 20px 15px;
-    border-radius: 25px;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 50%;
+    border: 3px solid transparent;
 }
 
 .submitButtonContainer button:hover:not(:disabled) {
     background-color: #0069D9;
     cursor: pointer;
+}
+
+/* Destaque de navegação por teclado: a borda transparente na base evita que o
+   botão "pule" de tamanho quando o foco chega via Tab. */
+.submitButtonContainer button:focus-visible {
+    border-color: #0B3D91;
 }
 
 .submitButtonContainer button:disabled {

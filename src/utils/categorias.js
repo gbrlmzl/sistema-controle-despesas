@@ -24,3 +24,8 @@ export function nomeDoMes(mes) {
 export function competenciaTexto(mes, ano) {
     return `${nomeDoMes(mes)} de ${ano}`;
 }
+
+//Forma compacta, para linhas estreitas onde o nome do mês por extenso não caberia
+export function competenciaCurta(mes, ano) {
+    return `${String(mes).padStart(2, "0")}/${ano}`;
+}

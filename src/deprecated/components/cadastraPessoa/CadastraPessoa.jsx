@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import SeletorNumeroPessoas from "./SeletorNumeroPessoas";
 import PessoaInfo from "./PessoaInfo";
-import { useCadastroPessoas } from "@/hooks/useCadastroPessoas";
+import { useCadastroPessoas } from "@/deprecated/hooks/useCadastroPessoas";
 import ConfirmaPessoas from "./ConfirmaPessoas";
 import ExistemPessoasCadastradas from "./ExistemPessoasCadastradas";
 import ResultadoCadastro from "./ResultadoCadastro";

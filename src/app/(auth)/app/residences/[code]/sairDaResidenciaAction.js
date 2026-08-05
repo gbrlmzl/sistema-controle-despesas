@@ -4,6 +4,7 @@ import db from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { carregarVinculoDoUsuario } from "@/lib/residence";
+import { competenciaAberta } from "@/lib/expenses";
 
 
 
@@ -37,15 +38,27 @@ export default async function sairDaResidenciaAction(code) {
         }
     }
 
-    // 4 -> Remove o vínculo do membro com a residência
-    try {
-        await db.membership.delete({
-            where: { id: contexto.vinculo.id },
-        })
+    // 4 -> RN-022: quem sai leva junto os lançamentos da competência ainda aberta —
+    //ao sair, está abrindo mão de receber por eles. Os meses já fechados permanecem
+    //intactos, porque aquelas contas já foram acertadas.
+    const competencia = await competenciaAberta(contexto.residencia.id);
 
-        //RN-022 (pendente): as despesas do mês em aberto lançadas por quem saiu devem ser
-        //apagadas, e as dos meses já fechados devem permanecer. Ainda não é possível aplicar
-        //aqui porque Expense não aponta para Residence/User (ver dependência D-02 / EP-04).
+    try {
+        await db.$transaction([
+            db.expense.updateMany({
+                where: {
+                    residenceId: contexto.residencia.id,
+                    createdById: contexto.usuario.id,
+                    month: competencia.month,
+                    year: competencia.year,
+                    deletedAt: null,
+                },
+                data: { deletedAt: new Date() },
+            }),
+            db.membership.delete({
+                where: { id: contexto.vinculo.id },
+            }),
+        ])
 
         revalidatePath('/app/residences');
 

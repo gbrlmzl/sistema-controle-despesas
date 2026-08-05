@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import Form from "next/form"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ export default function CadastrarDespesaForm({ residencia, competencia }) {
     const [value, setValue] = useState('');
     const [category, setCategory] = useState('');
     const [snackbar, setSnackbar] = useState({ open: false, message: "", type: "" });
+    const nameInputRef = useRef(null);
     const router = useRouter();
 
     const dadosPreenchidos = name.trim().length >= 2 && value.trim().length > 0 && category !== '';
@@ -35,6 +36,10 @@ export default function CadastrarDespesaForm({ residencia, competencia }) {
         setValue('');
         setCategory('');
         router.refresh();
+
+        //O foco volta para o nome assim que a despesa é salva, para o próximo
+        //lançamento começar direto pelo teclado, sem precisar clicar de novo.
+        nameInputRef.current?.focus();
 
         setSnackbar({ open: true, message: state.message, type: "success" });
         const temporizador = setTimeout(() => {
@@ -56,6 +61,7 @@ export default function CadastrarDespesaForm({ residencia, competencia }) {
             </div>
             {/* RN-020 -> o lançamento cai sempre na competência aberta, então ela é informada e não escolhida */}
             <p className={styles.competencia}>{competenciaTexto(competencia.month, competencia.year)}</p>
+            
 
             {state?.success === false && (
                 <div className={styles.errorMessage}>
@@ -65,9 +71,11 @@ export default function CadastrarDespesaForm({ residencia, competencia }) {
 
             <Form action={formAction}>
                 <input type="hidden" name="code" value={residencia.code} />
+            
+
 
                 <div className={styles.formFields}>
-                    <input type="text" name="name" placeholder="Nome da despesa" value={name} maxLength={60}
+                    <input ref={nameInputRef} type="text" name="name" placeholder="Nome da despesa" value={name} maxLength={60}
                         onChange={(e) => setName(e.target.value)} autoComplete="off" />
 
                     <input type="text" name="value" placeholder="Valor (ex.: 180,50)" value={value}
@@ -79,24 +87,22 @@ export default function CadastrarDespesaForm({ residencia, competencia }) {
                             <option key={categoria.value} value={categoria.value}>{categoria.label}</option>
                         ))}
                     </select>
-
-                    <label className={styles.recorrente}>
-                        <input type="checkbox" name="isRecurring" />
-                        <span>Repetir nos próximos meses</span>
-                    </label>
-                    <span className={styles.fieldHint}>
-                        Despesas recorrentes são lançadas de novo automaticamente quando o mês é fechado
-                    </span>
                 </div>
 
                 <div className={styles.submitButtonContainer}>
                     <button type="submit" disabled={isPending || !dadosPreenchidos}>
                         <span>
-                            <img src="/icons/avancarIcon.svg" alt="Cadastrar despesa" />
+                            <img src="/icons/adicionarIcon.svg" alt="Cadastrar despesa" />
                         </span>
                     </button>
                 </div>
             </Form>
+            
+            <Link href={`/app/residences/${residencia.code}/expenses/recurring`} className={styles.botaoRecorrentes}>
+                Despesas recorrentes
+            </Link>
+
+            
 
             <Snackbar
                 open={snackbar.open}

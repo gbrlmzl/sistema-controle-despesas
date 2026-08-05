@@ -72,7 +72,7 @@ export default function useAcoesResidencia(residencia, abrirConviteInicial = fal
     //CA-2 da US-015 -> a confirmação traz o nome do novo dono
     const confirmarTransferencia = (membro) => setConfirmacao({
         titulo: "Transferir propriedade",
-        mensagem: `"${membro.name}" passará a ser o criador da residência e você continuará nela como membro comum. Confirmar?`,
+        mensagem: `"${membro.name}" passará a ser o administrador da residência e você continuará nela como membro comum. Confirmar?`,
         textoConfirmar: "Transferir",
         onConfirmar: () => executarAcao(() => transferirPropriedadeAction(residencia.code, membro.userId)),
     });

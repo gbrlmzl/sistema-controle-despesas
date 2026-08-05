@@ -149,6 +149,63 @@ export async function gerarRecorrentes(residenceId, origem, destino) {
     return resultado.count;
 }
 
+//Despesas recorrentes do próprio usuário na competência aberta — é o que a tela
+//dedicada de gerenciamento (FEAT-025) lista, edita e para de repetir.
+export async function listarDespesasRecorrentesDoUsuario(residenceId, userId, month, year) {
+    return db.expense.findMany({
+        where: {
+            residenceId: residenceId,
+            createdById: userId,
+            month: month,
+            year: year,
+            isRecurring: true,
+            deletedAt: null,
+        },
+        orderBy: { createdAt: "desc" },
+        select: {
+            id: true,
+            name: true,
+            valueInCents: true,
+            category: true,
+            isRecurring: true,
+        },
+    });
+}
+
+//P-2 do painel -> últimos lançamentos da residência, com autor e momento.
+//Cobre apenas despesas: entradas e saídas de membros não deixam rastro consultável
+//hoje, o que só a trilha de auditoria (FEAT-031) resolveria.
+export async function atividadeRecente(residenceId, limite = 5) {
+    const despesas = await db.expense.findMany({
+        where: { residenceId: residenceId, deletedAt: null },
+        orderBy: { createdAt: "desc" },
+        take: limite,
+        select: {
+            id: true,
+            name: true,
+            valueInCents: true,
+            category: true,
+            month: true,
+            year: true,
+            createdAt: true,
+            createdBy: { select: { name: true } },
+        },
+    });
+
+    return despesas.map(despesa => ({
+        id: despesa.id,
+        name: despesa.name,
+        valueInCents: despesa.valueInCents,
+        category: despesa.category,
+        //A competência aparece na lista porque um lançamento recente pode pertencer
+        //a um mês diferente do atual — sem ela, "há 2 dias" fica ambíguo
+        month: despesa.month,
+        year: despesa.year,
+        createdAt: despesa.createdAt,
+        autor: despesa.createdBy.name,
+    }));
+}
+
 //Devolve a competência mais recente já fechada, usada para restringir a reabertura.
 export async function ultimoFechamento(residenceId) {
     return db.monthClosure.findFirst({

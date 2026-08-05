@@ -88,6 +88,7 @@ export default async function cadastrarDespesaAction(_prevState, formData) {
         })
 
         revalidatePath(`/app/residences/${contexto.residencia.code}/expenses`);
+        revalidatePath(`/app/residences/${contexto.residencia.code}/expenses/recurring`);
 
         return {
             success: true,

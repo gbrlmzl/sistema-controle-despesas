@@ -1,5 +1,5 @@
 import React from "react";
-import { useCadastroDespesas } from "@/hooks/useCadastroDespesas";
+import { useCadastroDespesas } from "@/deprecated/hooks/useCadastroDespesas";
 import DespesaInfo from "./DespesaInfo";
 import ConfirmaDespesa from "./ConfirmaDespesa";
 import ResumoPagamento from "./ResumoPagamento";

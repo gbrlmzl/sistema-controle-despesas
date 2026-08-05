@@ -19,9 +19,9 @@ import styles from "./ConsultaDespesas.module.css";
 //e total geral. Concentra também a edição/exclusão (FEAT-023) e o fechamento do mês.
 export default function ConsultaDespesas({ residencia, usuarioId, competencias, competencia, resumo, isCompetenciaAberta, podeReabrir }) {
     const [editando, setEditando] = useState(null);
-    //Guarda quem está recolhido, e não quem está aberto: assim os grupos nascem
-    //expandidos e um membro novo na lista já aparece com as despesas visíveis.
-    const [gruposRecolhidos, setGruposRecolhidos] = useState([]);
+    //Os grupos nascem recolhidos: a tela abre mostrando os totais por membro, e o
+    //usuário expande apenas quem quer detalhar. Guarda quem está expandido.
+    const [gruposExpandidos, setGruposExpandidos] = useState([]);
     const [confirmacao, setConfirmacao] = useState(null);
     const [processando, setProcessando] = useState(false);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", type: "" });
@@ -56,7 +56,7 @@ export default function ConsultaDespesas({ residencia, usuarioId, competencias, 
     }
 
     const alternarGrupo = (userId) => {
-        setGruposRecolhidos(anterior => anterior.includes(userId)
+        setGruposExpandidos(anterior => anterior.includes(userId)
             ? anterior.filter(id => id !== userId)
             : [...anterior, userId]
         );
@@ -119,7 +119,7 @@ export default function ConsultaDespesas({ residencia, usuarioId, competencias, 
 
             {/* Q-3 -> agrupamento por membro, com o grupo recolhível */}
             {resumo.porMembro.map(grupo => {
-                const recolhido = gruposRecolhidos.includes(grupo.userId);
+                const recolhido = !gruposExpandidos.includes(grupo.userId);
 
                 return (
                 <div key={grupo.userId} className={styles.grupoMembro}>

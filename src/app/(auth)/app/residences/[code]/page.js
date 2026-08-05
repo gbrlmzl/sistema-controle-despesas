@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import db from "@/lib/prisma";
 import { buscarResidenciaDoMembro } from "@/lib/residence";
 import { listarSolicitacoesPendentes, listarConvitesEnviados } from "@/lib/access";
+import { competenciaAberta, listarDespesasDaCompetencia, atividadeRecente } from "@/lib/expenses";
 
 import PainelResidencia from "./PainelResidencia";
 
@@ -45,12 +46,31 @@ export default async function Residencia({ params }) {
         ])
         : [[], []];
 
+    //P-1 e P-2 -> resumo da competência aberta e últimos lançamentos
+    const competencia = await competenciaAberta(residenciaId);
+    const [resumo, atividade] = await Promise.all([
+        listarDespesasDaCompetencia(residenciaId, competencia.month, competencia.year),
+        atividadeRecente(residenciaId),
+    ]);
+
     return (
         <div className="primaryCard">
             <PainelResidencia
                 residencia={residencia}
                 solicitacoes={solicitacoes}
-                convites={convites} />
+                convites={convites}
+                competencia={competencia}
+                resumo={{
+                    totalInCents: resumo.totalInCents,
+                    quantidade: resumo.quantidade,
+                    isClosed: resumo.isClosed,
+                    porMembro: resumo.porMembro.map(grupo => ({
+                        userId: grupo.userId,
+                        name: grupo.name,
+                        totalInCents: grupo.totalInCents,
+                    })),
+                }}
+                atividade={atividade} />
         </div>
     )
 

@@ -4,6 +4,7 @@ import db from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 import { carregarVinculoDoUsuario } from "@/lib/residence";
+import { competenciaAberta } from "@/lib/expenses";
 import { criarNotificacao } from "@/lib/notifications";
 
 
@@ -70,14 +71,26 @@ export default async function removerMembroAction(code, membroUserId) {
         }
     }
 
-    // 7 -> Remove o vínculo do membro
-    try {
-        await db.membership.delete({
-            where: { id: vinculoDoMembro.id },
-        })
+    // 7 -> RN-026: o membro removido segue a mesma regra da RN-022 — os lançamentos da
+    //competência aberta saem com ele, os dos meses já fechados permanecem.
+    const competencia = await competenciaAberta(contexto.residencia.id);
 
-        //RN-026 (pendente): as despesas do membro removido seguem a mesma regra da RN-022,
-        //que ainda não pode ser aplicada porque Expense não aponta para Residence/User (D-02).
+    try {
+        await db.$transaction([
+            db.expense.updateMany({
+                where: {
+                    residenceId: contexto.residencia.id,
+                    createdById: membroUserId,
+                    month: competencia.month,
+                    year: competencia.year,
+                    deletedAt: null,
+                },
+                data: { deletedAt: new Date() },
+            }),
+            db.membership.delete({
+                where: { id: vinculoDoMembro.id },
+            }),
+        ])
 
         //CA-7 -> o membro removido é notificado
         await criarNotificacao({

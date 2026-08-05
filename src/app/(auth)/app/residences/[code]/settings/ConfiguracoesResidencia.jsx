@@ -60,7 +60,7 @@ export default function ConfiguracoesResidencia({ residencia, abrirConviteInicia
 
             <div className={styles.opcoesContainer}>
                 <Link href={`/app/residences/${residencia.code}/members`} className={styles.botaoOpcao}>
-                    Gerenciar membros
+                    {residencia.isOwner ? "Gerenciar membros" : "Ver membros"}
                 </Link>
 
                 {residencia.isOwner && (

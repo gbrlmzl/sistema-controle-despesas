@@ -1,4 +1,4 @@
-import { useResumoDespesas } from "@/hooks/useResumoDespesas"
+import { useResumoDespesas } from "@/deprecated/hooks/useResumoDespesas"
 
 import DespesasInfoResumo from "./DespesasInfoResumo";
 import DespesasNaoCadastradas from "../shared/DespesasNaoCadastradas";

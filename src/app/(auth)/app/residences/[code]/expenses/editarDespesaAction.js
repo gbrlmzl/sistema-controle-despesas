@@ -107,6 +107,7 @@ export default async function editarDespesaAction(_prevState, formData) {
         })
 
         revalidatePath(`/app/residences/${contexto.residencia.code}/expenses`);
+        revalidatePath(`/app/residences/${contexto.residencia.code}/expenses/recurring`);
 
         return {
             success: true,

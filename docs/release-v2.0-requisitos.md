@@ -146,7 +146,13 @@ User (login) ──N:M (via Membership)──\> Residence ──1:N──\> Expe
 | FEAT-022 | Consultar despesas da residência | Consulta por competência, agrupada por membro, com total por membro e total geral. Inclui o fechamento do mês pelo owner. | Must | Concluído | 📄 |
 | FEAT-023 | Editar / excluir despesa própria | Membro corrige ou remove um lançamento que fez (exclusão lógica via `deletedAt`). | Should | Concluído | 💡 |
 | FEAT-024 | Categoria da despesa | Categoria obrigatória no cadastro, com cinco valores fixos: Alimentação, Contas domésticas, Assinaturas, Lazer e Outros. Pré-requisito dos relatórios. | Should | Concluído | 💡 (citado como intenção futura) |
-| FEAT-025 | Despesa recorrente | Lançamento marcado como recorrente, recriado na competência seguinte quando o owner fecha o mês. | Could | Concluído | 💡 |
+| FEAT-025 | Despesa recorrente | Lançamento marcado como recorrente, recriado na competência seguinte quando o owner fecha o mês. Gerenciada numa tela dedicada (`/expenses/recurring`), acessada por um botão em `/expenses/new` — o cadastro comum não expõe mais a marcação de recorrência. | Could | Concluído | 💡 |
+
+**Nota técnica sobre FEAT-025 (tela dedicada):** não existe um "molde" de despesa recorrente
+independente do mês — a tela lista, cria e edita a própria `Expense` da competência aberta com
+`isRecurring: true`, filtrada por autor (cada membro só gerencia as suas). "Excluir" nessa tela
+não apaga o lançamento: apenas marca `isRecurring: false`, então a despesa do mês corrente
+continua valendo e aparece normalmente em Consultar Despesas para edição/exclusão comum.
 
 ## EP-05 — Relatórios e Análise
 
@@ -154,10 +160,13 @@ User (login) ──N:M (via Membership)──\> Residence ──1:N──\> Expe
 
 | ID | Funcionalidade | Descrição | Prior. | Status | Origem |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| FEAT-026 | Relatório por categoria | Visão de quanto foi gasto em cada categoria em uma competência. | Won't (V2.0) | Não iniciado | 💡 |
-| FEAT-027 | Comparativo entre meses | Comparação de gastos entre competências diferentes. | Won't (V2.0) | Não iniciado | 💡 |
-| FEAT-028 | Gráficos do relatório | Representação visual dos gastos por categoria e por período. | Won't (V2.0) | Não iniciado | 💡 |
-| FEAT-029 | Rateio entre membros | Cálculo de quanto cada membro deve/recebe para equilibrar as despesas da residência. | Won't (V2.0) | Não iniciado | 💡 |
+| FEAT-026 | Relatório por categoria | Quanto foi gasto em cada categoria numa competência, em duas abas: a da residência e a pessoal. | Must | Concluído | 💡 |
+| FEAT-027 | Comparativo entre meses | Variação absoluta e percentual entre duas competências, no total e por categoria. | Should | Concluído | 💡 |
+| FEAT-028 | Gráficos do relatório | Composição por categoria e evolução ao longo dos meses. | Should | Concluído | 💡 |
+| FEAT-029 | Rateio entre membros | Divisão igual do total pelo número de membros, apontando quem paga e quem recebe. | Must | Concluído | 💡 |
+| FEAT-033 | Exportar relatório em CSV | Baixar os lançamentos da competência em planilha, para uso fora do sistema. | Could | Concluído | 💡 |
+| FEAT-034 | Compartilhar resumo como imagem | Gerar uma imagem do resumo do mês para enviar no grupo da casa. | Could | Concluído | 💡 |
+| FEAT-035 | Média e variação por categoria | Comparar a competência atual com a média dos meses anteriores, sinalizando desvios relevantes. | Could | Concluído | 💡 |
 
 ## EP-06 — Administração e Auditoria
 
@@ -875,7 +884,207 @@ O painel é a primeira tela que alguém abre ao entrar na casa, então ele dever
 
 ---
 
-### 2.6 Estórias pendentes de escrita
+## 2.6 Estórias — EP-05: Relatórios e Análise
+
+> Todas as estórias desta seção assumem uma tela dedicada de relatórios, em `/app/residences/{code}/reports`, com duas abas: **Residência** e **Meus gastos**. A competência é escolhida pelo mesmo seletor em grade já usado na consulta de despesas.
+
+### US-024 — Consultar o relatório da residência por categoria
+
+**Vinculada a:** FEAT-026 | **Prioridade:** Must | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **ver quanto a casa gastou em cada categoria numa competência**, para que **eu entenda para onde está indo o dinheiro da residência**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: A tela abre na aba "Residência".
+- [ ] CA-2: Cada categoria exibe o valor gasto e o percentual que representa do total.
+- [ ] CA-3: As categorias aparecem da que mais gastou para a que menos gastou.
+- [ ] CA-4: Categorias sem nenhum lançamento na competência não são exibidas.
+- [ ] CA-5: O total da residência aparece em destaque.
+- [ ] CA-6: A competência é escolhida pelo mesmo seletor da consulta de despesas.
+- [ ] CA-7: Sem despesas na competência, é exibida uma mensagem de estado vazio.
+- [ ] CA-8: Apenas membros da residência acessam a tela.
+
+**Regras de negócio**
+
+- **RN-057:** O relatório considera apenas despesas ativas — lançamentos excluídos (`deletedAt`) ficam de fora.
+- **RN-058:** Os percentuais são calculados sobre o total da competência exibida, não sobre o histórico.
+- **RN-059 💡:** Competências fechadas e abertas são igualmente consultáveis. Fechar o mês congela os lançamentos, não a leitura.
+
+**Cenários BDD relacionados:** CEN-024.1 a CEN-024.3
+
+---
+
+### US-025 — Consultar o meu relatório pessoal
+
+**Vinculada a:** FEAT-026 | **Prioridade:** Must | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **ver onde eu gastei mais**, para que **eu entenda os meus próprios hábitos, e não só os da casa**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: A aba "Meus gastos" exibe apenas os lançamentos do próprio usuário.
+- [ ] CA-2: A quebra por categoria segue o mesmo formato da aba da residência.
+- [ ] CA-3: O total pessoal aparece em destaque.
+- [ ] CA-4: É exibido o percentual que os meus gastos representam do total da casa.
+- [ ] CA-5: Sem lançamentos meus na competência, é exibida uma mensagem de estado vazio.
+- [ ] CA-6: Trocar de aba mantém a competência selecionada.
+
+**Regras de negócio**
+
+- **RN-060 ⬜:** O relatório pessoal soma todas as residências do usuário ou apenas a atual? **Sugestão 💡:** apenas a atual, já que a tela vive dentro da residência. Uma visão consolidada entre casas seria outra tela, fora do EP-05.
+
+**Cenários BDD relacionados:** CEN-025.1, CEN-025.2
+
+---
+
+### US-026 — Comparar duas competências
+
+**Vinculada a:** FEAT-027 | **Prioridade:** Should | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **comparar o mês atual com outro mês**, para que **eu perceba se a casa está gastando mais do que antes e em quê**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: Por padrão, a comparação é entre a competência selecionada e a imediatamente anterior.
+- [ ] CA-2: É possível escolher manualmente a competência de comparação.
+- [ ] CA-3: A variação é exibida em valor absoluto e em percentual, no total e por categoria.
+- [ ] CA-4: Aumentos e quedas são distinguidos visualmente.
+- [ ] CA-5: Categoria que existia antes e sumiu aparece com queda de 100%.
+- [ ] CA-6: Categoria que não existia antes aparece como "nova", sem percentual.
+- [ ] CA-7: Se não houver competência anterior com dados, a comparação informa isso em vez de exibir números vazios.
+
+**Regras de negócio**
+
+- **RN-061 💡:** Quando a base de comparação é zero, o sistema **não** exibe percentual — divisão por zero não tem leitura útil. A categoria é marcada como nova.
+
+**Cenários BDD relacionados:** CEN-026.1 a CEN-026.4
+
+---
+
+### US-027 — Visualizar os gráficos do relatório
+
+**Vinculada a:** FEAT-028 | **Prioridade:** Should | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **ver os gastos em gráfico**, para que **eu entenda a proporção entre as categorias de relance, sem ler tabela**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: Um gráfico mostra a composição da competência por categoria.
+- [ ] CA-2: Um gráfico mostra a evolução do total ao longo das últimas competências.
+- [ ] CA-3: Os gráficos respeitam a aba selecionada — residência ou pessoal.
+- [ ] CA-4: Os mesmos valores continuam disponíveis em texto, para quem usa leitor de tela.
+- [ ] CA-5: Os gráficos se adaptam à largura da tela no celular.
+- [ ] CA-6: Sem dados na competência, o espaço do gráfico exibe o estado vazio em vez de um gráfico em branco.
+
+**Regras de negócio**
+
+- **RN-062 ⬜:** Quantas competências a evolução mostra? **Sugestão 💡:** as últimas 6, o suficiente para enxergar tendência sem poluir no celular.
+
+**Notas técnicas**
+
+- ⚠️ **A escolha da biblioteca precisa de validação antes de virar dependência.** O Recharts declara suporte a React 19 nas *peer dependencies*, mas há relatos abertos de gráficos que não renderizam em versões recentes do React 19 — e o projeto usa a 19.1.0. **Sugestão 💡:** validar com um teste pequeno antes de adotar; se houver atrito, o Chart.js (via `react-chartjs-2`) é a alternativa de menor risco, por desenhar em canvas e depender pouco dos internos do React.
+
+**Cenários BDD relacionados:** CEN-027.1 a CEN-027.3
+
+---
+
+### US-028 — Ver o rateio entre os membros
+
+**Vinculada a:** FEAT-029 | **Prioridade:** Must | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **saber quanto eu devo pagar ou tenho a receber**, para que **a casa acerte as contas do mês sem discussão**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: A cota individual é o total da competência dividido pelo número de participantes.
+- [ ] CA-2: Para cada participante, a tela exibe quanto ele gastou, qual é a cota e qual o saldo.
+- [ ] CA-3: Quem gastou acima da cota aparece como quem **tem a receber**.
+- [ ] CA-4: Quem gastou abaixo da cota aparece como quem **deve pagar**.
+- [ ] CA-5: Quem não lançou nada aparece devendo a cota inteira.
+- [ ] CA-6: A soma de todos os saldos é zero.
+- [ ] CA-7: O rateio acompanha a competência selecionada.
+- [ ] CA-8: Sem despesas na competência, o rateio informa que não há o que dividir.
+
+**Regras de negócio**
+
+- **RN-063:** A divisão é igual entre os participantes, como no cálculo da V1. Não há pesos nem cotas diferenciadas.
+- **RN-064 ⬜:** Quem entrou no meio da competência paga cota cheia? **Sugestão 💡:** sim. Proporcional por dias exigiria registrar a data de entrada em cada competência e tornaria o número difícil de conferir na mão.
+- **RN-065 ⬜:** **Quem entra na conta do rateio?** Este é o ponto mais delicado. Pela RN-022, um membro que sai mantém as despesas dos meses já fechados. Se o rateio dividir só entre os **membros atuais**, o total continua incluindo os gastos de quem saiu, e a cota de todo mundo infla indevidamente. **Sugestão 💡:** participar do rateio quem for membro atual **ou** tiver ao menos um lançamento na competência. **Ressalva:** a resposta totalmente correta exigiria histórico de participação (quem era membro em cada mês), que o modelo não guarda hoje.
+- **RN-066 💡:** Arredondamento: como os valores são inteiros em centavos, a cota pode não dividir exatamente. A sobra de centavos deve ser distribuída de forma determinística, para que a soma dos saldos feche em zero.
+
+**Cenários BDD relacionados:** CEN-028.1 a CEN-028.4
+
+---
+
+### US-029 — Exportar o relatório em CSV 💡
+
+**Vinculada a:** FEAT-033 | **Prioridade:** Could | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **baixar os lançamentos da competência em planilha**, para que **eu consiga conferir as contas fora do sistema ou guardar um registro próprio**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: A tela de relatórios oferece a ação de exportar.
+- [ ] CA-2: O arquivo traz uma linha por despesa, com data, autor, nome, categoria e valor.
+- [ ] CA-3: O arquivo respeita a competência e a aba selecionadas.
+- [ ] CA-4: O nome do arquivo identifica a residência e a competência.
+- [ ] CA-5: Valores saem em formato numérico utilizável em planilha.
+
+**Regras de negócio**
+
+- **RN-067 💡:** O CSV usa ponto e vírgula como separador e vírgula como decimal, que é o formato que o Excel em português abre sem pedir configuração.
+
+**Cenários BDD relacionados:** CEN-029.1, CEN-029.2
+
+---
+
+### US-030 — Compartilhar o resumo do mês como imagem 💡
+
+**Vinculada a:** FEAT-034 | **Prioridade:** Could | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **gerar uma imagem do resumo do mês**, para que **eu consiga mandar no grupo da casa sem pedir que todos abram o sistema**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: A tela de relatórios oferece a ação de compartilhar.
+- [ ] CA-2: A imagem contém o nome da residência, a competência, o total e o rateio por membro.
+- [ ] CA-3: Em dispositivos compatíveis, a ação abre o compartilhamento nativo do sistema.
+- [ ] CA-4: Onde não houver compartilhamento nativo, a imagem é baixada.
+- [ ] CA-5: A imagem é legível em tela de celular.
+
+**Notas técnicas**
+
+- A imagem é **desenhada pelo próprio sistema em SVG** e rasterizada em PNG pelo canvas, sem capturar a tela. Isso garante que ela saia igual em qualquer navegador: não há CSS a reinterpretar nem fonte a adivinhar.
+- A fonte viaja embutida em base64 dentro do SVG, porque o rasterizador do canvas não enxerga as fontes carregadas pela página.
+- ✅ **Correção de premissa:** o utilitário `compartilharDespesas.js` da V1 **já usava** esta mesma abordagem. As dependências `html2canvas` e `dom-to-image-more` estavam instaladas mas **nunca eram importadas** em lugar nenhum — foram removidas.
+
+**Cenários BDD relacionados:** CEN-030.1, CEN-030.2
+
+---
+
+### US-031 — Comparar com a média dos meses anteriores 💡
+
+**Vinculada a:** FEAT-035 | **Prioridade:** Could | **Status:** Não iniciado | **Origem:** 💡
+
+> Como **membro**, quero **saber quando uma categoria fugiu do padrão**, para que **eu perceba um gasto fora do normal sem precisar comparar mês a mês na mão**.
+
+**Critérios de aceitação**
+
+- [ ] CA-1: Cada categoria exibe a média das competências anteriores ao lado do valor atual.
+- [ ] CA-2: Desvios acima de um limite definido são sinalizados visualmente.
+- [ ] CA-3: A sinalização distingue gasto acima e abaixo da média.
+- [ ] CA-4: Categorias sem histórico suficiente não são sinalizadas.
+
+**Regras de negócio**
+
+- **RN-068 ⬜:** Quantos meses formam a média e qual o limite de desvio? **Sugestão 💡:** média das 3 competências anteriores e sinalização a partir de 30% de desvio, exigindo ao menos 2 meses de histórico para não alarmar com base em um único mês.
+
+**Cenários BDD relacionados:** CEN-031.1, CEN-031.2
+
+---
+
+### 2.7 Estórias pendentes de escrita
 
 > Funcionalidades já no backlog que ainda não têm estória detalhada. Use o template da seção 2.2.
 
@@ -2142,6 +2351,291 @@ Então uma solicitação de entrada é enviada para a residência "Casa da Praia
 
 ---
 
+## 3.21 Relatório da residência (US-024)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Relatório da residência por categoria
+  Vinculada a: FEAT-026 | US-024
+
+  Contexto:
+    Dado que "gabriel" e "marina" são membros da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+
+  # CEN-024.1 — caminho feliz
+  Cenário: Consultar a divisão por categoria
+    Dado que na competência 08/2026 a residência tem 600.00 em "Alimentação"
+    E que na competência 08/2026 a residência tem 200.00 em "Contas domésticas"
+    Quando ele abre o relatório da residência na competência 08/2026
+    Então ele vê o total de 800.00
+    E ele vê "Alimentação" com 600.00 e 75% do total
+    E ele vê "Contas domésticas" com 200.00 e 25% do total
+    E "Alimentação" aparece antes de "Contas domésticas"
+
+  # CEN-024.2 — CA-4
+  Cenário: Categoria sem lançamento não é exibida
+    Dado que na competência 08/2026 não há nenhuma despesa em "Lazer"
+    Quando ele abre o relatório da residência na competência 08/2026
+    Então "Lazer" não aparece no relatório
+
+  # CEN-024.3 — estado vazio
+  Cenário: Competência sem despesas
+    Dado que não há despesas na competência 09/2026
+    Quando ele abre o relatório da residência na competência 09/2026
+    Então ele vê uma mensagem informando que não há despesas nesta competência
+```
+
+---
+
+## 3.22 Relatório pessoal (US-025)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Relatório pessoal do membro
+  Vinculada a: FEAT-026 | US-025
+
+  Contexto:
+    Dado que "gabriel" e "marina" são membros da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+
+  # CEN-025.1 — caminho feliz
+  Cenário: Consultar apenas os próprios gastos
+    Dado que "gabriel" lançou 300.00 na competência 08/2026
+    E que "marina" lançou 500.00 na competência 08/2026
+    Quando ele abre a aba "Meus gastos" na competência 08/2026
+    Então ele vê o total pessoal de 300.00
+    E ele vê que seus gastos representam 37,5% do total da casa
+    Mas ele não vê os lançamentos de "marina" no total pessoal
+
+  # CEN-025.2 — CA-6
+  Cenário: Trocar de aba preserva a competência
+    Dado que ele está no relatório da residência na competência 07/2026
+    Quando ele alterna para a aba "Meus gastos"
+    Então a competência exibida continua sendo 07/2026
+```
+
+---
+
+## 3.23 Comparativo entre competências (US-026)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Comparativo entre competências
+  Vinculada a: FEAT-027 | US-026
+
+  Contexto:
+    Dado que "gabriel" é membro da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+
+  # CEN-026.1 — caminho feliz
+  Cenário: Comparar com o mês anterior
+    Dado que a residência gastou 800.00 na competência 08/2026
+    E que a residência gastou 1000.00 na competência 07/2026
+    Quando ele abre o comparativo da competência 08/2026
+    Então ele vê a variação de -200.00 no total
+    E ele vê a variação de -20% no total
+    E a variação é apresentada como queda
+
+  # CEN-026.2 — CA-6 e RN-061
+  Cenário: Categoria que não existia no mês anterior
+    Dado que "Lazer" teve 150.00 na competência 08/2026
+    E que "Lazer" não teve nenhum lançamento na competência 07/2026
+    Quando ele abre o comparativo da competência 08/2026
+    Então "Lazer" aparece marcada como nova
+    E nenhum percentual de variação é exibido para "Lazer"
+
+  # CEN-026.3 — CA-5
+  Cenário: Categoria que desapareceu
+    Dado que "Assinaturas" teve 90.00 na competência 07/2026
+    E que "Assinaturas" não teve nenhum lançamento na competência 08/2026
+    Quando ele abre o comparativo da competência 08/2026
+    Então "Assinaturas" aparece com queda de 100%
+
+  # CEN-026.4 — CA-7
+  Cenário: Sem competência anterior para comparar
+    Dado que 08/2026 é a competência mais antiga com despesas
+    Quando ele abre o comparativo da competência 08/2026
+    Então ele vê uma mensagem informando que não há competência anterior para comparação
+```
+
+---
+
+## 3.24 Gráficos do relatório (US-027)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Gráficos do relatório
+  Vinculada a: FEAT-028 | US-027
+
+  Contexto:
+    Dado que "gabriel" é membro da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+
+  # CEN-027.1 — caminho feliz
+  Cenário: Ver a composição da competência
+    Dado que a residência tem despesas em 3 categorias na competência 08/2026
+    Quando ele abre o relatório na competência 08/2026
+    Então ele vê um gráfico com a composição das 3 categorias
+    E os mesmos valores continuam disponíveis em texto
+
+  # CEN-027.2 — CA-3
+  Cenário: O gráfico acompanha a aba selecionada
+    Dado que ele está vendo o gráfico da residência na competência 08/2026
+    Quando ele alterna para a aba "Meus gastos"
+    Então o gráfico passa a representar apenas os lançamentos dele
+
+  # CEN-027.3 — CA-6
+  Cenário: Competência sem dados não desenha gráfico vazio
+    Dado que não há despesas na competência 09/2026
+    Quando ele abre o relatório na competência 09/2026
+    Então nenhum gráfico é desenhado
+    E ele vê a mensagem de estado vazio no lugar
+```
+
+---
+
+## 3.25 Rateio entre membros (US-028)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Rateio das despesas entre os membros
+  Vinculada a: FEAT-029 | US-028
+
+  Contexto:
+    Dado que "gabriel" e "marina" são os membros da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+
+  # CEN-028.1 — caminho feliz
+  Cenário: Calcular quem paga e quem recebe
+    Dado que "marina" lançou 300.00 na competência 08/2026
+    E que "gabriel" lançou 100.00 na competência 08/2026
+    Quando ele abre o rateio da competência 08/2026
+    Então a cota individual é 200.00
+    E "marina" aparece com 100.00 a receber
+    E "gabriel" aparece com 100.00 a pagar
+    E a soma dos saldos é zero
+
+  # CEN-028.2 — CA-5
+  Cenário: Membro que não lançou nada deve a cota inteira
+    Dado que "marina" lançou 400.00 na competência 08/2026
+    E que "gabriel" não lançou nenhuma despesa na competência 08/2026
+    Quando ele abre o rateio da competência 08/2026
+    Então a cota individual é 200.00
+    E "gabriel" aparece com 200.00 a pagar
+    E "marina" aparece com 200.00 a receber
+
+  # CEN-028.3 — RN-066
+  Cenário: Sobra de centavos na divisão
+    Dado que a residência tem 3 membros
+    E que o total da competência 08/2026 é 100.00
+    Quando ele abre o rateio da competência 08/2026
+    Então a soma dos saldos é zero
+    E a diferença entre a maior e a menor cota não passa de 0.01
+
+  # CEN-028.4 — CA-8
+  Cenário: Competência sem despesas
+    Dado que não há despesas na competência 09/2026
+    Quando ele abre o rateio da competência 09/2026
+    Então ele vê uma mensagem informando que não há o que dividir
+```
+
+---
+
+## 3.26 Exportação em CSV (US-029)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Exportação do relatório em CSV
+  Vinculada a: FEAT-033 | US-029
+
+  Contexto:
+    Dado que "gabriel" é membro da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+
+  # CEN-029.1 — caminho feliz
+  Cenário: Exportar a competência
+    Dado que a residência tem 5 despesas na competência 08/2026
+    Quando ele exporta o relatório da competência 08/2026
+    Então um arquivo CSV é baixado
+    E o arquivo contém 5 linhas de despesa
+    E cada linha traz data, autor, nome, categoria e valor
+    E o nome do arquivo identifica a residência e a competência
+
+  # CEN-029.2 — CA-3
+  Cenário: A exportação respeita a aba selecionada
+    Dado que ele está na aba "Meus gastos" da competência 08/2026
+    Quando ele exporta o relatório
+    Então o arquivo contém apenas os lançamentos dele
+```
+
+---
+
+## 3.27 Compartilhamento como imagem (US-030)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Compartilhamento do resumo do mês
+  Vinculada a: FEAT-034 | US-030
+
+  Contexto:
+    Dado que "gabriel" é membro da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+    E que a residência tem despesas na competência 08/2026
+
+  # CEN-030.1 — caminho feliz
+  Cenário: Gerar a imagem do resumo
+    Quando ele aciona a opção de compartilhar o resumo da competência 08/2026
+    Então uma imagem é gerada com o nome da residência
+    E a imagem contém a competência e o total
+    E a imagem contém o rateio por membro
+
+  # CEN-030.2 — CA-4
+  Cenário: Dispositivo sem compartilhamento nativo
+    Dado que o dispositivo não oferece compartilhamento nativo
+    Quando ele aciona a opção de compartilhar o resumo
+    Então a imagem é baixada
+```
+
+---
+
+## 3.28 Média e variação por categoria (US-031)
+
+```gherkin
+# language: pt
+
+Funcionalidade: Comparação com a média das competências anteriores
+  Vinculada a: FEAT-035 | US-031
+
+  Contexto:
+    Dado que "gabriel" é membro da residência "Casa da Praia"
+    E que "gabriel" está autenticado
+    E que a média é calculada sobre as 3 competências anteriores
+    E que o desvio é sinalizado a partir de 30%
+
+  # CEN-031.1 — caminho feliz
+  Cenário: Sinalizar gasto acima da média
+    Dado que "Contas domésticas" tem média de 200.00 nas competências anteriores
+    E que "Contas domésticas" tem 300.00 na competência 08/2026
+    Quando ele abre o relatório da competência 08/2026
+    Então "Contas domésticas" aparece sinalizada como acima da média
+    E a média de 200.00 é exibida ao lado do valor atual
+
+  # CEN-031.2 — CA-4
+  Cenário: Categoria sem histórico suficiente não é sinalizada
+    Dado que "Lazer" tem lançamentos em apenas 1 competência anterior
+    Quando ele abre o relatório da competência 08/2026
+    Então "Lazer" não recebe sinalização de desvio
+```
+
+---
+
 # 4\. Anexos
 
 ## 4.1 Matriz de rastreabilidade
@@ -2168,7 +2662,15 @@ Então uma solicitação de entrada é enviada para a residência "Casa da Praia
 | EP-03 | FEAT-019 | US-017 | CEN-017.1 a CEN-017.5 |
 | EP-03 | FEAT-020 | US-023 | CEN-023.1 a CEN-023.4 |
 | EP-04 | FEAT-021 | US-010 | CEN-010.1 a CEN-010.4 |
-| EP-04 | FEAT-022 | US-011 ⬜ | CEN-011.1, CEN-011.2 (rascunho) |
+| EP-04 | FEAT-022 | US-011 | CEN-011.1, CEN-011.2 |
+| EP-05 | FEAT-026 | US-024 | CEN-024.1 a CEN-024.3 |
+| EP-05 | FEAT-026 | US-025 | CEN-025.1, CEN-025.2 |
+| EP-05 | FEAT-027 | US-026 | CEN-026.1 a CEN-026.4 |
+| EP-05 | FEAT-028 | US-027 | CEN-027.1 a CEN-027.3 |
+| EP-05 | FEAT-029 | US-028 | CEN-028.1 a CEN-028.4 |
+| EP-05 | FEAT-033 | US-029 | CEN-029.1, CEN-029.2 |
+| EP-05 | FEAT-034 | US-030 | CEN-030.1, CEN-030.2 |
+| EP-05 | FEAT-035 | US-031 | CEN-031.1, CEN-031.2 |
 
 ## 4.2 Decisões pendentes (checklist)
 
@@ -2197,6 +2699,13 @@ Então uma solicitação de entrada é enviada para a residência "Casa da Praia
 - [x] **RN-049** — Definir o limite de tentativas e a janela de tempo.  
 - [x] **RN-051** — Definir se o limite é por usuário, por IP ou ambos.  
 - [x] **RN-052** — Definir onde o contador de tentativas fica armazenado.
+- [x] **RN-060** — Definir se o relatório pessoal soma todas as residências ou só a atual. *(Só a atual.)*
+- [x] **RN-062** — Definir quantas competências o gráfico de evolução exibe. *(As últimas 6.)*
+- [x] **RN-064** — Definir se quem entrou no meio da competência paga cota cheia. *(Sim.)*
+- [x] **RN-065** — Definir quem participa do rateio. *(Membros atuais. Quem sai leva junto os lançamentos da competência aberta — RN-022.)*
+- [x] **RN-068** — Definir a janela da média e o limite de desvio sinalizado. *(3 meses, 30%, mínimo de 2 meses de histórico.)*
+- [x] **US-027 (notas técnicas)** — Validar a biblioteca de gráficos com React 19. *(Recharts 3.10.1 validado no navegador: funciona, mas a pizza exige `isAnimationActive={false}`.)*
+- [x] **US-030 (FEAT-034)** — Decidir a abordagem técnica do compartilhamento como imagem. *(SVG desenhado pelo próprio sistema, rasterizado em PNG. As dependências `html2canvas` e `dom-to-image-more` foram removidas — estavam instaladas mas nunca eram importadas.)*
 
 ## 4.3 Esboço de modelo de dados 💡
 
@@ -2281,7 +2790,9 @@ deletedAt    DateTime?
 
 ## 4.4 Fora do escopo da V2.0
 
-Registrado aqui para não se perder, sem entrar nesta release: relatórios por categoria com gráficos e comparativo entre meses (FEAT-026 a FEAT-028), rateio entre membros (FEAT-029) e área administrativa com auditoria (FEAT-030 a FEAT-032).
+Registrado aqui para não se perder, sem entrar nesta release: a área administrativa com auditoria e monitoramento de acessos (FEAT-030 a FEAT-032).
+
+> O EP-05 (relatórios, gráficos e rateio) **deixou de estar fora do escopo** — as FEAT-026 a FEAT-029 e as FEAT-033 a FEAT-035 foram promovidas para a V2.0.
 
 ---
 

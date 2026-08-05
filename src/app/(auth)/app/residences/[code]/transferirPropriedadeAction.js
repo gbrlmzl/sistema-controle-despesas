@@ -31,7 +31,7 @@ export default async function transferirPropriedadeAction(code, novoOwnerUserId)
     // 3 -> CA-6: apenas o owner transfere a propriedade
     if (!contexto.isOwner) {
         return {
-            message: 'Apenas o criador da residência pode transferir a propriedade.',
+            message: 'Apenas o administrador da residência pode transferir a propriedade.',
             success: false,
         }
     }
@@ -47,7 +47,7 @@ export default async function transferirPropriedadeAction(code, novoOwnerUserId)
     // 5 -> Transferir para si mesmo não muda nada
     if (novoOwnerUserId === contexto.usuario.id) {
         return {
-            message: 'Você já é o criador desta residência.',
+            message: 'Você já é o administrador desta residência.',
             success: false,
         }
     }
@@ -93,7 +93,7 @@ export default async function transferirPropriedadeAction(code, novoOwnerUserId)
             userId: novoOwnerUserId,
             type: 'OWNERSHIP_TRANSFERRED',
             title: 'Você agora administra uma residência',
-            message: `Você passou a ser o criador da residência "${contexto.residencia.name}".`,
+            message: `Você passou a ser o administrador da residência "${contexto.residencia.name}".`,
             linkTo: `/app/residences/${contexto.residencia.code}`,
         })
 

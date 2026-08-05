@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import useAcoesResidencia from "./useAcoesResidencia";
 import PendenciasResidencia from "./PendenciasResidencia";
+import ResumoDoMes from "./ResumoDoMes";
 import ConfirmacaoModal from "./ConfirmacaoModal";
 import Snackbar from "@/components/ui/Snackbar";
 import styles from "./PainelResidencia.module.css";
@@ -11,7 +12,7 @@ import styles from "./PainelResidencia.module.css";
 //FEAT-008 -> Painel da residência.
 //A administração (convidar, renomear, código, arquivar, membros) fica na tela de
 //configurações, acessível pela engrenagem.
-export default function PainelResidencia({ residencia, solicitacoes, convites }) {
+export default function PainelResidencia({ residencia, solicitacoes, convites, competencia, resumo, atividade }) {
     const {
         confirmacao,
         fecharConfirmacao,
@@ -66,7 +67,14 @@ export default function PainelResidencia({ residencia, solicitacoes, convites })
                         Cadastrar despesas
                     </Link>
                 )}
+
+                <Link href={`/app/residences/${residencia.code}/reports`} className={styles.botaoDespesas}>
+                    Relatórios
+                </Link>
             </div>
+
+            {/* P-1 e P-2 -> como está o mês em aberto e o que aconteceu por último */}
+            <ResumoDoMes competencia={competencia} resumo={resumo} atividade={atividade} />
 
             {/* US-009 e US-022 -> pendências que só o owner enxerga */}
             <PendenciasResidencia

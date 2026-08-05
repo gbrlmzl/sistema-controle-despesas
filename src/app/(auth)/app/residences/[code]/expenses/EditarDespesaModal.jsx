@@ -53,11 +53,11 @@ export default function EditarDespesaModal({ residencia, despesa, onFechar }) {
                         ))}
                     </select>
 
-                    <label className={styles.recorrente}>
+                    {/*<label className={styles.recorrente}>
                         <input type="checkbox" name="isRecurring" defaultChecked={despesa.isRecurring} />
                         <span>Repetir nos próximos meses</span>
                     </label>
-
+                       */} 
                     <div className="botoesContainer">
                         <button type="button" className="botaoTexto" onClick={onFechar} disabled={isPending}>Cancelar</button>
                         <button type="submit" className="botaoTexto" disabled={isPending || !dadosPreenchidos}>Salvar</button>

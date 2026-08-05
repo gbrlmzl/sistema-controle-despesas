@@ -15,7 +15,7 @@ export default function ListaMembros({ membros, podeGerenciar, onRemover, onTran
                         <div className={styles.membroInfo}>
                             <div className={styles.membroNome}>
                                 {membro.isOwner && (
-                                    <img src="/icons/adminIcon.svg" alt="Criador da residência" width={14} height={14} />
+                                    <img src="/icons/adminIcon.svg" alt="Administrador da residência" width={14} height={14} />
                                 )}
                                 <span>{membro.name}</span>
                                 {membro.isCurrentUser && (<span className={styles.marcadorVoce}>você</span>)}
@@ -26,7 +26,7 @@ export default function ListaMembros({ membros, podeGerenciar, onRemover, onTran
                         {podeGerenciar && !membro.isCurrentUser && (
                             <div className={styles.membroAcoes}>
                                 <button type="button" className={styles.botaoTransferir} onClick={() => onTransferir(membro)}>
-                                    Tornar criador
+                                    Tornar administrador
                                 </button>
                                 <button type="button" className={styles.botaoRemover} onClick={() => onRemover(membro)}>
                                     Remover

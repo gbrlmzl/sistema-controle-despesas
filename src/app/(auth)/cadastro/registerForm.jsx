@@ -14,6 +14,7 @@ export default function RegisterForm() {
     const [state, formAction, isPending] = useActionState(registerAction, null);  // Hook para gerenciar o estado da ação do formulário
     //isPending -> indica se a ação do formulário está em andamento, desabilitando o botão de envio para evitar envios múltiplos.
     const [name, setName] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,9 +27,18 @@ export default function RegisterForm() {
     const router = useRouter();
 
 
-    const dadosPreenchidos = email.trim().length > 0 && atLeast8Chars && hasNumberOrSymbol && passwordsMatch && name.trim().length > 0;
+    //O nome de usuário precisa ter de 3 a 20 caracteres (mesma regra do usernameSchema)
+    const usernameValido = username.length >= 3 && username.length <= 20;
+
+    const dadosPreenchidos = email.trim().length > 0 && atLeast8Chars && hasNumberOrSymbol && passwordsMatch && name.trim().length > 0 && usernameValido;
     const togglePasswordVisibility = () => {
         setShowPassword(prev => !prev);
+    }
+
+    //Mantém o campo sempre no formato aceito pelo servidor enquanto o usuário digita,
+    //em vez de deixá-lo errar e só descobrir o problema ao enviar o formulário.
+    const handleUsernameChange = (e) => {
+        setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''));
     }
 
     useEffect(() => {
@@ -66,6 +76,7 @@ export default function RegisterForm() {
             <Form action={formAction}>
                 <div className={styles.formFields}>
                     <input type="text" name="name" placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} />
+                    <input type="text" name="username" placeholder="Nome de usuário" value={username} onChange={handleUsernameChange} />
                     <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <div className={styles.passwordField}>
                         <input type={showPassword ? 'text' : 'password'} name="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />

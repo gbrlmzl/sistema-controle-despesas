@@ -3,6 +3,7 @@
 import db from "@/lib/prisma";
 import { hash } from "bcrypt";
 import { registerSchema } from "@/schemas/usuarios";
+import { normalizeUsername, usernameEmUso } from "@/lib/username";
 
 
 
@@ -10,11 +11,14 @@ export default async function registerAction(_prevState, formData) {
     const entries = Array.from(formData.entries()); //Converte os dados do formulário em um array de pares
     const data = Object.fromEntries(entries); //Transforma o array de pares em um objeto, onde cada campo do formulário vira uma propriedade do objeto.
     const saltRounds = 10;
-    
+
+    //O nome de usuário é sempre normalizado (sem espaços nas pontas e em minúsculas)
+    //antes da validação, para que "Gabriel" e "gabriel " sejam o mesmo identificador.
+    data.username = normalizeUsername(data.username);
 
 
-    // 1 -> Se não tiver email, nome ou senha, retorna erro
-    if (!data.email || !data.name || !data.password || !data.confirmPassword) {   
+    // 1 -> Se não tiver email, nome, nome de usuário ou senha, retorna erro
+    if (!data.email || !data.name || !data.username || !data.password || !data.confirmPassword) {
 
         return {
             message: 'Não pode haver campos vazios',
@@ -52,13 +56,22 @@ export default async function registerAction(_prevState, formData) {
         }
     }
 
+    //5 -> Verifica se o nome de usuário já está em uso por outra conta
+    if (await usernameEmUso(payload.username)) {
+        return {
+            message: 'Este nome de usuário já está em uso!',
+            success: false,
+        }
+    }
 
-    //5 -> Após a validação dos dados e a verificação de que não existe usuário cadastrado com esse email, cadastra o novo usuário
+
+    //6 -> Após a validação dos dados e a verificação de que não existe usuário cadastrado com esse email, cadastra o novo usuário
     try {
-        const senhaHash = await hash(payload.password, saltRounds) // 6-> Criptografa a senha do usuário
+        const senhaHash = await hash(payload.password, saltRounds) // 7-> Criptografa a senha do usuário
         await db.user.create({
             data: {
                 name: payload.name,
+                username: payload.username,
                 email: payload.email,
                 password: senhaHash, //salva a senha criptografada no banco de dados
                 profilePic: null,
@@ -74,7 +87,7 @@ export default async function registerAction(_prevState, formData) {
             }
         })
 
-        // 7 -> Retorna sucesso após cadastrar o usuário
+        // 8 -> Retorna sucesso após cadastrar o usuário
         return {
             success: true,
             message: 'Usuário cadastrado com sucesso!',
@@ -82,7 +95,7 @@ export default async function registerAction(_prevState, formData) {
 
     }
     catch (error) {
-        // 8 -> Retorna erro caso ocorra algum problema ao cadastrar o usuário
+        // 9 -> Retorna erro caso ocorra algum problema ao cadastrar o usuário
         return {
             message: 'Erro ao cadastrar usuário. Tente novamente mais tarde.',
             success: false,

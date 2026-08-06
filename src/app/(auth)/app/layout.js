@@ -1,16 +1,8 @@
-'use server';
-import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import "./app.css";
 
-
-
-export default async function ControleDespesasLayout({ children }) {
-    const session = await auth();
-    if (!session) {
-        redirect("/login"); // Se o usuário não estiver autenticado, redireciona para a página de login
-    }
-
+//A exigência de sessão pra tudo em /app/** é responsabilidade do middleware
+//(src/middleware.js) — ele roda antes desta página renderizar.
+export default function ControleDespesasLayout({ children }) {
     return (
         <div className="paginaConteudo">
             <main>

@@ -3,10 +3,12 @@ import Credentials from "next-auth/providers/credentials"
 import { findUserByCredentials } from "./lib/user";
 import db from "@/lib/prisma";
 import { gerarUsernameDisponivel } from "@/lib/username";
+import authConfig from "./auth.config";
 
 import GoogleProvider from "next-auth/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -30,6 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
+    ...authConfig.callbacks,
     async signIn({ user, account, profile }) {
       if (account?.provider === "google") {
         try {
@@ -118,11 +121,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return true;
     },
-    async jwt({ token, user, account, trigger, session }) {
-      //atualiza token  quando update() é chamado
+    async jwt(params) {
+      const { token, trigger, session } = params;
 
+      //atualiza token quando update() é chamado — só esse caminho toca o banco,
+      //por isso não pode viver em auth.config.js (Edge Runtime não roda Prisma)
       if (trigger === "update") {
-        // Busca dados atualizados do banco
         if (session.updateType === "profilePicture") { // Atualização da foto de perfil
           const updatedUser = await db.user.findUnique({
             where: { email: token.email },
@@ -132,37 +136,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (updatedUser) {
             token.profilePic = updatedUser.profilePic;
           }
-
         }
 
         return token;
       }
 
-      // Armazena o ID do banco no token JWT
-      if (user?.dbId) {
-        token.dbId = user.dbId;
-        token.profilePic = user.profilePic;
-        token.provider = user.provider;
-      } else if (user?.id && account?.provider === 'credentials') {
-        // Para login com credenciais, user.id já é o ID do banco
-        token.dbId = user.id;
-        token.profilePic = user.profilePic || null;
-        token.provider = 'credentials';
-      }
-      // Se user não existir (chamadas subsequentes), mantém os valores do token
-
-      return token;
+      return authConfig.callbacks.jwt(params);
     },
-    async session({ session, token }) {
-      // Passa o ID do banco para a sessão do cliente
-      if (token.dbId) {
-        session.user.id = token.dbId;
-        session.user.profilePic = token.profilePic || null;
-        session.user.provider = token.provider || null;
-      }
-
-
-      return session;
-    }
   }
 });

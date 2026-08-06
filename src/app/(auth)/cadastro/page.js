@@ -1,15 +1,9 @@
 import RegisterForm from "@/app/(auth)/cadastro/RegisterForm";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 
 import styles from './page.module.css';
 
-export default async function paginaRegistro() {
-
-    const session = await auth();
-    if (session) {
-        return redirect('/'); //caso o usuário esteja logado, ele é redirecionado para a página inicial.
-    }
+//Quem já está logado é redirecionado antes de chegar aqui pelo middleware (src/middleware.js)
+export default function paginaRegistro() {
     return (
 
         <div className={styles.container}>

@@ -26,7 +26,13 @@ export default function Profile() {
         snackbarType
     } = useProfile({ update });
 
-
+    //O layout raiz não passa a sessão pro SessionProvider, então useSession() nasce
+    //undefined até o fetch client-side de /api/auth/session responder — sem essa
+    //guarda, um carregamento direto da URL (sem vir de um Link já com sessão em
+    //cache) quebra aqui.
+    if (!session) {
+        return null;
+    }
 
     return (
         <div className={styles.container}>
